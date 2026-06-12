@@ -28,7 +28,7 @@ if (!window.GG_FLUID || reduce || !fino || !ancho || !gl2) {
 
 function init() {
   /* ---------- constantes de la simulación ---------- */
-  const PIXELES_SIM = 1 << 18;     // presupuesto desktop (la referencia usa 2^18)
+  const PIXELES_SIM = 1 << 19;     // presupuesto ×2 (la referencia usa 2^18)
   const DISIPA_TINTA = 0.97;
   const DISIPA_VEL = 0.99;
   const DECAE_PRESION = 0.99;
@@ -51,7 +51,7 @@ function init() {
     canvas: cv, alpha: true, antialias: false, depth: false, stencil: false,
     premultipliedAlpha: false, powerPreference: 'high-performance',
   });
-  renderer.setPixelRatio(1);       // la sim es de baja resolución: ampliar suaviza
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2)); // presentación nítida
   renderer.autoClear = false;
 
   const escena = new THREE.Scene();
