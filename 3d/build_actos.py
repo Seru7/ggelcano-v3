@@ -18,30 +18,91 @@ def escena_limpia():
     bpy.ops.wm.read_factory_settings(use_empty=True)
 
 
-def mar(strength, color, rough):
-    bpy.ops.mesh.primitive_grid_add(x_subdivisions=220, y_subdivisions=220, size=320)
+def mar(strength, color, rough, cresta=(0.85, 0.83, 0.76)):
+    """Mar con 3 octavas de geometría (fondo+oleaje+rizado), espuma de cresta
+    rota con ruido y vetas peinadas por el viento. Que el agua aguante el
+    nivel de detalle del cielo pintado."""
+    bpy.ops.mesh.primitive_grid_add(x_subdivisions=300, y_subdivisions=300, size=320)
     o = bpy.context.active_object
     o.name = "Mar"
-    tex = bpy.data.textures.new("olas", "CLOUDS")
-    tex.noise_scale = 7.0
-    mod = o.modifiers.new("Olas", "DISPLACE")
-    mod.texture = tex
-    mod.strength = strength
-    bpy.ops.object.modifier_apply(modifier="Olas")
+    for nombre, esc, st in (("OlasFondo", 7.0, strength),
+                            ("OlasMedias", 2.0, strength * 0.42)):
+        tex = bpy.data.textures.new(nombre, "CLOUDS")
+        tex.noise_scale = esc
+        mod = o.modifiers.new(nombre, "DISPLACE")
+        mod.texture = tex
+        mod.strength = st
+        bpy.ops.object.modifier_apply(modifier=nombre)
     for p in o.data.polygons:
         p.use_smooth = True
+
     m = bpy.data.materials.new("Agua")
     m.use_nodes = True
-    b = m.node_tree.nodes["Principled BSDF"]
-    b.inputs["Base Color"].default_value = (*color, 1)
-    b.inputs["Roughness"].default_value = rough
     nt = m.node_tree
-    ruido = nt.nodes.new("ShaderNodeTexNoise")
-    ruido.inputs["Scale"].default_value = 110
-    bump = nt.nodes.new("ShaderNodeBump")
-    bump.inputs["Strength"].default_value = 0.25
-    nt.links.new(ruido.outputs["Fac"], bump.inputs["Height"])
-    nt.links.new(bump.outputs["Normal"], b.inputs["Normal"])
+    b = nt.nodes["Principled BSDF"]
+    b.inputs["Roughness"].default_value = rough
+
+    geom = nt.nodes.new("ShaderNodeNewGeometry")
+    sep = nt.nodes.new("ShaderNodeSeparateXYZ")
+    nt.links.new(geom.outputs["Position"], sep.inputs[0])
+
+    # color por altura: valles hondos → crestas más claras
+    hRango = nt.nodes.new("ShaderNodeMapRange")
+    hRango.inputs["From Min"].default_value = -strength * 0.9
+    hRango.inputs["From Max"].default_value = strength * 0.9
+    nt.links.new(sep.outputs["Z"], hRango.inputs["Value"])
+    mixCol = nt.nodes.new("ShaderNodeMix")
+    mixCol.data_type = "RGBA"
+    mixCol.inputs[6].default_value = (*color, 1)
+    mixCol.inputs[7].default_value = (color[0] * 3.2, color[1] * 2.8, color[2] * 2.2, 1)
+    nt.links.new(hRango.outputs["Result"], mixCol.inputs["Factor"])
+
+    # espuma: solo en lo alto de las crestas, rota con ruido (no una capa lisa)
+    hEspuma = nt.nodes.new("ShaderNodeMapRange")
+    hEspuma.inputs["From Min"].default_value = strength * 0.45
+    hEspuma.inputs["From Max"].default_value = strength * 1.05
+    nt.links.new(sep.outputs["Z"], hEspuma.inputs["Value"])
+    rotura = nt.nodes.new("ShaderNodeTexNoise")
+    rotura.inputs["Scale"].default_value = 14
+    rotRango = nt.nodes.new("ShaderNodeMapRange")
+    rotRango.inputs["From Min"].default_value = 0.42
+    rotRango.inputs["From Max"].default_value = 0.72
+    nt.links.new(rotura.outputs["Fac"], rotRango.inputs["Value"])
+    fEsp = nt.nodes.new("ShaderNodeMath")
+    fEsp.operation = "MULTIPLY"
+    nt.links.new(hEspuma.outputs["Result"], fEsp.inputs[0])
+    nt.links.new(rotRango.outputs["Result"], fEsp.inputs[1])
+    mixEsp = nt.nodes.new("ShaderNodeMix")
+    mixEsp.data_type = "RGBA"
+    nt.links.new(mixCol.outputs[2], mixEsp.inputs[6])
+    mixEsp.inputs[7].default_value = (*cresta, 1)
+    nt.links.new(fEsp.outputs[0], mixEsp.inputs["Factor"])
+    nt.links.new(mixEsp.outputs[2], b.inputs["Base Color"])
+    # la espuma es mate: sube la rugosidad donde hay espuma
+    rEsp = nt.nodes.new("ShaderNodeMapRange")
+    rEsp.inputs["To Min"].default_value = rough
+    rEsp.inputs["To Max"].default_value = 0.55
+    nt.links.new(fEsp.outputs[0], rEsp.inputs["Value"])
+    nt.links.new(rEsp.outputs["Result"], b.inputs["Roughness"])
+
+    # vetas peinadas por el viento (ruido estirado) + rizo fino, en cadena
+    mapV = nt.nodes.new("ShaderNodeMapping")
+    nt.links.new(geom.outputs["Position"], mapV.inputs["Vector"])
+    mapV.inputs["Scale"].default_value = (0.9, 3.6, 1.0)
+    vetas = nt.nodes.new("ShaderNodeTexNoise")
+    vetas.inputs["Scale"].default_value = 6.5
+    nt.links.new(mapV.outputs["Vector"], vetas.inputs["Vector"])
+    bumpV = nt.nodes.new("ShaderNodeBump")
+    bumpV.inputs["Strength"].default_value = 0.22
+    nt.links.new(vetas.outputs["Fac"], bumpV.inputs["Height"])
+    rizo = nt.nodes.new("ShaderNodeTexNoise")
+    rizo.inputs["Scale"].default_value = 120
+    bumpR = nt.nodes.new("ShaderNodeBump")
+    bumpR.inputs["Strength"].default_value = 0.3
+    nt.links.new(rizo.outputs["Fac"], bumpR.inputs["Height"])
+    nt.links.new(bumpV.outputs["Normal"], bumpR.inputs["Normal"])
+    nt.links.new(bumpR.outputs["Normal"], b.inputs["Normal"])
+
     o.data.materials.append(m)
     return o
 
@@ -118,6 +179,10 @@ def render(nombre, cam_loc, cam_dir, lens=33, mist=(18, 90), mist_color=(0.93, 0
     s = bpy.context.scene
     s.render.engine = "CYCLES"
     s.cycles.samples = 64
+    try:
+        s.view_settings.look = "AgX - Punchy"   # contraste de revelado: el 3D deja de ser plano
+    except Exception:
+        pass
     s.cycles.use_denoising = False
     s.render.resolution_x = 1280
     s.render.resolution_y = 800
@@ -141,8 +206,8 @@ for nombre, (px, py), rz, esc in (("NaoLider", (0, 10), 196, 0),
                                   ("NaoAla2", (16, 36), 190, -2)):
     nivel = aplana(m2, px, py)
     nao(nombre, (px, py, nivel + 2.65), rz, escora=esc)
-mundo("matte_atardecer.jpg", 1.0, (1.0, 0.66, 0.34), 3.2,
-      (math.radians(75), 0, math.radians(-150)))
+mundo("matte_atardecer.jpg", 1.0, (1.0, 0.62, 0.3), 4.4,
+      (math.radians(81), 0, math.radians(-150)))
 render("acto2_flota.png", (3, -24, 4.2), (-1, 30, 1.0), lens=31, mist=(25, 110))
 print("ACTO2_OK")
 
@@ -151,8 +216,8 @@ escena_limpia()
 m4 = mar(2.6, (0.025, 0.04, 0.07), 0.32)
 nivel4 = aplana(m4, -2, 14, rx=12.0, ry=5.5)
 nao("NaoTormenta", (-2, 14, nivel4 + 2.55), 188, escora=6)
-mundo("matte_tormenta.jpg", 0.22, (0.6, 0.68, 0.9), 1.1,
-      (math.radians(70), 0, math.radians(-120)))
+mundo("matte_tormenta.jpg", 0.22, (0.65, 0.72, 0.95), 1.6,
+      (math.radians(78), 0, math.radians(-120)))
 # el haz dorado del matte toca el agua tras la nao
 foco = bpy.data.objects.new("Haz", bpy.data.lights.new("Haz", "SPOT"))
 foco.data.energy = 220000
