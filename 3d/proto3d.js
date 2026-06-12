@@ -163,6 +163,9 @@ async function init() {
   const heroCv = document.createElement('canvas');
   heroCv.id = 'hero3d';
   heroSec.appendChild(heroCv);
+  /* modo animático: los frames del vídeo IA sustituyen visualmente al 3D del
+     hero; este canvas queda oculto pero su ScrollTrigger sigue dando el pin */
+  if (window.GG_FRAMES) heroCv.style.display = 'none';
   const heroR = rendererEn(heroCv);
   /* tone mapping de cine: contraste rico en la nao (el mar usa shader propio
      sin tonemapping, así su fundido a papel sigue casando con la página) */
@@ -453,6 +456,8 @@ async function init() {
       // la niebla se levanta según avanza el plano
       heroEstado.fog = 0.085 - 0.063 * self.progress;
       heroEstado.farol = THREE.MathUtils.smoothstep(self.progress, 0.62, 0.9);
+      // modo animático: el progreso mueve los frames del vídeo IA
+      if (window.__setHeroFrame) window.__setHeroFrame(self.progress);
     },
     onToggle(self) { heroEstado.activo = self.isActive; },
   });
@@ -685,7 +690,7 @@ async function init() {
     const dtR = Math.min(0.05, tRaw - tAnt); tAnt = tRaw;
     const t = tRaw * 0.5;
     uT.value = t;
-    if (heroEstado.activo) {
+    if (heroEstado.activo && !window.GG_FRAMES) {
       seaUniforms.uTime.value = t;
       /* el cursor sobre el agua: inercia hacia el objetivo + envejecer ondas */
       const pu = seaUniforms.uPunt.value;

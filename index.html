@@ -564,6 +564,18 @@ h2.display.lr-in .lr-i{transform:translateY(0)}
 #sprog.sp-dark{color:var(--gold-light)}
 @media (min-width:1081px){#sprog{display:flex}}
 
+/* ============ HERO ANIMÁTICO (FRAMES DEL VÍDEO IA) ============ */
+#heroFrames{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+html.frames #chartC,html.frames #heroSea{display:none}
+/* velo de pergamino para que el titular siga leyéndose sobre la foto */
+html.frames #inicio::before{
+  content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    linear-gradient(90deg,rgba(244,239,226,.97) 0%,rgba(244,239,226,.82) 30%,rgba(244,239,226,.38) 55%,rgba(244,239,226,0) 74%),
+    linear-gradient(0deg,rgba(244,239,226,.88) 0%,rgba(244,239,226,0) 24%);
+}
+html.frames #inicio>div{position:relative;z-index:2}
+
 /* ============ BOTÓN DE SONIDO (OLAS DEL PUERTO) ============ */
 #sndBtn{
   position:fixed;right:22px;bottom:20px;z-index:200;width:46px;height:46px;border-radius:50%;
@@ -2858,6 +2870,12 @@ ggSafe(function(){
     && innerWidth > 880
     && (function(){ try { return !!document.createElement('canvas').getContext('webgl2'); } catch(e){ return false; } })();
 
+  /* hero animático: el vídeo IA de la nao troceado en frames y scrubbed por
+     el scroll sustituye a la escena 3D del hero (el globo 3D se mantiene).
+     Mismos requisitos que el resto de capas pesadas. */
+  window.GG_FRAMES = window.GG_FLUID;
+  if (window.GG_FRAMES) document.documentElement.classList.add('frames');
+
   /* ---------- A2 cursor de agua: estela fluida + gotas + ondas ---------- */
   ggSafe(function(){
     if (!UMX) return;                         /* mismo gating que el cursor custom */
@@ -3150,6 +3168,49 @@ ggSafe(function(){
     });
   });
 
+  /* ---------- A7 hero animático: frames del vídeo IA scrubbed por scroll ----------
+     96 frames WebP (vídeo Kling 5s desde una foto generada de la nao Victoria).
+     El pin y el progreso los sigue dando el ScrollTrigger del hero (proto3d.js),
+     que llama a window.__setHeroFrame(p). Patrón del playbook: frames en canvas,
+     NUNCA video.currentTime. */
+  ggSafe(function(){
+    if (!window.GG_FRAMES) return;
+    const N = 96;
+    const ruta = i => 'assets/nao-frames/f' + String(i + 1).padStart(3, '0') + '.webp';
+    const sec = document.getElementById('inicio');
+    const cv = document.createElement('canvas');
+    cv.id = 'heroFrames';
+    cv.setAttribute('aria-hidden', 'true');
+    sec.insertBefore(cv, sec.firstChild);
+    const c2 = cv.getContext('2d');
+    const imgs = new Array(N);
+    let actual = 0, W = 0, H = 0;
+    function pinta(idx){
+      let i = Math.max(0, Math.min(N - 1, idx));
+      while (i > 0 && !imgs[i]) i--;     /* el pedido o el cargado más cercano */
+      const im = imgs[i];
+      if (!im || !W) return;
+      const esc = Math.max(W / im.width, H / im.height);
+      const dw = im.width * esc, dh = im.height * esc;
+      c2.drawImage(im, (W - dw) / 2, (H - dh) / 2, dw, dh);
+    }
+    window.__setHeroFrame = p => {
+      actual = Math.round(p * (N - 1));
+      pinta(actual);
+    };
+    function rs(){
+      W = sec.clientWidth; H = sec.clientHeight;
+      cv.width = W; cv.height = H;   /* el vídeo es 720p: más buffer no añade nitidez */
+      pinta(actual);
+    }
+    rs(); addEventListener('resize', rs);
+    for (let i = 0; i < N; i++){
+      const im = new Image();
+      im.onload = () => { imgs[i] = im; if (Math.abs(i - actual) < 4) pinta(actual); };
+      im.src = ruta(i);
+    }
+  });
+
   /* ---------- A6 el sonido del puerto: olas procedurales (Web Audio) ----------
      Rumor grave del mar con vaivén lento + rompientes aleatorias cada pocos
      segundos paseándose por el estéreo. Sintetizado al vuelo con ruido marrón
@@ -3183,18 +3244,28 @@ ggSafe(function(){
       ctx = new (window.AudioContext || window.webkitAudioContext)();
       master = ctx.createGain(); master.gain.value = 0;
       master.connect(ctx.destination);
-      /* mar de fondo: rumor grave que respira despacio */
+      /* mar de fondo: rumor que respira despacio (filtro más abierto: en
+         altavoces de portátil el grave puro de 260 Hz era inaudible) */
       const fondo = ctx.createBufferSource(); fondo.buffer = ruidoMarron(7); fondo.loop = true;
-      const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 260; lp.Q.value = .4;
-      const gF = ctx.createGain(); gF.gain.value = .4;
+      const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 440; lp.Q.value = .4;
+      const gF = ctx.createGain(); gF.gain.value = .55;
       const lfo = ctx.createOscillator(); lfo.frequency.value = .07;
-      const lfoG = ctx.createGain(); lfoG.gain.value = .15;
+      const lfoG = ctx.createGain(); lfoG.gain.value = .22;
       lfo.connect(lfoG); lfoG.connect(gF.gain);
       fondo.connect(lp); lp.connect(gF); gF.connect(master);
       fondo.start(); lfo.start();
+      /* espuma lejana constante: siseo suave en medios-agudos, siempre audible */
+      const sis = ctx.createBufferSource(); sis.buffer = ruidoMarron(6); sis.loop = true;
+      const hpS = ctx.createBiquadFilter(); hpS.type = 'bandpass'; hpS.frequency.value = 2300; hpS.Q.value = .5;
+      const gS = ctx.createGain(); gS.gain.value = .09;
+      const lfo2 = ctx.createOscillator(); lfo2.frequency.value = .11;
+      const lfo2G = ctx.createGain(); lfo2G.gain.value = .05;
+      lfo2.connect(lfo2G); lfo2G.connect(gS.gain);
+      sis.connect(hpS); hpS.connect(gS); gS.connect(master);
+      sis.start(); lfo2.start();
       /* rompientes: soplo de espuma que llega cada 4-10 s, de babor a estribor */
       const romp = ctx.createBufferSource(); romp.buffer = ruidoMarron(5); romp.loop = true;
-      const bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 850; bp.Q.value = .8;
+      const bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 1150; bp.Q.value = .7;
       const gR = ctx.createGain(); gR.gain.value = 0;
       const pan = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
       romp.connect(bp); bp.connect(gR);
@@ -3202,7 +3273,7 @@ ggSafe(function(){
       romp.start();
       (function ola(){
         if (!ctx) return;
-        const t = ctx.currentTime, dur = 2.2 + Math.random()*2.2, pico = .10 + Math.random()*.12;
+        const t = ctx.currentTime, dur = 2.2 + Math.random()*2.2, pico = .22 + Math.random()*.20;
         gR.gain.cancelScheduledValues(t);
         gR.gain.setValueAtTime(Math.max(gR.gain.value, 0.0001), t);
         gR.gain.linearRampToValueAtTime(pico, t + dur*.4);
@@ -3221,7 +3292,7 @@ ggSafe(function(){
         if (!ctx) arranca();
         if (ctx.state === 'suspended') ctx.resume();
         master.gain.cancelScheduledValues(ctx.currentTime);
-        master.gain.setTargetAtTime(.32, ctx.currentTime, 1.2);
+        master.gain.setTargetAtTime(.55, ctx.currentTime, 1.2);
       } else if (ctx){
         master.gain.setTargetAtTime(.0001, ctx.currentTime, .5);
       }
