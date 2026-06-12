@@ -576,6 +576,35 @@ html.frames #inicio::before{
 }
 html.frames #inicio>div{position:relative;z-index:2}
 
+/* ============ EL MUNDO DE LOS ACTOS (planchas tras el papel) ============ */
+#actosC{
+  /* por ENCIMA del footer-reveal (que vive fijo tras el contenido) y por
+     DEBAJO de main: la plancha es el mundo entre el papel y el sótano */
+  position:fixed;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;
+  opacity:0;transition:opacity .6s;
+}
+html.actos main{position:relative;z-index:2}
+/* Acto II · la flota tras los servicios: la sección se vuelve cristal oscuro */
+html.actos #servicios{background:linear-gradient(180deg,rgba(16,28,60,.22),rgba(12,21,48,.46))}
+html.actos #servicios .ship{background:rgba(7,13,32,.62);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+/* Acto IV · la tormenta tras el método: el texto pasa a claro */
+html.actos #metodo{background:linear-gradient(180deg,rgba(10,16,40,.28),rgba(10,16,40,.42))}
+html.actos #metodo h2.display,html.actos #metodo .step h3{color:var(--cream)}
+html.actos #metodo h2.display em{color:var(--gold-light)}
+html.actos #metodo .step p{color:#c3cbe2}
+html.actos #metodo .label{color:var(--gold-light)}
+html.actos #metodo .label::before{background:var(--gold-light)}
+html.actos #metodo .step-dot{background:rgba(7,13,32,.7);color:var(--gold-light);border-color:var(--gold-light)}
+html.actos #metodo .metodo-pull{color:var(--cream)}
+/* Acto V · el puerto tras tarifas y sectores: velo de pergamino fino */
+html.actos #tarifas{background:rgba(244,239,226,.32)}
+html.actos #sectores{background:rgba(235,228,209,.4)}
+html.actos #sectores .port{background:rgba(250,247,238,.82)}
+/* Acto VI · la noche tras el contacto y el cierre */
+html.actos #contacto{background:linear-gradient(168deg,rgba(22,41,94,.3) 0%,rgba(16,28,60,.35) 32%,rgba(7,13,32,.5) 100%)}
+html.actos #zarpa .zarpa-img{display:none}
+html.actos #zarpa{background:transparent}
+
 /* ============ BOTÓN DE SONIDO (OLAS DEL PUERTO) ============ */
 #sndBtn{
   position:fixed;right:22px;bottom:20px;z-index:200;width:46px;height:46px;border-radius:50%;
@@ -2875,10 +2904,9 @@ ggSafe(function(){
     && innerWidth > 880
     && (function(){ try { return !!document.createElement('canvas').getContext('webgl2'); } catch(e){ return false; } })();
 
-  /* hero animático (vídeo IA en frames): APAGADO — ha vuelto el 3D con la
-     nao v3 texturizada y tela simulada. Para recuperar el animático, poner
-     window.GG_FRAMES = window.GG_FLUID. */
-  window.GG_FRAMES = false;
+  /* hero animático: ACTIVO con la plancha de niebla del guion v2 (Acto I).
+     El 3D del hero queda de reserva poniendo esto a false. */
+  window.GG_FRAMES = window.GG_FLUID;
   if (window.GG_FRAMES) document.documentElement.classList.add('frames');
 
   /* ---------- A2 cursor de agua: estela fluida + gotas + ondas ---------- */
@@ -3180,8 +3208,8 @@ ggSafe(function(){
      NUNCA video.currentTime. */
   ggSafe(function(){
     if (!window.GG_FRAMES) return;
-    const N = 96;
-    const ruta = i => 'assets/nao-frames/f' + String(i + 1).padStart(3, '0') + '.webp';
+    const N = 64;
+    const ruta = i => 'assets/actos/niebla/f' + String(i + 1).padStart(3, '0') + '.webp';
     const sec = document.getElementById('inicio');
     const cv = document.createElement('canvas');
     cv.id = 'heroFrames';
@@ -3214,6 +3242,95 @@ ggSafe(function(){
       im.onload = () => { imgs[i] = im; if (Math.abs(i - actual) < 4) pinta(actual); };
       im.src = ruta(i);
     }
+  });
+
+  /* ---------- A9 el mundo de los actos: las planchas animadas tras el papel ----------
+     Un lienzo FIJO detrás del contenido pinta la plancha del acto actual,
+     scrubeada por el scroll dentro de su rango y con fundido en las
+     fronteras. Las secciones del acto se vuelven cristal (CSS html.actos).
+     Acto I = hero (módulo A7); Acto III = globo 3D (proto3d). */
+  ggSafe(function(){
+    if (!window.GG_FRAMES) return;
+    document.documentElement.classList.add('actos');
+    const ACTOS = [
+      { id: 'flota',    desde: 'servicios', hasta: 'servicios' },
+      { id: 'tormenta', desde: 'metodo',    hasta: 'metodo' },
+      { id: 'puerto',   desde: 'tarifas',   hasta: 'sectores' },
+      { id: 'noche',    desde: 'contacto',  hasta: 'zarpa' },
+    ];
+    const N = 64;
+    const cv = document.createElement('canvas');
+    cv.id = 'actosC';
+    cv.setAttribute('aria-hidden', 'true');
+    document.body.insertBefore(cv, document.body.firstChild);
+    const c2 = cv.getContext('2d');
+    let W = 0, H = 0, pintaPedida = false;
+    function repinta(){
+      if (pintaPedida) return;
+      pintaPedida = true;
+      requestAnimationFrame(() => { pintaPedida = false; pinta(); });
+    }
+    const bancos = {};
+    function carga(id){
+      if (bancos[id]) return;
+      const arr = bancos[id] = new Array(N);
+      for (let i = 0; i < N; i++){
+        const im = new Image();
+        /* repintar al cargar (agrupado en rAF: las ráfagas de 64 cargas no
+           deben significar 64 repintados completos) */
+        im.onload = () => { arr[i] = im; repinta(); };
+        im.src = 'assets/actos/' + id + '/f' + String(i + 1).padStart(3, '0') + '.webp';
+      }
+    }
+    let rangos = [];
+    function mide(){
+      rangos = ACTOS.map(a => {
+        const d = document.getElementById(a.desde), h = document.getElementById(a.hasta);
+        if (!d || !h) return null;
+        return { id: a.id, top: d.offsetTop - innerHeight * .5,
+                 fin: h.offsetTop + h.offsetHeight };
+      }).filter(Boolean);
+    }
+    function dibuja(id, p, alpha){
+      const arr = bancos[id];
+      if (!arr) return;
+      let i = Math.max(0, Math.min(N - 1, Math.round(p * (N - 1))));
+      while (i > 0 && !arr[i]) i--;          /* el pedido o el cargado más cercano */
+      const im = arr[i];
+      if (!im) return;
+      const esc = Math.max(W / im.width, H / im.height);
+      c2.globalAlpha = alpha;
+      c2.drawImage(im, (W - im.width * esc) / 2, (H - im.height * esc) / 2,
+                   im.width * esc, im.height * esc);
+      c2.globalAlpha = 1;
+    }
+    function pinta(){
+      const mid = scrollY + innerHeight * .5;
+      c2.clearRect(0, 0, W, H);
+      let visible = false;
+      for (const r of rangos){
+        if (mid > r.top - innerHeight * 1.5 && mid < r.fin + innerHeight) carga(r.id);
+        if (mid >= r.top && mid <= r.fin){
+          const p = (mid - r.top) / (r.fin - r.top);
+          const borde = Math.max(0, Math.min(p / .1, (1 - p) / .1, 1));
+          dibuja(r.id, p, borde);
+          visible = true;
+        }
+      }
+      cv.style.opacity = visible ? '1' : '0';
+    }
+    function rs(){
+      W = innerWidth; H = innerHeight;
+      cv.width = W; cv.height = H;
+      mide(); pinta();
+    }
+    rs();
+    addEventListener('resize', rs);
+    addEventListener('scroll', pinta, { passive: true });
+    if ('ResizeObserver' in window)
+      new ResizeObserver(() => { mide(); pinta(); }).observe(document.body);
+    carga('flota');
+    window.__actos = { bancos, get rangos(){ return rangos; }, pinta, dibuja };
   });
 
   /* ---------- A6 el sonido del puerto: olas procedurales (Web Audio) ----------
