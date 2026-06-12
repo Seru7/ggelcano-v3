@@ -57,14 +57,16 @@ for o in kit:
     if o not in secciones:
         bpy.data.objects.remove(o)
 g1 = grupo(secciones, "MuelleA")
-# segundo tramo: duplicado desplazado la longitud de la cadena (~8.2 en y)
+# segundo tramo: duplicado empalmado midiendo la cadena real
+mn, mx = bbox(secciones)
+largo = mx[1] - mn[1] - 0.35          # solape leve para esconder la junta
 bpy.ops.object.select_all(action="DESELECT")
 for o in secciones:
     o.select_set(True)
 bpy.ops.object.duplicate()
 dup = [o for o in bpy.context.selected_objects]
 g2 = grupo(dup, "MuelleB")
-g2.location = (0, -8.2, 0)
+g2.location = (0, -largo, 0)
 muelle = grupo([g1, g2], "Muelle")
 muelle.rotation_euler = (0, 0, math.radians(90))   # el muelle corre a lo largo de X
 muelle.location = (-22, 2, -1.5)                   # cubierta ≈ +1.1 sobre el agua
@@ -93,15 +95,15 @@ def acantilado(asset, nombre, ancho, alto_extra, pos, rotz):
     s = ancho / (maxs[0] - mins[0])
     g.scale = (s, s, s * alto_extra)
     g.rotation_euler = (0, 0, math.radians(rotz))
-    g.location = (pos[0], pos[1], -mins[2] * s * alto_extra - 1.6)
-    return g, maxs[2] * s * alto_extra - 1.6
+    g.location = (pos[0], pos[1], -mins[2] * s * alto_extra - 3.2)
+    return g, maxs[2] * s * alto_extra - 3.2
 
-acantilado("coastal_cliff_01", "Acantilado1", 64, 1.5, (6, 42), 188)
-_, topF = acantilado("coastal_cliff_02", "Acantilado2", 40, 1.7, (36, 24), 205)
-acantilado("coast_rocks_01", "Rocas1", 14, 1.6, (-34, 8), 35)
+acantilado("coastal_cliff_01", "Acantilado1", 70, 1.0, (-4, 46), 196)
+_, topF = acantilado("coastal_cliff_02", "Acantilado2", 34, 1.0, (34, 26), 205)
+acantilado("coast_rocks_01", "Rocas1", 18, 1.4, (-31, 0), 25)
 
 # ---------------- barco holandés de atrezzo, fondeado a contraluz ----------------
-coloca("dutch_ship_medium", "BarcoFondo", 1.0, (26, -8, -0.4), 200)
+# (barco de fondo retirado: la nao manda sola en el plano)
 
 # ---------------- nao IA protagonista amarrada al muelle ----------------
 if os.path.exists("/tmp/nao-ia.glb"):
@@ -111,7 +113,7 @@ if os.path.exists("/tmp/nao-ia.glb"):
     g = grupo(nuevos, "NaoIA")
     g.scale = (11, 11, 11)
     g.rotation_euler = (0, 0, math.radians(8))
-    g.location = (-12, 6.6, 2.05)
+    g.location = (-12, 6.6, 2.45)
     print("NAO colocada")
 
 # ---------------- faro propio sobre el acantilado 2 ----------------
@@ -143,7 +145,7 @@ bl.inputs["Base Color"].default_value = (1, 0.85, 0.6, 1)
 bl.inputs["Emission Color"].default_value = (1, 0.8, 0.45, 1)
 bl.inputs["Emission Strength"].default_value = 40
 
-FX, FY, FZ = 33, 22, min(11.0, max(6.0, topF))
+FX, FY, FZ = 33, 23, min(10.0, max(5.0, topF - 1.4))
 def cono(nombre, loc, r1, r2, alto, mt, caras=28):
     bpy.ops.mesh.primitive_cone_add(location=loc, radius1=r1, radius2=r2, depth=alto, vertices=caras)
     o = bpy.context.active_object
