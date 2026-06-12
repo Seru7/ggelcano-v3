@@ -45,7 +45,7 @@ const C = {
   azul: 0x223f83, azulSoft: 0x3a5aa8, gold: 0xb08d57, goldLight: 0xc9b07e, cream: 0xfaf7ee,
 };
 
-const DPR = Math.min((devicePixelRatio || 1) * 2, 3);
+const DPR = Math.min((devicePixelRatio || 1) * 3, 4.5);
 const loader = new GLTFLoader();
 loader.setMeshoptDecoder(MeshoptDecoder);
 

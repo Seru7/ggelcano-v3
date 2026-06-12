@@ -1789,7 +1789,7 @@ ggSafe(function(){
   const hero = document.getElementById('inicio');
   if (!cv || !hero) return;
   const ctx = cv.getContext('2d');
-  const DPR = Math.min((devicePixelRatio || 1) * 2, 3);
+  const DPR = Math.min((devicePixelRatio || 1) * 3, 4.5);
   let W = 0, H = 0, grid = null;
 
   function buildGrid(){
@@ -1906,7 +1906,7 @@ ggSafe(function(){
   const ctx = cv.getContext('2d');
   let MOBILE = innerWidth < 880;
   const N = MOBILE ? 1100 : 2200;
-  const DPR = Math.min((devicePixelRatio || 1) * 2, 3);
+  const DPR = Math.min((devicePixelRatio || 1) * 3, 4.5);
   let W = 0, H = 0, cx = 0, cy = 0, scale = 1;
 
   /* paleta náutica por capítulo: pergamino → noche → abismo → azul marca */
@@ -2179,7 +2179,7 @@ ggSafe(function(){
   const cv = document.getElementById('globeC');
   if (!cv || !cv.getContext) return;
   const ctx = cv.getContext('2d');
-  const DPR = Math.min((devicePixelRatio || 1) * 2, 3);
+  const DPR = Math.min((devicePixelRatio || 1) * 3, 4.5);
   const RAD = Math.PI / 180;
 
   /* máscara de tierra (ver cabecera del bloque) */
@@ -2849,7 +2849,7 @@ ggSafe(function(){
   const AS = UMX ? UMX.S : {t:0, y:scrollY, vy:0, dt:1, mx:innerWidth/2, my:innerHeight/2, calm:false};
   const FALL = [];                            /* módulos del loop propio (sin UM) */
   function reg(m){ if (!m) return; if (UMX) UMX.add(m); else FALL.push(m); }
-  const DPRC = Math.min((devicePixelRatio || 1) * 2, 3);
+  const DPRC = Math.min((devicePixelRatio || 1) * 3, 4.5);
   const TAU = Math.PI * 2;
 
   /* ¿puede correr la simulación de fluidos (3d/fluid.js)? Si sí, la estela 2D
