@@ -46,6 +46,28 @@ def mar(strength, color, rough):
     return o
 
 
+
+
+def aplana(mar_obj, cx, cy, rx=10.0, ry=4.5):
+    """Calma el agua bajo el casco (huella elíptica) y devuelve el nivel local:
+    el barco se asienta SOBRE su agua, no atravesado por las crestas."""
+    me = mar_obj.data
+    zs = []
+    for v in me.vertices:
+        dx = (v.co.x - cx) / rx
+        dy = (v.co.y - cy) / ry
+        if dx * dx + dy * dy < 4.0:
+            zs.append(v.co.z)
+    nivel = sum(zs) / max(1, len(zs))
+    for v in me.vertices:
+        dx = (v.co.x - cx) / rx
+        dy = (v.co.y - cy) / ry
+        d = (dx * dx + dy * dy) ** 0.5
+        if d < 2.2:
+            t = max(0.0, 1.0 - max(0.0, d - 1.0) / 1.2)
+            v.co.z = v.co.z * (1 - t) + nivel * t
+    return nivel
+
 def nao(nombre, pos, rotz, escora=0, escala=11):
     antes = set(bpy.context.scene.objects)
     bpy.ops.import_scene.gltf(filepath="/tmp/nao-ia.glb")
@@ -113,10 +135,12 @@ def render(nombre, cam_loc, cam_dir, lens=33, mist=(18, 90), mist_color=(0.93, 0
 
 # ================= ACTO II · LA FLOTA =================
 escena_limpia()
-mar(1.1, (0.06, 0.10, 0.22), 0.18)
-nao("NaoLider", (0, 10, 1.9), 196)
-nao("NaoAla1", (-19, 30, 1.7), 203, escora=2)
-nao("NaoAla2", (16, 36, 1.7), 190, escora=-2)
+m2 = mar(1.1, (0.06, 0.10, 0.22), 0.18)
+for nombre, (px, py), rz, esc in (("NaoLider", (0, 10), 196, 0),
+                                  ("NaoAla1", (-19, 30), 203, 2),
+                                  ("NaoAla2", (16, 36), 190, -2)):
+    nivel = aplana(m2, px, py)
+    nao(nombre, (px, py, nivel + 2.5), rz, escora=esc)
 mundo("matte_atardecer.jpg", 1.0, (1.0, 0.66, 0.34), 3.2,
       (math.radians(75), 0, math.radians(-150)))
 render("acto2_flota.png", (3, -24, 4.2), (-1, 30, 1.0), lens=31, mist=(25, 110))
@@ -124,8 +148,9 @@ print("ACTO2_OK")
 
 # ================= ACTO IV · LA TORMENTA =================
 escena_limpia()
-mar(2.6, (0.025, 0.04, 0.07), 0.32)
-nao("NaoTormenta", (-2, 14, 2.1), 188, escora=6)
+m4 = mar(2.6, (0.025, 0.04, 0.07), 0.32)
+nivel4 = aplana(m4, -2, 14, rx=12.0, ry=5.5)
+nao("NaoTormenta", (-2, 14, nivel4 + 2.35), 188, escora=6)
 mundo("matte_tormenta.jpg", 0.22, (0.6, 0.68, 0.9), 1.1,
       (math.radians(70), 0, math.radians(-120)))
 # el haz dorado del matte toca el agua tras la nao
