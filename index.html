@@ -583,7 +583,12 @@ html.frames #inicio>div{position:relative;z-index:2}
   position:fixed;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;
   opacity:0;transition:opacity .6s;
 }
-html.actos main{position:relative;z-index:2}
+html.actos main,html.um-foot.actos main{position:relative;z-index:2;background:transparent}
+/* el footer-reveal queda DEBAJO del lienzo (que se desvanece al llegar al final) */
+html.actos footer{z-index:0}
+/* el papel vive en las SECCIONES no-acto; main debe ser cristal o tapa el mundo */
+html.actos #quienes,html.actos .exp-intro,html.actos #faq{background:var(--paper)}
+html.actos .mq{background:var(--paper)}
 /* Acto II · la flota tras los servicios: la sección se vuelve cristal oscuro */
 html.actos #servicios{background:linear-gradient(180deg,rgba(16,28,60,.22),rgba(12,21,48,.46))}
 html.actos #servicios .ship{background:rgba(7,13,32,.62);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
