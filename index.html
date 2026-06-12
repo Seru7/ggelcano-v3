@@ -1,0 +1,3248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>G&amp;G Elcano — Estudio digital en Bizkaia · Webs, apps y reservas con IA</title>
+<meta name="description" content="G&G Elcano es un estudio digital de Bizkaia. Diseñamos webs profesionales para negocios locales, apps a medida y sistemas de reservas autónomos con IA. Te enseñamos una propuesta real antes de cobrar, sin permanencia.">
+<meta name="theme-color" content="#223f83">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<meta property="og:title" content="G&amp;G Elcano — Estudio digital en Bizkaia">
+<meta property="og:description" content="Webs profesionales, apps a medida y reservas autónomas con IA para negocios locales. Te enseñamos una propuesta real antes de cobrar, sin permanencia.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_ES">
+<meta property="og:url" content="https://www.ggelcano.com/">
+<meta property="og:image" content="https://www.ggelcano.com/assets/logo-original.jpg">
+<link rel="canonical" href="https://www.ggelcano.com/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,560;0,9..144,640;1,9..144,420;1,9..144,560&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "G&G Elcano",
+  "url": "https://www.ggelcano.com/",
+  "description": "Estudio digital en Bizkaia: webs profesionales para negocios locales, apps a medida y sistemas de reservas autónomos con IA.",
+  "email": "accounting@ggelcano.com",
+  "logo": "https://www.ggelcano.com/assets/logo-original.jpg",
+  "areaServed": "Bizkaia, España",
+  "founder": { "@type": "Person", "name": "Sergio" }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "¿Cuánto cuesta tener la web?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Desde 19 € al mes más una puesta en marcha única, según el plan (precios sin IVA). El plan exacto se propone por escrito junto a una propuesta real, antes de pagar nada." } },
+    { "@type": "Question", "name": "¿Hay permanencia o contrato de larga duración?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. La cuota es mes a mes y puede dejarse en cualquier momento, sin permanencia." } },
+    { "@type": "Question", "name": "¿Cuánto tardáis en enseñarme algo?",
+      "acceptedAnswer": { "@type": "Answer", "text": "En pocos días hay un enlace con la web hecha con datos reales del negocio. No un boceto: la web navegando." } },
+    { "@type": "Question", "name": "¿Y si la veo y no me convence?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No se paga nada. Trabajamos antes de cobrar para que la decisión se tome viendo el resultado." } },
+    { "@type": "Question", "name": "¿Quién se ocupa del alojamiento y el mantenimiento?",
+      "acceptedAnswer": { "@type": "Answer", "text": "G&G Elcano: alojamiento, certificado SSL y mantenimiento van incluidos en la cuota mensual." } },
+    { "@type": "Question", "name": "¿Qué hacéis con mis datos?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Solo se usan para responder y preparar la propuesta (RGPD). No se ceden a terceros y pueden borrarse a petición." } },
+    { "@type": "Question", "name": "¿Atendéis fuera de Bizkaia?",
+      "acceptedAnswer": { "@type": "Answer", "text": "El puerto base es Bizkaia y alrededores, pero se atienden proyectos de fuera: basta con contarnos el caso." } },
+    { "@type": "Question", "name": "¿En castellano o en euskera?",
+      "acceptedAnswer": { "@type": "Answer", "text": "En los dos: atendemos y construimos en castellano y en euskera." } }
+  ]
+}
+</script>
+<style>
+/* ============================================================
+   G&G ELCANO — Web corporativa · carta náutica premium
+   ============================================================ */
+:root{
+  --azul:#223f83;          /* azul del logo */
+  --azul-soft:#3a5aa8;
+  --noche:#101c3c;         /* azul noche */
+  --abismo:#070d20;        /* azul abismo */
+  --paper:#f4efe2;         /* pergamino */
+  --paper-2:#ebe4d1;
+  --cream:#faf7ee;
+  --ink:#1b2238;
+  --mute:#4c536b;
+  --gold:#b08d57;          /* latón de instrumentos */
+  --gold-deep:#73592f;     /* latón para texto pequeño en claro (AA real: 5.72:1 sobre paper, 5.17:1 sobre paper-2) */
+  --gold-light:#c9b07e;
+  --line:rgba(34,63,131,.18);
+  --line-gold:rgba(176,141,87,.35);
+  --line-dark:rgba(201,176,126,.22);
+  --serif:'Fraunces', Georgia, serif;
+  --sans:'Inter', system-ui, sans-serif;
+  --mono:'JetBrains Mono', ui-monospace, monospace;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:clip}
+body{
+  font-family:var(--sans);color:var(--ink);background:var(--paper);
+  line-height:1.6;font-size:16px;-webkit-font-smoothing:antialiased;
+  /* clip, NUNCA hidden: con overflow-x en html, el hidden de body ya no se
+     propaga al viewport y convertía a body en contenedor de scroll, lo que
+     mataba TODOS los position:sticky descendientes (el pin de la expedición) */
+  overflow-x:clip;
+}
+::selection{background:var(--azul);color:var(--cream)}
+img{max-width:100%;display:block}
+a{color:inherit}
+button{font:inherit;cursor:pointer}
+
+/* --- accesibilidad --- */
+.skip-link{position:absolute;left:-9999px;top:0;background:var(--azul);color:#fff;
+  padding:10px 18px;z-index:300;font-weight:600;border-radius:0 0 8px 0}
+.skip-link:focus{left:0}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ============ HEADER ============ */
+header{
+  position:fixed;inset:0 0 auto 0;z-index:120;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 clamp(20px,4vw,52px);height:86px;
+  transition:transform .45s var(--ease),background .35s,height .35s,box-shadow .35s;
+  background:transparent;
+}
+header.scrolled{
+  background:rgba(244,239,226,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  height:66px;box-shadow:0 1px 0 var(--line);
+}
+header.hide{transform:translateY(-101%)}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none}
+.brand-mark{width:36px;height:36px;background:var(--azul);display:grid;place-items:center;flex:0 0 auto}
+.brand-mark span{color:#fff;font-family:Arial,Helvetica,sans-serif;font-weight:bold;font-size:14px;letter-spacing:-.5px;transform:scaleX(.92)}
+.brand-name{font-family:Arial,Helvetica,sans-serif;font-weight:bold;color:var(--azul);
+  font-size:17px;letter-spacing:.22em}
+nav.main{display:flex;align-items:center;gap:clamp(16px,2.4vw,34px)}
+nav.main a{
+  text-decoration:none;font-size:13.5px;font-weight:500;color:var(--ink);
+  letter-spacing:.04em;position:relative;padding:4px 0;
+}
+nav.main a::after{
+  content:'';position:absolute;left:0;right:0;bottom:-2px;height:2px;background:var(--gold);
+  transform:scaleX(0);transform-origin:right;transition:transform .4s var(--ease);
+}
+nav.main a:hover::after,nav.main a:focus-visible::after{transform:scaleX(1);transform-origin:left}
+.nav-cta,nav.main a.nav-cta{
+  background:var(--azul);color:#fff!important;padding:10px 22px;border-radius:3px;
+  font-weight:600;transition:background .3s,transform .3s var(--ease);
+}
+.nav-cta::after,nav.main a.nav-cta::after{display:none}
+.nav-cta:hover{background:var(--noche)}
+
+/* burger + overlay móvil */
+#burger{display:none;background:none;border:0;width:44px;height:44px;position:relative;z-index:130}
+#burger span{position:absolute;left:10px;right:10px;height:2px;background:var(--azul);
+  transition:transform .4s var(--ease),opacity .3s}
+#burger span:nth-child(1){top:15px}#burger span:nth-child(2){top:22px}#burger span:nth-child(3){top:29px}
+body.nav-open #burger span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+body.nav-open #burger span:nth-child(2){opacity:0}
+body.nav-open #burger span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+#mnav{
+  position:fixed;inset:0;z-index:125;background:var(--noche);
+  display:flex;flex-direction:column;justify-content:center;padding:0 clamp(28px,9vw,80px);gap:6px;
+  opacity:0;visibility:hidden;
+  /* visibility se esconde tras el fade al cerrar, pero aparece al instante al
+     abrir: si no, el focus() del primer enlace falla (el menú aún computa hidden) */
+  transition:opacity .45s var(--ease),visibility 0s .45s;
+}
+body.nav-open{overflow:hidden}
+body.nav-open #mnav{opacity:1;visibility:visible;transition:opacity .45s var(--ease),visibility 0s}
+#mnav a{
+  color:var(--cream);text-decoration:none;font-family:var(--serif);
+  font-size:clamp(30px,8vw,44px);font-weight:560;padding:8px 0;
+  border-bottom:1px solid var(--line-dark);
+  opacity:0;transform:translateY(22px);transition:opacity .5s var(--ease),transform .5s var(--ease);
+}
+body.nav-open #mnav a{opacity:1;transform:none}
+body.nav-open #mnav a:nth-child(1){transition-delay:.08s}
+body.nav-open #mnav a:nth-child(2){transition-delay:.14s}
+body.nav-open #mnav a:nth-child(3){transition-delay:.2s}
+body.nav-open #mnav a:nth-child(4){transition-delay:.26s}
+body.nav-open #mnav a:nth-child(5){transition-delay:.32s}
+body.nav-open #mnav a:nth-child(6){transition-delay:.38s}
+#mnav .mnav-foot{margin-top:34px;font-family:var(--mono);font-size:12px;color:var(--gold-light);letter-spacing:.14em}
+
+/* ============ SCAFFOLD DE SECCIÓN ============ */
+section{scroll-margin-top:80px}
+.sec{padding:clamp(80px,11vw,140px) clamp(20px,5vw,64px);position:relative}
+.sec-inner{max-width:1240px;margin:0 auto;position:relative}
+.label{
+  font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--gold-deep);display:flex;align-items:center;gap:14px;margin-bottom:26px;
+}
+.label::before{content:'';width:42px;height:1px;background:var(--gold)}
+h1,h2,h3{font-family:var(--serif);font-weight:560;line-height:1.08;letter-spacing:-.01em}
+h2.display{font-size:clamp(34px,4.6vw,58px);max-width:17em}
+h2.display em,h1 em{font-style:italic;font-weight:560;color:var(--azul)}
+.lead{font-size:clamp(16px,1.4vw,19px);color:var(--mute);max-width:620px;margin-top:22px}
+.dark{background:var(--noche);color:var(--cream)}
+.dark .label{color:var(--gold-light)}
+.dark .label::before{background:var(--gold-light)}
+.dark h2.display{color:var(--cream)}
+.dark h2.display em{color:var(--gold-light)}
+.dark .lead{color:#b9c1d8}
+
+/* reveals */
+.rv{opacity:0;transform:translateY(38px);transition:opacity 1s var(--ease-out),transform 1s var(--ease-out)}
+.rv-l{transform:translateX(-64px)}
+.rv-r{transform:translateX(64px)}
+.rv.in{opacity:1;transform:none}
+
+/* botones */
+.btn{
+  display:inline-flex;align-items:center;gap:10px;text-decoration:none;border-radius:2px;
+  font-weight:600;font-size:15px;padding:15px 30px;transition:background .3s,color .3s,border-color .3s;
+  border:1.5px solid transparent;will-change:transform;
+}
+.btn-azul{background:var(--azul);color:#fff}
+.btn-azul:hover{background:var(--noche)}
+.btn-ghost{border-color:var(--azul);color:var(--azul);background:transparent}
+.btn-ghost:hover{background:rgba(34,63,131,.07)}
+.btn-cream{background:var(--cream);color:var(--azul)}
+.btn-cream:hover{background:var(--gold-light);color:var(--noche)}
+.btn-gold{border-color:var(--gold-light);color:var(--gold-light);background:transparent}
+.btn-gold:hover{background:rgba(201,176,126,.12)}
+.btn svg{flex:0 0 auto}
+
+/* ============ HERO ============ */
+#inicio{
+  min-height:100svh;display:flex;align-items:center;position:relative;overflow:hidden;
+  padding:130px clamp(20px,5vw,64px) 90px;background:var(--paper);
+}
+#chartC{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;
+  -webkit-mask-image:linear-gradient(180deg,transparent,#000 120px);
+  mask-image:linear-gradient(180deg,transparent,#000 120px)}
+.hero-grid{
+  position:relative;max-width:1240px;margin:0 auto;width:100%;
+  display:grid;grid-template-columns:minmax(0,7.2fr) minmax(0,3.4fr);gap:clamp(30px,5vw,80px);align-items:center;
+}
+.hero-eyebrow{
+  font-family:var(--mono);font-size:12.5px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--gold-deep);display:flex;align-items:center;gap:14px;margin-bottom:30px;
+}
+.hero-eyebrow::before{content:'';width:54px;height:1px;background:var(--gold)}
+#inicio h1{
+  font-size:clamp(42px,6.4vw,84px);color:var(--ink);max-width:11.5em;
+}
+#inicio h1 .w{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.08em;margin-bottom:-.08em}
+#inicio h1 .w>span{display:inline-block;transform:translateY(112%);transition:transform 1.15s var(--ease-out)}
+#inicio.loaded h1 .w>span{transform:translateY(0)}
+.hero-lead{font-size:clamp(16px,1.5vw,19.5px);color:var(--mute);max-width:560px;margin-top:28px}
+.hero-ctas{display:flex;gap:16px;flex-wrap:wrap;margin-top:38px}
+.hero-trust{
+  display:flex;gap:26px;flex-wrap:wrap;margin-top:44px;
+  font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--mute);
+}
+.hero-trust span{display:flex;align-items:center;gap:8px}
+.hero-trust b{color:var(--gold-deep);font-weight:600}
+/* tarjeta de instrumentos a la derecha */
+.hero-side{position:relative;display:flex;flex-direction:column;align-items:center;gap:26px}
+.rosa{width:clamp(150px,14vw,210px);height:auto;opacity:.85}
+.rosa.spin{animation:rosaspin 90s linear infinite}
+@keyframes rosaspin{to{transform:rotate(360deg)}}
+.hero-card{
+  border:1px solid var(--line-gold);background:rgba(250,247,238,.72);backdrop-filter:blur(4px);
+  padding:22px 24px;width:100%;max-width:280px;
+}
+.hero-card dl{display:flex;flex-direction:column;gap:9px;font-size:12.5px}
+.hero-card dl>div{display:flex;justify-content:space-between;gap:16px;align-items:baseline}
+.hero-card dl>div+div{border-top:1px solid var(--line-gold);padding-top:9px}
+.hero-card dt{font-family:var(--mono);font-weight:600;letter-spacing:.14em;color:var(--gold-deep)}
+.hero-card dd{color:var(--ink);font-weight:500;text-align:right}
+.scroll-cue{
+  position:absolute;left:50%;bottom:26px;transform:translateX(-50%);
+  font-family:var(--mono);font-size:11px;letter-spacing:.3em;color:var(--mute);
+  display:flex;flex-direction:column;align-items:center;gap:9px;text-transform:uppercase;
+}
+.scroll-cue::after{content:'';width:1px;height:42px;background:linear-gradient(var(--gold),transparent);
+  animation:cue 2.2s var(--ease) infinite}
+@keyframes cue{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}
+  55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ============ MARQUESINA ============ */
+.mq{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  background:var(--paper-2);padding:15px 0}
+.mq-track{display:flex;width:max-content;animation:mq 36s linear infinite;gap:0}
+.mq span{
+  font-family:var(--mono);font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--azul);padding:0 26px;white-space:nowrap;display:flex;align-items:center;gap:26px;
+}
+.mq span::after{content:'✦';color:var(--gold);font-size:9px}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* ============ QUIÉNES SOMOS ============ */
+#quienes .sec-inner{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(36px,6vw,96px)}
+.q-left{position:relative}
+.coords{
+  font-family:var(--mono);font-size:12px;letter-spacing:.18em;color:var(--gold-deep);
+  margin-top:34px;display:flex;flex-direction:column;gap:8px;
+}
+.coords i{font-style:normal;color:var(--mute)}
+.q-rule{width:64px;height:1px;background:var(--gold);margin-top:34px}
+.q-right p{color:var(--mute);font-size:clamp(15.5px,1.3vw,17.5px);margin-bottom:20px}
+.q-right p b{color:var(--ink)}
+.q-claims{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:36px}
+.q-claims div{background:var(--paper);padding:20px 22px}
+.q-claims strong{font-family:var(--serif);font-size:19px;font-weight:560;color:var(--azul);display:block;margin-bottom:5px}
+.q-claims small{font-size:12.5px;color:var(--mute);line-height:1.5;display:block}
+
+/* ============ SERVICIOS (FLOTA) ============ */
+#servicios{background:linear-gradient(180deg,var(--noche),#0c1530)}
+.fleet{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,2.4vw,30px);margin-top:64px}
+.ship{
+  background:rgba(250,247,238,.035);border:1px solid var(--line-dark);padding:38px 32px 34px;
+  position:relative;transition:transform .5s var(--ease),border-color .4s,background .4s;
+  display:flex;flex-direction:column;
+}
+.ship:hover{transform:translateY(-9px);border-color:var(--gold-light);background:rgba(250,247,238,.06)}
+.ship:nth-child(2){transform:translateY(30px)}
+.ship:nth-child(2):hover{transform:translateY(21px)}
+.ship-num{
+  font-family:var(--serif);font-size:15px;color:var(--gold-light);
+  letter-spacing:.1em;display:flex;align-items:center;gap:12px;margin-bottom:26px;
+}
+.ship-num::after{content:'';flex:1;height:1px;background:var(--line-dark)}
+.ship h3{font-size:clamp(23px,2vw,28px);color:var(--cream);margin-bottom:14px}
+.ship p{font-size:14.5px;color:#b9c1d8;flex:1}
+.ship ul{list-style:none;margin-top:22px;display:flex;flex-direction:column;gap:9px}
+.ship li{font-size:13.5px;color:#cdd4e6;display:flex;gap:10px;align-items:baseline}
+.ship li::before{content:'—';color:var(--gold);flex:0 0 auto}
+.ship .badge{
+  align-self:flex-start;margin-top:24px;font-family:var(--mono);font-size:10.5px;font-weight:600;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--gold-light);
+  border:1px solid var(--line-dark);padding:6px 12px;
+}
+.fleet-note{
+  margin-top:64px;font-size:13px;color:#9aa3bf;max-width:620px;
+  border-left:2px solid var(--gold);padding-left:18px;
+}
+
+/* ============ LA EXPEDICIÓN (partículas) ============ */
+#expedicion{height:600svh;position:relative}
+.exp-stage{
+  position:sticky;top:0;height:100svh;overflow:hidden;background:var(--paper);
+}
+#expCanvas{position:absolute;inset:0;width:100%;height:100%}
+.exp-cap{
+  position:absolute;left:clamp(24px,7vw,110px);top:50%;transform:translateY(-50%);
+  max-width:350px;opacity:0;pointer-events:none;
+}
+.exp-cap .k{
+  font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--gold-deep);display:block;margin-bottom:14px;
+}
+.exp-cap h3{font-size:clamp(26px,2.6vw,36px);margin-bottom:13px;color:var(--ink)}
+.exp-cap p{font-size:14.5px;line-height:1.65;color:var(--mute)}
+.exp-stage.dark-ch .exp-cap .k{color:var(--gold-light)}
+.exp-stage.dark-ch .exp-cap h3{color:var(--cream)}
+.exp-stage.dark-ch .exp-cap p{color:#b9c1d8}
+.exp-progress{
+  position:absolute;right:clamp(18px,4vw,52px);top:50%;transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:13px;
+}
+.exp-progress span{
+  width:8px;height:8px;border-radius:50%;border:1.5px solid var(--gold);transition:background .4s;
+}
+.exp-progress span.on{background:var(--gold)}
+.exp-hint{
+  position:absolute;left:50%;bottom:26px;transform:translateX(-50%);
+  font-family:var(--mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--gold-deep);transition:opacity .5s;white-space:nowrap;
+}
+.exp-stage.dark-ch .exp-hint{color:var(--gold-light)}
+/* intro de la sección, antes del pin */
+.exp-intro{background:var(--paper);text-align:left}
+.exp-intro .sec-inner{max-width:880px}
+
+/* ============ CÓMO TRABAJAMOS (DERROTA) ============ */
+#metodo{background:var(--paper)}
+.route{position:relative;margin-top:70px;display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(18px,2.6vw,34px)}
+.route::before{
+  content:'';position:absolute;top:25px;left:4%;right:4%;height:0;
+  border-top:2px dashed var(--line-gold);z-index:0;
+}
+.step{position:relative;z-index:1}
+.step-dot{
+  width:50px;height:50px;border-radius:50%;background:var(--paper);border:1.5px solid var(--gold);
+  display:grid;place-items:center;font-family:var(--serif);font-style:italic;font-size:17px;
+  color:var(--azul);margin-bottom:22px;transition:background .35s,color .35s;
+}
+.step:hover .step-dot{background:var(--azul);color:var(--cream);border-color:var(--azul)}
+.step h3{font-size:20.5px;margin-bottom:10px}
+.step p{font-size:14px;color:var(--mute)}
+.metodo-pull{
+  margin-top:80px;max-width:660px;font-family:var(--serif);font-style:italic;
+  font-size:clamp(20px,2.2vw,27px);line-height:1.45;color:var(--azul);
+  border-left:2px solid var(--gold);padding-left:26px;
+}
+
+/* ============ SECTORES (PUERTOS) ============ */
+#sectores{background:var(--paper-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.ports{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:56px}
+.port{background:var(--paper-2);padding:28px 26px;transition:background .35s}
+.port:hover{background:var(--cream)}
+.port h3{font-size:19px;display:flex;align-items:baseline;gap:12px;margin-bottom:8px}
+.port h3 i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--gold-deep);letter-spacing:.12em}
+.port p{font-size:13.5px;color:var(--mute)}
+.ports-note{margin-top:30px;font-size:13px;color:var(--mute);font-style:italic}
+
+/* ============ TARIFAS (EL MANIFIESTO) ============ */
+#tarifas{background:var(--paper)}
+.tarifas-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,1.8vw,24px);margin-top:64px;align-items:stretch}
+.tarifa{
+  background:var(--cream);border:1px solid var(--line);padding:36px 28px 30px;
+  position:relative;display:flex;flex-direction:column;
+  transition:transform .5s var(--ease),border-color .4s,box-shadow .5s;
+}
+.tarifa:hover{transform:translateY(-8px);border-color:var(--gold);box-shadow:0 20px 44px -24px rgba(16,28,60,.3)}
+.t-num{
+  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.18em;
+  color:var(--gold-deep);display:flex;align-items:center;gap:12px;margin-bottom:20px;
+}
+.t-num::after{content:'';flex:1;height:1px;background:var(--line-gold)}
+.tarifa h3{font-size:23px;margin-bottom:8px}
+.t-desc{font-size:13.5px;color:var(--mute);flex:1;line-height:1.55}
+.t-precio{margin-top:26px;display:flex;align-items:baseline;gap:8px}
+.t-eur{font-family:var(--serif);font-weight:640;font-size:clamp(32px,2.6vw,42px);color:var(--azul);letter-spacing:-.02em}
+.t-mes{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.t-alta{font-size:12.5px;color:var(--mute);margin-top:7px;padding-bottom:24px;margin-bottom:24px;border-bottom:1px solid var(--line)}
+.t-cta{margin-top:auto;justify-content:center;padding:12px 18px;font-size:14px}
+.t-flag{
+  position:absolute;top:-13px;left:24px;background:var(--gold);color:var(--noche);
+  font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.16em;
+  text-transform:uppercase;padding:6px 12px;
+}
+.tarifa.destacada{background:var(--noche);border-color:var(--gold)}
+.tarifa.destacada h3{color:var(--cream)}
+.tarifa.destacada .t-desc{color:#b9c1d8}
+.tarifa.destacada .t-eur{color:var(--gold-light)}
+.tarifa.destacada .t-mes,.tarifa.destacada .t-alta{color:#9aa3bf}
+.tarifa.destacada .t-alta{border-color:var(--line-dark)}
+.tarifa.destacada .t-num{color:var(--gold-light)}
+.tarifa.destacada .t-num::after{background:var(--line-dark)}
+.tarifas-incluye{list-style:none;margin-top:48px;display:flex;flex-wrap:wrap;gap:10px 28px}
+.tarifas-incluye li{font-size:13px;display:flex;gap:10px;align-items:baseline}
+.tarifas-incluye li::before{content:'—';color:var(--gold-deep);flex:0 0 auto}
+.tarifas-note{margin-top:18px;font-size:12.5px;color:var(--mute);font-style:italic}
+
+/* ============ FAQ (CUADERNO DE A BORDO) ============ */
+#faq{background:var(--paper)}
+.faq-list{margin-top:56px;max-width:840px;border-top:1px solid var(--line)}
+.faq-item{border-bottom:1px solid var(--line)}
+.faq-item h3{font-size:inherit;font-weight:inherit;line-height:inherit}
+.faq-q{
+  width:100%;background:none;border:0;text-align:left;display:flex;align-items:baseline;gap:18px;
+  padding:24px 2px;color:var(--ink);transition:color .3s;
+}
+.faq-q:hover{color:var(--azul)}
+.faq-q i{font-style:normal;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.14em;color:var(--gold-deep);flex:0 0 44px}
+.faq-q span{font-family:var(--serif);font-weight:560;font-size:clamp(17px,1.7vw,21px);flex:1}
+.faq-x{position:relative;width:16px;height:16px;flex:0 0 auto;align-self:center}
+.faq-x::before,.faq-x::after{
+  content:'';position:absolute;left:0;top:7px;width:16px;height:1.5px;background:var(--gold-deep);
+  transition:transform .5s var(--ease);
+}
+.faq-x::after{transform:rotate(90deg)}
+.faq-item.open .faq-x::before{transform:rotate(180deg)}
+.faq-item.open .faq-x::after{transform:rotate(180deg)}
+/* apertura animada sin medir alturas: grid-template-rows 0fr → 1fr */
+.faq-a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .55s var(--ease)}
+.faq-a>div{overflow:hidden}
+.faq-a p{font-size:14.5px;color:var(--mute);line-height:1.7;max-width:640px;padding:0 2px 26px 62px}
+.faq-item.open .faq-a{grid-template-rows:1fr}
+.faq-foot{margin-top:34px;font-size:13.5px;color:var(--mute)}
+.faq-foot a{color:var(--azul);font-weight:600}
+
+/* ============ CONTACTO + GLOBO ============ */
+#contacto{
+  background:linear-gradient(168deg,#16295e 0%,var(--noche) 32%,var(--abismo) 100%);
+  overflow:hidden;
+}
+#contacto .sec-inner{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5.2fr);gap:clamp(36px,5vw,76px);align-items:center}
+#contacto .label{color:var(--gold-light)}
+#contacto .label::before{background:var(--gold-light)}
+#contacto h2.display{color:var(--cream)}
+#contacto h2.display em{color:var(--gold-light)}
+#contacto .lead{color:#c3cbe2}
+.con-card{
+  background:rgba(7,13,32,.62);border:1px solid var(--line-dark);padding:clamp(26px,2.6vw,40px);
+  margin-top:40px;max-width:540px;
+}
+/* globo de puntos */
+.con-globe{position:relative;display:flex;flex-direction:column;align-items:center;gap:18px;min-width:0}
+#globeC{width:100%;max-width:580px;aspect-ratio:1/1;display:block}
+.globe-cap{
+  font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.26em;
+  text-transform:uppercase;color:var(--gold-light);text-align:center;
+  display:flex;align-items:center;gap:14px;white-space:nowrap;
+}
+.globe-cap::before,.globe-cap::after{content:'';width:30px;height:1px;background:var(--line-dark);flex:0 0 auto}
+.con-card h3{color:var(--cream);font-size:22px;margin-bottom:24px}
+.con-actions{display:flex;flex-direction:column;gap:14px}
+.con-actions .btn{justify-content:space-between;width:100%}
+.con-small{margin-top:26px;font-size:12.5px;color:#9aa3bf;line-height:1.6}
+.con-small b{color:var(--gold-light);font-weight:600}
+
+/* ============ FOOTER ============ */
+/* un punto más claro que el --abismo de #contacto: el footer-reveal necesita
+   separación tonal entre los dos planos para leerse */
+footer{background:#0b1430;color:#aeb6cf;padding:70px clamp(20px,5vw,64px) 36px}
+.f-grid{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:2.2fr 1fr 1fr 1.4fr;gap:clamp(28px,4vw,60px)}
+.f-brand .brand-mark{width:42px;height:42px}
+.f-brand .brand-mark span{font-size:16px}
+.f-brand-name{font-family:Arial,Helvetica,sans-serif;font-weight:bold;color:var(--cream);letter-spacing:.24em;font-size:15px;margin-top:14px;display:block}
+.f-brand p{font-size:13.5px;margin-top:16px;max-width:300px;line-height:1.65}
+.f-col h4{
+  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--gold-light);margin-bottom:18px;
+}
+.f-col ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+.f-col a{color:#aeb6cf;text-decoration:none;font-size:13.5px;transition:color .3s}
+.f-col a:hover{color:var(--cream)}
+.f-legal details{border-bottom:1px solid rgba(201,176,126,.14);padding:10px 0}
+.f-legal summary{
+  cursor:pointer;font-size:13.5px;color:#aeb6cf;list-style:none;display:flex;justify-content:space-between;align-items:center;
+}
+.f-legal summary::-webkit-details-marker{display:none}
+.f-legal summary::after{content:'+';color:var(--gold-light);font-family:var(--mono);transition:transform .3s}
+.f-legal details[open] summary::after{transform:rotate(45deg)}
+.f-legal details p{font-size:12px;line-height:1.65;color:#8a93b0;padding:10px 0 6px}
+.f-base{
+  max-width:1240px;margin:54px auto 0;padding-top:26px;border-top:1px solid rgba(201,176,126,.14);
+  display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;
+  font-size:12px;color:#7c85a3;
+}
+.f-base .mono{font-family:var(--mono);letter-spacing:.1em;font-size:11px}
+
+/* ============ INTRO DE CARGA ============ */
+#intro{
+  position:fixed;inset:0;z-index:400;background:var(--abismo);
+  display:grid;place-items:center;transition:opacity .45s var(--ease);
+}
+#intro.out{opacity:0;pointer-events:none}
+.intro-inner{display:flex;flex-direction:column;align-items:center;gap:15px}
+#intro .brand-mark{width:46px;height:46px;background:var(--azul);display:grid;place-items:center;
+  opacity:0;animation:introFade .55s var(--ease-out) .05s forwards}
+#intro .brand-mark span{font-size:16px}
+.intro-name{font-family:Arial,Helvetica,sans-serif;font-weight:bold;color:var(--cream);
+  letter-spacing:.34em;font-size:14px;text-indent:.34em;
+  opacity:0;animation:introFade .55s var(--ease-out) .18s forwards}
+.intro-line{
+  width:min(210px,52vw);height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold) 25%,var(--gold) 75%,transparent);
+  transform:scaleX(0);animation:introLine .75s var(--ease-out) .3s forwards;
+}
+.intro-coord{font-family:var(--mono);font-size:10.5px;letter-spacing:.3em;color:var(--gold-light);
+  opacity:0;animation:introFade .5s var(--ease-out) .55s forwards}
+@keyframes introFade{to{opacity:1}}
+@keyframes introLine{to{transform:scaleX(1)}}
+
+/* ============ REVELADO POR LÍNEAS (titulares display) ============ */
+.lr{display:block;overflow:hidden;padding:0 .08em .14em;margin:0 -.08em -.14em}
+.lr-i{display:block;transform:translateY(118%);transition:transform 1.05s var(--ease-out)}
+h2.display.lr-in .lr-i{transform:translateY(0)}
+
+/* ============ BRÚJULA DE PROGRESO (desktop) ============ */
+#sprog{
+  position:fixed;left:30px;bottom:22px;z-index:90;display:none;align-items:center;gap:13px;
+  font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.18em;
+  color:var(--gold-deep);transition:color .45s;pointer-events:none;
+}
+#sprog .sp-track{position:relative;width:64px;height:1px;background:var(--line-gold)}
+#sprog .sp-track i{
+  position:absolute;left:0;top:-1px;width:18px;height:3px;background:var(--gold);
+  transition:transform .25s linear;
+}
+#sprog.sp-dark{color:var(--gold-light)}
+@media (min-width:1081px){#sprog{display:flex}}
+
+/* ============ DESTELLO NÁUTICO EN EL NAV ============ */
+nav.main a:not(.nav-cta)::before{
+  content:'✦';position:absolute;right:-15px;top:-5px;font-size:8.5px;color:var(--gold);
+  opacity:0;transform:scale(.3) rotate(-60deg);
+  transition:opacity .3s,transform .5s var(--ease-out);pointer-events:none;
+}
+nav.main a:not(.nav-cta):hover::before,
+nav.main a:not(.nav-cta):focus-visible::before{opacity:1;transform:scale(1) rotate(0deg)}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:1080px){
+  nav.main{display:none}
+  #burger{display:block}
+}
+@media (max-width:980px){
+  /* los reveals laterales inflan el layout viewport móvil (translateX cuenta
+     como overflow) y dejaban el burger medio fuera de pantalla: en móvil
+     entran en vertical */
+  .rv-l,.rv-r{transform:translateY(38px)}
+  .hero-grid{grid-template-columns:1fr}
+  .hero-side{flex-direction:row;justify-content:flex-start;align-items:center;gap:30px}
+  .rosa{width:110px}
+  .fleet{grid-template-columns:1fr;margin-top:48px}
+  .ship:nth-child(2){transform:none}
+  .ship:nth-child(2):hover{transform:translateY(-9px)}
+  #quienes .sec-inner{grid-template-columns:1fr}
+  .route{grid-template-columns:1fr 1fr;gap:38px 24px}
+  .route::before{display:none}
+  .ports{grid-template-columns:1fr 1fr}
+  .tarifas-grid{grid-template-columns:1fr 1fr;margin-top:48px}
+  #contacto .sec-inner{grid-template-columns:1fr}
+  .con-globe{margin-top:14px}
+  #globeC{max-width:340px}
+  .f-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:880px){
+  #expedicion{height:380svh}
+  .exp-cap{left:24px;right:24px;top:auto;bottom:72px;transform:none;max-width:none}
+  .exp-progress{top:auto;bottom:26px;right:24px;flex-direction:row}
+  .exp-hint{left:24px;transform:none}
+}
+@media (max-width:640px){
+  .route{grid-template-columns:1fr}
+  .ports{grid-template-columns:1fr}
+  .tarifas-grid{grid-template-columns:1fr}
+  .faq-q i{flex-basis:34px}
+  .faq-a p{padding-left:52px}
+  .q-claims{grid-template-columns:1fr}
+  .hero-side{flex-direction:column;align-items:flex-start}
+  .hero-card{max-width:none}
+  .f-grid{grid-template-columns:1fr}
+  .hero-ctas .btn{width:100%;justify-content:center}
+  .con-actions .btn{padding:15px 20px}
+}
+
+/* ============ REDUCED MOTION ============ */
+.no-motion .rv{opacity:1;transform:none}
+.no-motion #inicio h1 .w>span{transform:none}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{
+    animation-duration:.01ms!important;animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+  }
+  .rv{opacity:1!important;transform:none!important}
+  #inicio h1 .w>span{transform:none!important}
+  #intro{display:none}
+  .lr-i{transform:none!important}
+  .mq-track{animation:none}
+  /* La Expedición sin animación: los 4 capítulos apilados como contenido estático */
+  #expedicion{height:auto}
+  .exp-stage{position:static;height:auto;padding:80px 24px}
+  .exp-cap{position:static;opacity:1!important;transform:none!important;
+    margin:0 auto 60px;max-width:560px;pointer-events:auto}
+  #expDots,#expHint{display:none}
+}
+
+/* ============================================================
+   ULTRAMOTION — capa de movimiento premium.
+   TODO cuelga de html.um-on / html.um-foot: clases que solo pone
+   el JS en desktop con puntero fino y sin reduced-motion.
+   Sin esas clases, la hoja anterior manda tal cual.
+   ============================================================ */
+
+/* P1.1 — el motor inercial llama a scrollTo() por frame: el smooth nativo
+   crearía gelatina, se neutraliza solo cuando el motor está vivo */
+html.um-on{scroll-behavior:auto}
+
+/* ---------- P1.2 cursor personalizado ---------- */
+#cc{position:fixed;inset:0;pointer-events:none;z-index:500;opacity:0;transition:opacity .35s}
+#cc.cc-live{opacity:1}
+#cc.cc-hidden{opacity:0}
+/* el aro fue sustituido por la estela de agua (#waterC, capa Atlántico):
+   queda solo el punto, que crece como gota sobre los enlaces */
+.cc-dot{position:absolute;left:0;top:0;width:6px;height:6px;border-radius:50%;background:var(--azul);
+  transition:width .3s var(--ease-out),height .3s var(--ease-out),background .3s,box-shadow .3s}
+#cc.cc-link .cc-dot{width:13px;height:13px;background:var(--gold);box-shadow:0 0 16px rgba(176,141,87,.55)}
+#cc.cc-dark .cc-dot{background:var(--gold-light)}
+#waterC{position:fixed;inset:0;width:100%;height:100%;z-index:499;pointer-events:none}
+@media (max-width:880px){#waterC{display:none}}
+/* ocultar el nativo solo donde toca */
+html.um-on body,html.um-on a,html.um-on button,html.um-on summary{cursor:none}
+html.um-on input,html.um-on textarea,html.um-on select{cursor:auto}
+/* UM_ON se decide en carga: si la ventana se estrecha después, devolver el
+   cursor nativo y esconder el custom */
+@media (max-width:880px){
+  html.um-on body,html.um-on a,html.um-on button,html.um-on summary{cursor:auto}
+  #cc{display:none}
+}
+
+/* ---------- P1.3a titulares display por palabras (con blur en desktop) ---------- */
+.lw{display:inline-block;opacity:.2;transform:translateY(.18em);
+  transition:opacity .9s var(--ease-out),transform .9s var(--ease-out),filter .9s var(--ease-out)}
+html.um-on .lw{filter:blur(7px)}
+/* en secciones oscuras las palabras fantasma parecían manchas blancas.
+   :where() anula la especificidad del id: con #contacto a pelo esta regla
+   (1,2,1) ganaba SIEMPRE a la de revelado h2.display.lr-in .lw (0,3,2)
+   y el titular de "Zarpamos" se quedaba al 8% para siempre */
+html.um-on :where(.dark,#contacto,#zarpa,#interludio) .lw{opacity:.08}
+h2.display.lr-in .lw{opacity:1;transform:none;filter:none}
+/* el blur sangra por arriba/lados: ampliar la ventana del clip (compensada) */
+html.um-on .lr{padding:.12em .14em .14em;margin:-.12em -.14em -.14em}
+@media (prefers-reduced-motion:reduce){.lw{opacity:1!important;transform:none!important;filter:none!important}}
+
+/* ---------- P1.3b label y lead más marcados ---------- */
+html.um-on .label.rv{transform:translateY(26px);transition-duration:.8s}
+html.um-on .lead.rv{transform:translateY(52px);transition-duration:1.1s}
+html.um-on .label.rv.in,html.um-on .lead.rv.in{opacity:1;transform:none}
+html.um-on .label.rv::before{transform:scaleX(0);transform-origin:left;
+  transition:transform .9s var(--ease-out) .25s}
+html.um-on .label.rv.in::before{transform:scaleX(1)}
+
+/* ---------- P1.3c flota con entrada 3D escalonada ---------- */
+html.um-on .fleet{perspective:1100px}
+html.um-on .ship.rv{opacity:0;transform:translateY(40px) rotateX(4deg);transform-origin:50% 100%;
+  transition:opacity 1.1s var(--ease-out),transform 1.1s var(--ease-out),border-color .4s,background .4s}
+html.um-on .ship.rv.in{opacity:1;transform:none}
+/* re-declarar el offset decorativo de la tarjeta central (su transform vive en CSS) */
+html.um-on .ship.rv.in:nth-child(2){transform:translateY(30px)}
+/* P2.10: el hover lo compone el JS de tilt (lift + rotateX/Y) */
+html.um-on .ship.rv.in:hover{transform:none}
+html.um-on .ship.rv.in:nth-child(2):hover{transform:translateY(30px)}
+@media (max-width:980px){
+  html.um-on .ship.rv.in:nth-child(2),
+  html.um-on .ship.rv.in:nth-child(2):hover{transform:none}
+}
+
+/* ---------- P1.6 botones magnéticos de doble capa + relleno líquido ---------- */
+html.um-on .um-mag{position:relative;overflow:hidden}
+html.um-on .um-mag-i{display:inline-flex;align-items:center;gap:10px;position:relative;z-index:1;
+  transition:transform .2s var(--ease-out),color .3s}
+html.um-on .con-actions .um-mag-i{width:100%;justify-content:space-between}
+html.um-on .um-mag::before{content:'';position:absolute;inset:-2%;border-radius:50% 50% 0 0;
+  background:var(--noche);transform:translateY(102%);
+  transition:transform .5s var(--ease-out),border-radius .5s var(--ease-out);z-index:0}
+html.um-on .um-mag:hover::before{transform:translateY(0);border-radius:0}
+html.um-on .btn-azul.um-mag:hover{background:var(--azul)}      /* el ::before pone el noche */
+html.um-on .btn-ghost.um-mag::before{background:var(--azul)}
+html.um-on .btn-ghost.um-mag:hover{color:#fff}
+html.um-on .btn-cream.um-mag::before{background:var(--gold-light)}
+html.um-on .btn-gold.um-mag::before{background:rgba(201,176,126,.16)}
+html.um-on a.nav-cta.um-mag::before{background:var(--noche)}
+html.um-on a.nav-cta.um-mag:hover{background:var(--azul)}
+
+/* ---------- P1.7 marquesina reactiva (la mueve el rAF) ---------- */
+html.um-on .mq-track{animation:none}
+
+/* ---------- P1.8 footer reveal ---------- */
+html.um-foot footer{position:fixed;left:0;right:0;bottom:0;z-index:1;
+  border-top:1px solid var(--line-dark)}
+html.um-foot main{position:relative;z-index:2;background:var(--paper);
+  box-shadow:0 36px 70px rgba(7,13,32,.4)}
+
+/* ---------- P2.12 hint "Navegar" imantado ---------- */
+html.um-on .scroll-cue{transition:translate .4s var(--ease-out)}
+
+/* ============================================================
+   AVENTURA ATLÁNTICA — barco compañero, olas, interludios,
+   espiral y fondo evolutivo. Igual que el ultramotion: si el JS
+   no arranca, nada de esto estorba (todo decorativo/estático).
+   ============================================================ */
+
+/* ---------- A1 el barco compañero de viaje (derrota al margen) ---------- */
+#navio{position:fixed;top:0;right:clamp(10px,1.4vw,28px);width:56px;height:100vh;
+  z-index:80;pointer-events:none;display:none;
+  transition:opacity .65s var(--ease),transform .65s var(--ease)}
+#navio.nv-hide{opacity:0;transform:translateX(40px)}
+/* solo con margen real a la derecha del contenido (1240px + padding + holgura) */
+@media (min-width:1360px){html.um-on #navio{display:block}}
+.nv-line{position:absolute;left:50%;top:9vh;bottom:3.5vh;width:1px;
+  background:repeating-linear-gradient(180deg,var(--line-gold) 0 3px,transparent 3px 11px)}
+.nv-knot{position:absolute;left:50%;width:7px;height:7px;border-radius:50%;
+  border:1px solid var(--gold);transform:translate(-50%,-50%);
+  transition:background .45s,box-shadow .45s}
+.nv-knot.on{background:var(--gold);box-shadow:0 0 9px rgba(176,141,87,.55)}
+.nv-wake{position:absolute;left:50%;width:3px;height:3px;border-radius:50%;
+  background:var(--gold-light);transform:translate(-50%,-50%);opacity:0}
+#nvShip{position:absolute;left:50%;top:0;width:52px;margin-left:-26px;will-change:transform}
+#nvShip .nv-f{opacity:0;transition:opacity .85s var(--ease)}
+#nvShip .nv-f.on{opacity:1}
+/* mini nao discreta: móvil y anchos sin sitio para la derrota */
+#navioMini{position:fixed;right:12px;bottom:14px;width:38px;z-index:70;
+  pointer-events:none;opacity:.55;display:none;transition:opacity .5s}
+#navioMini.nv-hide{opacity:0}
+#navioMini svg{display:block;animation:nvBob 4.4s ease-in-out infinite}
+@keyframes nvBob{0%,100%{transform:rotate(-2.6deg) translateY(0)}50%{transform:rotate(2.6deg) translateY(-3px)}}
+@media (max-width:1359px){#navioMini{display:block}}
+
+/* ---------- A3 olas separadoras + línea de mar del hero ---------- */
+.wave-sep{position:absolute;left:0;right:0;bottom:-1px;width:100%;height:88px;
+  pointer-events:none;z-index:3;display:block}
+#heroSea{position:absolute;left:0;right:0;bottom:0;width:100%;height:76px;pointer-events:none}
+/* mar de tinta móvil (cuando la capa 3D no se activa): más lienzo y nao a flote */
+#inicio.hero-mar-movil #heroSea{height:150px}
+#naoMovil{position:absolute;left:0;bottom:150px;width:92px;pointer-events:none;z-index:1;display:none}
+#inicio.hero-mar-movil #naoMovil{display:block}
+
+/* ---------- A4 bitácora: mapamundi de 1626 + bloque editorial ---------- */
+.bita-map{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  opacity:.1;mix-blend-mode:multiply;filter:sepia(.25) saturate(.8);pointer-events:none}
+.edit-fig{margin-top:46px;border:1px solid var(--line-gold);padding:10px;
+  background:var(--cream);max-width:430px}
+.fig-frame{position:relative;display:block;overflow:hidden}
+.fig-frame img{width:100%;aspect-ratio:16/10;object-fit:cover;filter:saturate(.85)}
+.fig-frame::after{content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(34,63,131,.10),rgba(16,28,60,.30))}
+.edit-fig figcaption{font-family:var(--mono);font-size:10.5px;font-weight:600;
+  letter-spacing:.18em;color:var(--gold-deep);margin-top:10px;text-transform:uppercase}
+
+/* ---------- A4 interludio editorial (océano aéreo + frase) ---------- */
+#interludio{position:relative;min-height:72svh;display:flex;align-items:center;
+  overflow:hidden;background:var(--noche);
+  padding:clamp(96px,13vw,170px) clamp(20px,5vw,64px)}
+.ilu-img{position:absolute;left:0;top:-12%;width:100%;height:124%;object-fit:cover;will-change:transform}
+.ilu-veil{position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(7,13,32,.68),rgba(16,28,60,.42) 45%,rgba(7,13,32,.74))}
+.ilu-inner{position:relative;max-width:1240px;margin:0 auto;width:100%;z-index:2}
+.ilu-kicker{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--gold-light);display:flex;align-items:center;gap:14px;margin-bottom:28px}
+.ilu-kicker::before{content:'';width:48px;height:1px;background:var(--gold-light)}
+.ilu-quote{font-family:var(--serif);font-style:italic;font-weight:420;
+  font-size:clamp(30px,4.4vw,56px);line-height:1.18;color:var(--paper);max-width:15em;
+  text-shadow:0 2px 34px rgba(7,13,32,.5)}
+.ilu-quote em{color:var(--gold-light)}
+/* A5 espiral áurea que se dibuja con el scroll */
+.ilu-spiral{position:absolute;right:clamp(3%,7vw,9%);top:50%;transform:translateY(-50%) rotate(-90deg);
+  width:clamp(180px,22vw,300px);height:auto;z-index:1;opacity:.85}
+.ilu-spiral path{stroke:var(--gold-light);stroke-width:1.1;fill:none}
+@media (max-width:880px){.ilu-spiral{right:-70px;opacity:.45}}
+
+/* ---------- A4 banda CTA de cierre: la arribada ---------- */
+#zarpa{position:relative;min-height:78svh;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;background:var(--abismo);text-align:center;
+  padding:clamp(100px,13vw,170px) clamp(20px,5vw,64px)}
+.zarpa-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 35%}
+.zarpa-veil{position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(7,13,32,.80),rgba(7,13,32,.52) 52%,rgba(7,13,32,.88))}
+.zarpa-inner{position:relative;z-index:2;max-width:880px;margin:0 auto}
+.zarpa-kicker{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--gold-light);display:flex;align-items:center;
+  justify-content:center;gap:14px;margin-bottom:28px}
+.zarpa-kicker::before,.zarpa-kicker::after{content:'';width:42px;height:1px;background:var(--gold-light)}
+#zarpa h2.display{color:var(--cream);margin:0 auto 20px;max-width:13em}
+#zarpa h2.display em{color:var(--gold-light)}
+.zarpa-sub{color:#e8edfa;font-size:clamp(15px,1.4vw,18px);max-width:560px;margin:0 auto 38px;text-shadow:0 1px 14px rgba(7,13,32,.85),0 0 36px rgba(7,13,32,.6)}
+
+/* ---------- A5 entrada en espiral sutil (imágenes/bloques editoriales) ---------- */
+.rv.rv-spin{transform:translateY(46px) rotate(-2.4deg) scale(1.05);transform-origin:18% 85%}
+.rv.rv-spin.in{transform:none}
+
+/* ---------- A6 fondo evolutivo del viaje ---------- */
+#voyage{position:fixed;inset:0;z-index:88;pointer-events:none}
+
+/* ---------- reduced-motion / sin JS: degradado limpio ---------- */
+@media (prefers-reduced-motion:reduce){
+  #navioMini svg{animation:none}
+  .ilu-img{transform:none!important}
+  .ilu-spiral path{stroke-dasharray:none!important;stroke-dashoffset:0!important}
+  .rv.rv-spin{transform:none}
+}
+</style>
+<style id="proto3d-css">
+/* Capa 3D del prototipo — solo activa cuando JS añade html.p3d */
+html.p3d #heroSea{display:none}
+html.p3d #hero3d{position:absolute;left:0;right:0;bottom:0;width:100%;height:56vh;
+  pointer-events:none;z-index:1;
+  -webkit-mask-image:linear-gradient(180deg,transparent,#000 26%);
+  mask-image:linear-gradient(180deg,transparent,#000 26%)}
+html.p3d #inicio>div{position:relative;z-index:2}
+html.p3d #interludio{min-height:100svh}
+html.p3d #interludio .ilu-img,html.p3d #interludio .ilu-spiral{display:none!important}
+html.p3d #globe3d{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+html.p3d .globe3d-year{font-family:var(--mono);font-size:12px;letter-spacing:.18em;
+  color:var(--gold-light);margin-top:18px}
+html.p3d .globe3d-tag{
+  position:absolute;z-index:2;transform:translate(12px,-50%);
+  font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--gold-light);white-space:nowrap;
+  opacity:0;transition:opacity .6s;pointer-events:none;
+  text-shadow:0 0 10px rgba(7,13,32,.95);
+}
+html.p3d .globe3d-tag::before{
+  content:'';display:inline-block;width:14px;height:1px;background:var(--gold-light);
+  vertical-align:middle;margin-right:8px;
+}
+</style>
+</head>
+<body>
+<!-- intro de carga breve (se salta con sessionStorage o reduced-motion) -->
+<div id="intro" aria-hidden="true">
+  <div class="intro-inner">
+    <span class="brand-mark"><span>G&amp;G</span></span>
+    <span class="intro-name">ELCANO</span>
+    <span class="intro-line"></span>
+    <span class="intro-coord">43°15′N · 2°55′O</span>
+  </div>
+</div>
+<script>
+/* quitar la intro ANTES de pintar si ya se vio en esta sesión o hay reduced-motion */
+(function(){
+  var el = document.getElementById('intro');
+  try{
+    if (sessionStorage.getItem('ggIntro') || matchMedia('(prefers-reduced-motion: reduce)').matches){
+      el.parentNode.removeChild(el); return;
+    }
+    sessionStorage.setItem('ggIntro','1');
+  }catch(e){ if (el && el.parentNode) el.parentNode.removeChild(el); }
+})();
+</script>
+<noscript><style>
+/* sin JS: todo el contenido visible y la expedición como historia estática */
+#intro{display:none}
+.rv{opacity:1;transform:none}
+.lw{opacity:1;transform:none;filter:none}
+#expedicion{height:auto}
+.exp-stage{position:static;height:auto;padding:80px 24px}
+.exp-cap{position:static;opacity:1;transform:none;margin:0 auto 60px;max-width:560px;pointer-events:auto}
+#expDots,#expHint,#expCanvas{display:none}
+.faq-a{grid-template-rows:1fr}
+</style></noscript>
+
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+<!-- ================= HEADER ================= -->
+<header id="hdr">
+  <a class="brand" href="#inicio" aria-label="G&G Elcano — inicio">
+    <span class="brand-mark" aria-hidden="true"><span>G&amp;G</span></span>
+    <span class="brand-name">ELCANO</span>
+  </a>
+  <nav class="main" aria-label="Principal">
+    <a href="#quienes">Quiénes somos</a>
+    <a href="#servicios">Servicios</a>
+    <a href="#expedicion">La Expedición</a>
+    <a href="#metodo">Cómo trabajamos</a>
+    <a href="#tarifas">Tarifas</a>
+    <a class="nav-cta" href="#contacto">Hablamos</a>
+  </nav>
+  <button id="burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="mnav">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+<nav id="mnav" aria-label="Menú móvil">
+  <a href="#quienes">Quiénes somos</a>
+  <a href="#servicios">Servicios</a>
+  <a href="#expedicion">La Expedición</a>
+  <a href="#metodo">Cómo trabajamos</a>
+  <a href="#tarifas">Tarifas</a>
+  <a href="#contacto">Hablamos</a>
+  <div class="mnav-foot">G&amp;G ELCANO · BIZKAIA · 43°15′N 2°55′O</div>
+</nav>
+
+<main id="contenido">
+
+<!-- ================= HERO ================= -->
+<section id="inicio" aria-label="Presentación">
+  <canvas id="chartC" aria-hidden="true"></canvas>
+  <div class="hero-grid">
+    <div>
+      <p class="hero-eyebrow">Estudio digital · Bizkaia</p>
+      <h1 id="heroTitle">Tecnología con <em>rumbo</em> para tu negocio.</h1>
+      <p class="hero-lead">Diseñamos webs profesionales para negocios locales, construimos
+        aplicaciones a medida y montamos sistemas de reservas que atienden solos, con
+        inteligencia artificial. Tú te dedicas a lo tuyo; del resto nos ocupamos nosotros.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-azul" href="#contacto">Pide tu propuesta
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn btn-ghost" href="#expedicion">La Expedición</a>
+      </div>
+      <div class="hero-trust" role="list">
+        <span role="listitem"><b>Propuesta real</b> antes de pagar</span>
+        <span role="listitem"><b>0</b> permanencia</span>
+        <span role="listitem"><b>RGPD</b> de serie</span>
+      </div>
+    </div>
+    <div class="hero-side">
+      <!-- rosa de los vientos -->
+      <svg class="rosa spin" viewBox="0 0 200 200" fill="none" aria-hidden="true">
+        <circle cx="100" cy="100" r="96" stroke="#b08d57" stroke-width="1" opacity=".5"/>
+        <circle cx="100" cy="100" r="78" stroke="#b08d57" stroke-width=".7" opacity=".35" stroke-dasharray="2 5"/>
+        <circle cx="100" cy="100" r="30" stroke="#223f83" stroke-width=".8" opacity=".5"/>
+        <g fill="#223f83">
+          <path d="M100 8 L107 93 L100 100 L93 93 Z" opacity=".9"/>
+          <path d="M100 192 L107 107 L100 100 L93 107 Z" opacity=".45"/>
+          <path d="M8 100 L93 93 L100 100 L93 107 Z" opacity=".45"/>
+          <path d="M192 100 L107 93 L100 100 L107 107 Z" opacity=".45"/>
+        </g>
+        <g fill="#b08d57" opacity=".6">
+          <path d="M165 35 L104 96 L100 100 L104 104 Z" transform="rotate(0 100 100)"/>
+          <path d="M35 35 L96 96 L100 100 L96 104 Z"/>
+          <path d="M35 165 L96 104 L100 100 L104 104 Z"/>
+          <path d="M165 165 L104 104 L100 100 L104 96 Z"/>
+        </g>
+        <circle cx="100" cy="100" r="4.5" fill="#223f83"/>
+      </svg>
+      <div class="hero-card">
+        <dl>
+          <div><dt>BASE</dt><dd>Bizkaia, España</dd></div>
+          <div><dt>FLOTA</dt><dd>Webs · Apps · IA</dd></div>
+          <div><dt>RUMBO</dt><dd>1519 → 2026</dd></div>
+          <div><dt>IDIOMAS</dt><dd>Castellano · Euskera</dd></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+  <canvas id="heroSea" aria-hidden="true"></canvas>
+  <div class="scroll-cue" aria-hidden="true">Navegar</div>
+</section>
+
+<!-- ================= MARQUESINA ================= -->
+<div class="mq" aria-hidden="true">
+  <div class="mq-track">
+    <span>Webs profesionales</span><span>Apps a medida</span><span>Reservas con IA</span>
+    <span>Propuesta real sin compromiso</span><span>Tarifas desde 19 €/mes</span><span>Sin permanencia</span><span>Castellano y euskera</span>
+    <span>Cumplimiento RGPD</span><span>Bizkaia · 43°15′N 2°55′O</span>
+    <span>Webs profesionales</span><span>Apps a medida</span><span>Reservas con IA</span>
+    <span>Propuesta real sin compromiso</span><span>Tarifas desde 19 €/mes</span><span>Sin permanencia</span><span>Castellano y euskera</span>
+    <span>Cumplimiento RGPD</span><span>Bizkaia · 43°15′N 2°55′O</span>
+  </div>
+</div>
+
+<!-- ================= QUIÉNES SOMOS ================= -->
+<section id="quienes" class="sec" aria-labelledby="quienes-t">
+  <!-- mapamundi de doble hemisferio (c. 1626) como filigrana bajo velo pergamino -->
+  <img class="bita-map" src="assets/stock/mapamundi-pergamino-xvii-movil.jpg"
+    srcset="assets/stock/mapamundi-pergamino-xvii-movil.jpg 900w, assets/stock/mapamundi-pergamino-xvii.jpg 1920w"
+    sizes="100vw" alt="" loading="lazy" decoding="async">
+  <div class="sec-inner">
+    <div class="q-left rv rv-l">
+      <p class="label">01 · Bitácora</p>
+      <h2 class="display" id="quienes-t">Un estudio pequeño con una ambición <em>enorme</em>.</h2>
+      <div class="q-rule" aria-hidden="true"></div>
+      <div class="coords" data-px=".4">
+        <span>43°15′N · 2°55′O <i>— Bizkaia, España</i></span>
+        <span>G&amp;G ELCANO <i>— estudio digital</i></span>
+      </div>
+      <figure class="edit-fig rv rv-spin">
+        <span class="fig-frame">
+          <img src="assets/stock/atlantico-tormenta-luz-movil.jpg"
+            srcset="assets/stock/atlantico-tormenta-luz-movil.jpg 900w, assets/stock/atlantico-tormenta-luz.jpg 1920w"
+            sizes="(max-width:980px) 92vw, 420px"
+            alt="Mar tormentoso del Atlántico con un rayo de luz atravesando las nubes"
+            loading="lazy" decoding="async">
+        </span>
+        <figcaption>Atlántico Norte · 43°N — luz tras la tormenta</figcaption>
+      </figure>
+    </div>
+    <div class="q-right rv rv-r">
+      <p>G&amp;G Elcano es un estudio digital de Bizkaia. Hacemos una cosa y la hacemos bien:
+        <b>tecnología que trae clientes a negocios locales</b> — la web con la que te encuentra Google,
+        la aplicación que te quita trabajo y el sistema de reservas que atiende cuando tú no puedes.</p>
+      <p>Trabajamos al revés que casi todo el mundo: <b>primero te enseñamos el trabajo hecho y
+        después decides si quieres pagarlo</b>. Sin reuniones eternas, sin permanencias ni
+        ataduras. En castellano o en euskera, como prefieras.</p>
+      <div class="q-claims">
+        <div><strong>Trabajo primero</strong><small>Te enseñamos una propuesta real de tu web antes de cobrarte un euro.</small></div>
+        <div><strong>Mes a mes</strong><small>Sin contratos de permanencia. Te quedas porque quieres, no porque firmaste.</small></div>
+        <div><strong>Trato local</strong><small>Estamos en Bizkaia y atendemos en castellano y euskera.</small></div>
+        <div><strong>Legalidad de serie</strong><small>RGPD, LSSI y accesibilidad europea incluidos en cada proyecto.</small></div>
+      </div>
+    </div>
+  </div>
+  <canvas class="wave-sep" data-fill="#101c3c" aria-hidden="true"></canvas>
+</section>
+
+<!-- ================= SERVICIOS / FLOTA ================= -->
+<section id="servicios" class="sec dark" aria-labelledby="servicios-t">
+  <div class="sec-inner">
+    <p class="label rv">02 · La flota</p>
+    <h2 class="display rv" id="servicios-t">Tres naves, <em>un mismo rumbo</em>: que tu negocio venda más.</h2>
+    <p class="lead rv">Cada proyecto embarca en la nave que necesita. Muchos acaban navegando con las tres.</p>
+    <div class="fleet">
+      <article class="ship rv">
+        <p class="ship-num">I</p>
+        <h3>Webs profesionales</h3>
+        <p>Tu negocio, fácil de encontrar. Diseñamos, alojamos y mantenemos la web que tus clientes
+          ven cuando te buscan en Google — y también cuando preguntan a una IA.</p>
+        <ul>
+          <li>Diseño a medida, impecable en el móvil</li>
+          <li>Google Maps, contacto directo y dominio propio</li>
+          <li>Alojamiento, SSL y mantenimiento incluidos</li>
+          <li>Cumplimiento legal europeo y español</li>
+        </ul>
+        <span class="badge">El núcleo de la flota</span>
+      </article>
+      <article class="ship rv">
+        <p class="ship-num">II</p>
+        <h3>Apps a medida</h3>
+        <p>Cuando una web no basta. Herramientas hechas para tu forma de trabajar:
+          paneles de gestión, automatizaciones y aplicaciones que te ahorran horas cada semana.</p>
+        <ul>
+          <li>Desarrollo a medida, sin plantillas</li>
+          <li>Pensadas para tu operativa real</li>
+          <li>De la idea al primer prototipo, rápido</li>
+          <li>Evolucionan contigo, mes a mes</li>
+        </ul>
+        <span class="badge">Construcción a medida</span>
+      </article>
+      <article class="ship rv">
+        <p class="ship-num">III</p>
+        <h3>Reservas autónomas con IA</h3>
+        <p>Tus clientes reservan solos, por web o por teléfono, y todo cae en un único panel.
+          La IA atiende, reserva y filtra; solo te pasa lo que de verdad necesita una persona.</p>
+        <ul>
+          <li>Reservas por web, disponibles 24/7</li>
+          <li>Atención telefónica con IA, en lanzamiento</li>
+          <li>Un único panel para todo el negocio</li>
+          <li>El asistente se identifica siempre como IA</li>
+        </ul>
+        <span class="badge">Web hoy · Voz en lanzamiento</span>
+      </article>
+    </div>
+    <p class="fleet-note rv" data-px=".3">Lo que <b>no</b> hacemos (todavía): campañas de anuncios, SEO “mágico”
+      ni gestión de redes sociales. Preferimos hacer pocas cosas y hacerlas de verdad.</p>
+  </div>
+</section>
+
+<!-- ================= INTERLUDIO ATLÁNTICO ================= -->
+<section id="interludio" aria-label="Interludio — el Atlántico">
+  <img class="ilu-img" src="assets/stock/oceano-aereo-azul-movil.jpg"
+    srcset="assets/stock/oceano-aereo-azul-movil.jpg 900w, assets/stock/oceano-aereo-azul.jpg 1920w"
+    sizes="100vw" alt="" loading="lazy" decoding="async">
+  <div class="ilu-veil" aria-hidden="true"></div>
+  <svg class="ilu-spiral" viewBox="0 0 200 200" aria-hidden="true"><path id="spiralPath" d=""/></svg>
+  <div class="ilu-inner">
+    <p class="ilu-kicker rv">Travesía · 43°N</p>
+    <p class="ilu-quote rv">El Atlántico no se cruza con prisa. <em>Se cruza con rumbo.</em></p>
+  </div>
+  <canvas class="wave-sep" data-fill="#f4efe2" aria-hidden="true"></canvas>
+</section>
+
+<!-- ================= LA EXPEDICIÓN: intro ================= -->
+<section class="exp-intro sec" aria-labelledby="exp-t" id="expedicion-intro">
+  <div class="sec-inner">
+    <p class="label rv">03 · La Expedición</p>
+    <h2 class="display rv" id="exp-t">¿Por qué <em>Elcano</em>?</h2>
+    <p class="lead rv">En 1519 una expedición zarpó para intentar lo que nadie había logrado:
+      dar la vuelta al mundo. La terminó un marino vasco. Sigue bajando — la historia se cuenta sola.</p>
+  </div>
+</section>
+
+<!-- ================= LA EXPEDICIÓN: partículas ================= -->
+<section id="expedicion" aria-label="La primera vuelta al mundo, contada con partículas">
+  <div class="exp-stage" id="expStage">
+    <canvas id="expCanvas" aria-hidden="true"></canvas>
+
+    <div class="exp-cap" data-ch="0">
+      <span class="k">Capítulo I · 1519</span>
+      <h3>Zarpa la expedición</h3>
+      <p>Cinco naves y 239 hombres salen de Sanlúcar de Barrameda buscando una ruta
+        que no aparecía en ningún mapa. Nadie sabía si era posible.</p>
+    </div>
+    <div class="exp-cap" data-ch="1">
+      <span class="k">Capítulo II · La nao Victoria</span>
+      <h3>Un barco pequeño, una idea enorme</h3>
+      <p>De las cinco naves, solo una completó el viaje. No la más grande
+        ni la más rápida: la que siguió navegando cuando las demás se quedaron.</p>
+    </div>
+    <div class="exp-cap" data-ch="2">
+      <span class="k">Capítulo III · 1522</span>
+      <h3>La primera vuelta al mundo</h3>
+      <p>Tres años después, 18 hombres regresan al mando de Juan Sebastián Elcano.
+        El rey le concedió un escudo de armas con un globo terráqueo y una leyenda:
+        <em>Primus circumdedisti me</em> — «fuiste el primero en rodearme».</p>
+    </div>
+    <div class="exp-cap" data-ch="3">
+      <span class="k">Capítulo IV · Hoy</span>
+      <h3>La misma ambición</h3>
+      <p>G&amp;G Elcano existe para eso: llevar a los negocios locales a dar
+        la vuelta al mundo digital. Tu negocio es la siguiente expedición.</p>
+    </div>
+
+    <div class="exp-progress" id="expDots" aria-hidden="true">
+      <span class="on"></span><span></span><span></span><span></span>
+    </div>
+    <div class="exp-hint" id="expHint" aria-hidden="true">Sigue navegando</div>
+  </div>
+</section>
+
+<!-- ================= CÓMO TRABAJAMOS ================= -->
+<section id="metodo" class="sec" aria-labelledby="metodo-t">
+  <div class="sec-inner">
+    <p class="label rv">04 · El rumbo</p>
+    <h2 class="display rv" id="metodo-t">Cómo trabajamos: <em>sin sorpresas</em>, sin letra pequeña.</h2>
+    <div class="route">
+      <div class="step rv">
+        <div class="step-dot">i</div>
+        <h3>Nos cuentas tu negocio</h3>
+        <p>Con el nombre nos basta. Nosotros buscamos el resto: fotos, datos públicos, lo que ya existe de ti en internet.</p>
+      </div>
+      <div class="step rv">
+        <div class="step-dot">ii</div>
+        <h3>Te enseñamos una propuesta real</h3>
+        <p>En pocos días tienes un enlace con tu web hecha, con tus datos de verdad. No un boceto: tu web.</p>
+      </div>
+      <div class="step rv">
+        <div class="step-dot">iii</div>
+        <h3>Solo pagas si te convence</h3>
+        <p>La ves, la tocas y decides. Si no te convence, aquí no ha pasado nada.</p>
+      </div>
+      <div class="step rv">
+        <div class="step-dot">iv</div>
+        <h3>Navegamos contigo</h3>
+        <p>Cuota mensual sin permanencia y, según el plan, un único pago inicial de puesta en marcha. El precio exacto, contigo y por adelantado.</p>
+      </div>
+    </div>
+    <p class="metodo-pull rv" data-px=".35">«Trabajamos antes de cobrar. Solo pagas cuando la ves,
+      la tocas y la apruebas.»</p>
+  </div>
+</section>
+
+<!-- ================= TARIFAS / EL MANIFIESTO ================= -->
+<section id="tarifas" class="sec" aria-labelledby="tarifas-t">
+  <div class="sec-inner">
+    <p class="label rv">05 · El manifiesto</p>
+    <h2 class="display rv" id="tarifas-t">Tarifas a la vista, <em>como las velas</em>.</h2>
+    <p class="lead rv">Una cuota mensual sin permanencia y un único pago de puesta en marcha.
+      Qué incluye exactamente cada plan te lo detallamos por escrito junto a tu propuesta —
+      y solo pagas si la apruebas.</p>
+    <div class="tarifas-grid">
+      <article class="tarifa rv">
+        <p class="t-num">T·I</p>
+        <h3>Básico</h3>
+        <p class="t-desc">La botadura: tu negocio, visible y en el mapa.</p>
+        <p class="t-precio"><span class="t-eur">19&nbsp;€</span><span class="t-mes">/ mes</span></p>
+        <p class="t-alta">+ 150&nbsp;€ de puesta en marcha, una sola vez</p>
+        <a class="btn btn-ghost t-cta" href="#contacto">Pide tu propuesta</a>
+      </article>
+      <article class="tarifa destacada rv">
+        <span class="t-flag">Rumbo recomendado</span>
+        <p class="t-num">T·II</p>
+        <h3>Profesional</h3>
+        <p class="t-desc">Más vela: para negocios que quieren moverse.</p>
+        <p class="t-precio"><span class="t-eur">35&nbsp;€</span><span class="t-mes">/ mes</span></p>
+        <p class="t-alta">+ 300&nbsp;€ de puesta en marcha, una sola vez</p>
+        <a class="btn btn-gold t-cta" href="#contacto">Pide tu propuesta</a>
+      </article>
+      <article class="tarifa rv">
+        <p class="t-num">T·III</p>
+        <h3>Avanzado</h3>
+        <p class="t-desc">Travesía larga: web y herramientas remando juntas.</p>
+        <p class="t-precio"><span class="t-eur">55&nbsp;€</span><span class="t-mes">/ mes</span></p>
+        <p class="t-alta">+ 220&nbsp;€ de puesta en marcha, una sola vez</p>
+        <a class="btn btn-ghost t-cta" href="#contacto">Pide tu propuesta</a>
+      </article>
+      <article class="tarifa rv">
+        <p class="t-num">T·IV</p>
+        <h3>Premium</h3>
+        <p class="t-desc">La flota entera, navegando a tu servicio.</p>
+        <p class="t-precio"><span class="t-eur">89&nbsp;€</span><span class="t-mes">/ mes</span></p>
+        <p class="t-alta">+ 220&nbsp;€ de puesta en marcha, una sola vez</p>
+        <a class="btn btn-ghost t-cta" href="#contacto">Pide tu propuesta</a>
+      </article>
+    </div>
+    <ul class="tarifas-incluye rv" aria-label="Incluido en todos los planes">
+      <li>Diseño a medida</li>
+      <li>Alojamiento, SSL y mantenimiento</li>
+      <li>Sin permanencia, mes a mes</li>
+      <li>Cumplimiento RGPD</li>
+    </ul>
+    <p class="tarifas-note rv">Precios sin IVA (21&nbsp;%). El plan exacto te lo proponemos
+      con tu propuesta delante, antes de que pagues un euro.</p>
+  </div>
+</section>
+
+<!-- ================= SECTORES ================= -->
+<section id="sectores" class="sec" aria-labelledby="sectores-t">
+  <div class="sec-inner">
+    <p class="label rv">06 · Puertos donde atracamos</p>
+    <h2 class="display rv" id="sectores-t">Negocios locales, de <em>Bizkaia</em> y alrededores.</h2>
+    <p class="lead rv">Cada sector necesita cosas distintas de su web. Estas son las aguas que mejor conocemos.</p>
+    <div class="ports">
+      <div class="port rv"><h3><i>P·01</i>Hostelería</h3><p>Carta digital, reservas online, alérgenos y pedidos para llevar.</p></div>
+      <div class="port rv"><h3><i>P·02</i>Belleza y peluquería</h3><p>Reservas 24/7 con recordatorio, galería de trabajos y bonos regalo.</p></div>
+      <div class="port rv"><h3><i>P·03</i>Talleres y servicios</h3><p>Cita previa, recordatorios de ITV y canal directo para urgencias.</p></div>
+      <div class="port rv"><h3><i>P·04</i>Salud y profesionales</h3><p>Citas sincronizadas, formularios guiados y presencia que da confianza.</p></div>
+      <div class="port rv"><h3><i>P·05</i>Comercio local</h3><p>Catálogo visible en Google y reserva de producto sin fricción.</p></div>
+      <div class="port rv"><h3><i>P·06</i>Deporte y fitness</h3><p>Horarios de clases, gestión de bonos y captación de nuevos socios.</p></div>
+    </div>
+    <p class="ports-note rv">Sin nombres inventados ni cifras hinchadas: enséñanos tu negocio y te enseñamos lo que haríamos con él.</p>
+  </div>
+</section>
+
+<!-- ================= FAQ / CUADERNO DE A BORDO ================= -->
+<section id="faq" class="sec" aria-labelledby="faq-t">
+  <div class="sec-inner">
+    <p class="label rv">07 · El cuaderno de a bordo</p>
+    <h2 class="display rv" id="faq-t">Preguntas que nos hacen <em>antes de zarpar</em>.</h2>
+    <div class="faq-list rv">
+      <div class="faq-item open">
+        <h3><button class="faq-q" aria-expanded="true" aria-controls="faqa1" id="faqq1">
+          <i>F·01</i><span>¿Cuánto cuesta tener la web?</span><em class="faq-x" aria-hidden="true"></em></button></h3>
+        <div class="faq-a" id="faqa1" role="region" aria-labelledby="faqq1"><div>
+          <p>Desde 19&nbsp;€ al mes más una puesta en marcha única, según el plan. Los precios
+            están publicados aquí arriba, sin letra pequeña, y el plan exacto te lo proponemos
+            por escrito junto a tu propuesta.</p>
+        </div></div>
+      </div>
+      <div class="faq-item">
+        <h3><button class="faq-q" aria-expanded="false" aria-controls="faqa2" id="faqq2">
+          <i>F·02</i><span>¿Hay permanencia o contrato de larga duración?</span><em class="faq-x" aria-hidden="true"></em></button></h3>
+        <div class="faq-a" id="faqa2" role="region" aria-labelledby="faqq2"><div>
+          <p>No. La cuota es mes a mes y puedes dejarlo cuando quieras. Te quedas porque
+            quieres, no porque firmaste.</p>
+        </div></div>
+      </div>
+      <div class="faq-item">
+        <h3><button class="faq-q" aria-expanded="false" aria-controls="faqa3" id="faqq3">
+          <i>F·03</i><span>¿Cuánto tardáis en enseñarme algo?</span><em class="faq-x" aria-hidden="true"></em></button></h3>
+        <div class="faq-a" id="faqa3" role="region" aria-labelledby="faqq3"><div>
+          <p>En pocos días tienes un enlace con tu web hecha, con tus datos de verdad.
+            No un boceto ni una maqueta: tu web, navegando.</p>
+        </div></div>
+      </div>
+      <div class="faq-item">
+        <h3><button class="faq-q" aria-expanded="false" aria-controls="faqa4" id="faqq4">
+          <i>F·04</i><span>¿Y si la veo y no me convence?</span><em class="faq-x" aria-hidden="true"></em></button></h3>
+        <div class="faq-a" id="faqa4" role="region" aria-labelledby="faqq4"><div>
+          <p>No pagas nada y aquí no ha pasado nada. Trabajamos antes de cobrar precisamente
+            para que decidas viendo el resultado, no un PowerPoint.</p>
+        </div></div>
+      </div>
+      <div class="faq-item">
+        <h3><button class="faq-q" aria-expanded="false" aria-controls="faqa5" id="faqq5">
+          <i>F·05</i><span>¿Quién se ocupa del alojamiento y el mantenimiento?</span><em class="faq-x" aria-hidden="true"></em></button></h3>
+        <div class="faq-a" id="faqa5" role="region" aria-labelledby="faqq5"><div>
+          <p>Nosotros. Alojamiento, certificado SSL y mantenimiento van incluidos en la cuota.
+            Tú te dedicas a tu negocio; del barco nos ocupamos nosotros.</p>
+        </div></div>
+      </div>
+      <div class="faq-item">
+        <h3><button class="faq-q" aria-expanded="false" aria-controls="faqa6" id="faqq6">
+          <i>F·06</i><span>¿Qué hacéis con mis datos?</span><em class="faq-x" aria-hidden="true"></em></button></h3>
+        <div class="faq-a" id="faqa6" role="region" aria-labelledby="faqq6"><div>
+          <p>Solo usarlos para responderte y preparar tu propuesta, como manda el RGPD.
+            No se ceden a terceros y puedes pedir que los borremos cuando quieras.</p>
+        </div></div>
+      </div>
+      <div class="faq-item">
+        <h3><button class="faq-q" aria-expanded="false" aria-controls="faqa7" id="faqq7">
+          <i>F·07</i><span>¿Atendéis fuera de Bizkaia?</span><em class="faq-x" aria-hidden="true"></em></button></h3>
+        <div class="faq-a" id="faqa7" role="region" aria-labelledby="faqq7"><div>
+          <p>Nuestro puerto base es Bizkaia y alrededores, y es donde mejor trato cercano damos.
+            Pero una web no entiende de fronteras: cuéntanos tu caso y te decimos si encajamos.</p>
+        </div></div>
+      </div>
+      <div class="faq-item">
+        <h3><button class="faq-q" aria-expanded="false" aria-controls="faqa8" id="faqq8">
+          <i>F·08</i><span>¿En castellano o en euskera?</span><em class="faq-x" aria-hidden="true"></em></button></h3>
+        <div class="faq-a" id="faqa8" role="region" aria-labelledby="faqq8"><div>
+          <p>Como prefieras: atendemos y construimos en los dos.</p>
+        </div></div>
+      </div>
+    </div>
+    <p class="faq-foot rv">¿Otra pregunta? <a href="mailto:accounting@ggelcano.com">Escríbenos</a> y te contestamos en cristiano.</p>
+  </div>
+  <canvas class="wave-sep" data-fill="#16295e" aria-hidden="true"></canvas>
+</section>
+
+<!-- ================= CONTACTO ================= -->
+<section id="contacto" class="sec" aria-labelledby="contacto-t">
+  <div class="sec-inner">
+    <div class="con-left rv rv-l">
+      <p class="label">08 · Zarpamos</p>
+      <h2 class="display" id="contacto-t">Dinos el nombre de tu negocio. <em>En pocos días lo ves navegar.</em></h2>
+      <p class="lead">Una propuesta real, gratis y sin compromiso. Si nos escribes y luego
+        no sigues, aquí no ha pasado nada.</p>
+      <div class="con-card">
+        <h3>Escríbenos un email y te contestamos</h3>
+        <div class="con-actions">
+          <a class="btn btn-cream" href="mailto:accounting@ggelcano.com?subject=Propuesta%20para%20mi%20negocio&amp;body=Hola%2C%20mi%20negocio%20se%20llama%20">accounting@ggelcano.com
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+        <p class="con-small">Te respondemos <b>lo antes posible</b>, en días laborables.
+          Tus datos solo se usan para contestarte; no se comparten con nadie.</p>
+      </div>
+    </div>
+    <!-- globo terráqueo de puntos con la ruta de la primera circunnavegación (1519-1522) -->
+    <div class="con-globe rv" data-px=".5" aria-hidden="true">
+      <canvas id="globeC"></canvas>
+      <p class="globe-cap">Primus circumdedisti me · 1519–1522</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LA ARRIBADA (cierre) ================= -->
+<section id="zarpa" aria-labelledby="zarpa-t">
+  <img class="zarpa-img" src="assets/stock/velero-contraluz-rayos-movil.jpg"
+    srcset="assets/stock/velero-contraluz-rayos-movil.jpg 900w, assets/stock/velero-contraluz-rayos.jpg 1920w"
+    sizes="100vw" alt="" loading="lazy" decoding="async">
+  <div class="zarpa-veil" aria-hidden="true"></div>
+  <div class="zarpa-inner">
+    <p class="zarpa-kicker rv">La arribada</p>
+    <h2 class="display" id="zarpa-t">Toda travesía empieza <em>con un nombre</em>.</h2>
+    <p class="zarpa-sub rv">El de tu negocio. Escríbenoslo y en pocos días lo ves navegar.</p>
+    <p class="rv"><a class="btn btn-cream" href="mailto:accounting@ggelcano.com?subject=Propuesta%20para%20mi%20negocio&amp;body=Hola%2C%20mi%20negocio%20se%20llama%20">Zarpa con nosotros
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></p>
+  </div>
+</section>
+
+</main>
+
+<!-- el barco compañero de viaje: nao de trazo latón sobre su derrota (desktop ancho) -->
+<div id="navio" aria-hidden="true">
+  <span class="nv-line"></span>
+  <div id="nvShip">
+    <svg viewBox="0 0 100 120" fill="none" stroke="#b08d57" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <!-- casco, castillos y arboladura (común a las cuatro formas) -->
+      <path d="M20,86 C32,94 70,93 82,84 L76,101 C58,108 38,108 28,101 Z" fill="rgba(176,141,87,.08)"/>
+      <path d="M20,86 L17,71 L34,71"/>
+      <path d="M82,84 L96,71"/>
+      <path d="M50,85 L50,20"/><path d="M68,84 L68,34"/><path d="M33,84 L33,38"/>
+      <!-- forma 0: velas plegadas (zarpando) -->
+      <g class="nv-f" data-f="0">
+        <path d="M34,30 L66,30"/><path d="M34,30 Q50,38 66,30" fill="rgba(176,141,87,.10)"/>
+        <path d="M56,42 L80,42"/><path d="M56,42 Q68,49 80,42" fill="rgba(176,141,87,.10)"/>
+        <path d="M33,44 L43,72"/>
+        <path d="M50,20 L60,23 L50,26" fill="rgba(176,141,87,.2)"/>
+      </g>
+      <!-- forma 1: velas llenas (navegando) -->
+      <g class="nv-f" data-f="1">
+        <path d="M40,25 Q52,29 60,25 L62,38 Q50,45 38,38 Z" fill="rgba(176,141,87,.12)"/>
+        <path d="M36,42 Q52,47 64,42 L66,66 Q50,76 34,66 Z" fill="rgba(176,141,87,.12)"/>
+        <path d="M58,42 Q70,46 78,42 L80,60 Q68,68 56,60 Z" fill="rgba(176,141,87,.12)"/>
+        <path d="M25,70 L33,40 L46,61 Z" fill="rgba(176,141,87,.12)"/>
+        <path d="M50,20 L64,24 L50,28" fill="rgba(176,141,87,.2)"/>
+      </g>
+      <!-- forma 2: velas de tormenta (trazo agitado, estayes tensos) -->
+      <g class="nv-f" data-f="2">
+        <path d="M34,30 L66,30"/><path d="M56,42 L80,42"/>
+        <path d="M40,54 Q52,58 60,54 L61,69 Q50,75 39,69 Z" fill="rgba(176,141,87,.12)"/>
+        <path d="M50,20 L59,22 L54,24 L62,27 L50,29"/>
+        <path d="M50,22 L31,80" stroke-width="1.2"/><path d="M50,22 L71,80" stroke-width="1.2"/>
+      </g>
+      <!-- forma 3: arribada (velas aferradas, farolillo encendido) -->
+      <g class="nv-f" data-f="3">
+        <path d="M34,30 L66,30"/><path d="M34,30 Q50,38 66,30" fill="rgba(176,141,87,.10)"/>
+        <path d="M56,42 L80,42"/><path d="M56,42 Q68,49 80,42" fill="rgba(176,141,87,.10)"/>
+        <path d="M50,20 L58,23 L50,26"/>
+        <circle cx="22" cy="66" r="6.5" fill="rgba(255,217,138,.22)" stroke="none"/>
+        <circle cx="22" cy="66" r="2.6" fill="#ffd98a" stroke="none"/>
+        <circle cx="44" cy="93" r="1.5" fill="#ffd98a" stroke="none"/>
+        <circle cx="57" cy="93" r="1.5" fill="#ffd98a" stroke="none"/>
+      </g>
+    </svg>
+  </div>
+</div>
+<!-- mini nao para móvil / pantallas sin margen (solo cabeceo CSS) -->
+<div id="navioMini" aria-hidden="true">
+  <svg viewBox="0 0 100 120" fill="none" stroke="#b08d57" stroke-width="3"
+    stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20,86 C32,94 70,93 82,84 L76,101 C58,108 38,108 28,101 Z" fill="rgba(176,141,87,.12)"/>
+    <path d="M50,85 L50,22"/>
+    <path d="M36,42 Q52,47 64,42 L66,66 Q50,76 34,66 Z" fill="rgba(176,141,87,.16)"/>
+    <path d="M50,22 L62,26 L50,30" fill="rgba(176,141,87,.2)"/>
+  </svg>
+</div>
+
+<!-- brújula de progreso (solo desktop) -->
+<div id="sprog" aria-hidden="true">
+  <span class="sp-num">01</span>
+  <span class="sp-track"><i></i></span>
+  <span class="sp-total">/ 08</span>
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="f-grid">
+    <div class="f-brand">
+      <span class="brand-mark" aria-hidden="true"><span>G&amp;G</span></span>
+      <span class="f-brand-name">ELCANO</span>
+      <p>Estudio digital en Bizkaia. Webs profesionales, apps a medida y reservas
+        autónomas con IA para negocios locales. Diseñamos, alojamos y mantenemos;
+        tú te dedicas a lo tuyo.</p>
+    </div>
+    <div class="f-col">
+      <h4>Navegación</h4>
+      <ul>
+        <li><a href="#quienes">Quiénes somos</a></li>
+        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#expedicion">La Expedición</a></li>
+        <li><a href="#metodo">Cómo trabajamos</a></li>
+        <li><a href="#tarifas">Tarifas</a></li>
+      </ul>
+    </div>
+    <div class="f-col">
+      <h4>Contacto</h4>
+      <ul>
+        <li><a href="mailto:accounting@ggelcano.com">accounting@ggelcano.com</a></li>
+        <li><a href="https://www.ggelcano.com/" rel="noopener">ggelcano.com</a></li>
+      </ul>
+    </div>
+    <div class="f-col f-legal">
+      <h4>Legal</h4>
+      <details>
+        <summary>Aviso legal</summary>
+        <p>Titular: G&amp;G Elcano 1519 Ventures, S.L. · NIF B22677132 ·
+          Calle Txirro Bidea 3, 48100 Mungia (Bizkaia), España.
+          Contacto: accounting@ggelcano.com.
+          Los contenidos de esta web tienen carácter informativo. Queda prohibida su
+          reproducción sin autorización del titular.</p>
+      </details>
+      <details>
+        <summary>Privacidad</summary>
+        <p>Responsable del tratamiento: G&amp;G Elcano 1519 Ventures, S.L. (NIF B22677132).
+          Solo tratamos los datos que tú nos envías por email, con la única
+          finalidad de responderte y preparar tu propuesta (RGPD y LOPDGDD). No se ceden
+          a terceros. Puedes ejercer tus derechos de acceso, rectificación y supresión
+          escribiendo a accounting@ggelcano.com.</p>
+      </details>
+      <details>
+        <summary>Cookies</summary>
+        <p>Esta web no utiliza cookies de seguimiento ni de análisis. Solo se cargan las
+          tipografías desde Google Fonts.</p>
+      </details>
+    </div>
+  </div>
+  <div class="f-base">
+    <span>© <span id="anio">2026</span> G&amp;G Elcano · Bizkaia, España. Todos los derechos reservados.</span>
+    <span class="mono">43°15′N 2°55′O — DISEÑADO CON OFICIO EN BIZKAIA</span>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   G&G ELCANO — JS (vanilla, sin dependencias)
+   ============================================================ */
+'use strict';
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+if (REDUCED) document.documentElement.classList.add('no-motion');
+const FINE = matchMedia('(pointer: fine)').matches;
+
+/* cada módulo aislado: un fallo puntual no debe abortar el resto del bloque
+   (p. ej. dejar sin instalar el observer de reveals → página en blanco) */
+function ggSafe(fn){ try{ fn(); }catch(e){ console.error('GG módulo:', e); } }
+
+/* ---------- año del footer ---------- */
+ggSafe(function(){ document.getElementById('anio').textContent = new Date().getFullYear(); });
+
+/* ---------- header inteligente ---------- */
+ggSafe(function(){
+  const hdr = document.getElementById('hdr');
+  let lastY = 0;
+  function onScroll(){
+    const y = scrollY;
+    hdr.classList.toggle('scrolled', y > 40);
+    hdr.classList.toggle('hide', y > 520 && y > lastY && !document.body.classList.contains('nav-open'));
+    lastY = y;
+  }
+  addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+  /* si el foco de teclado entra al header oculto, que reaparezca */
+  hdr.addEventListener('focusin', () => hdr.classList.remove('hide'));
+});
+
+/* ---------- menú móvil ---------- */
+ggSafe(function(){
+  const burger = document.getElementById('burger');
+  const mnav = document.getElementById('mnav');
+  function setOpen(open){
+    if (open === document.body.classList.contains('nav-open')) return;
+    document.body.classList.toggle('nav-open', open);
+    burger.setAttribute('aria-expanded', String(open));
+    burger.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+    /* el focus se difiere: en el mismo frame #mnav aún computa visibility:hidden
+       y el focus() fallaría en silencio */
+    if (open) requestAnimationFrame(() => requestAnimationFrame(() => {
+      if (document.body.classList.contains('nav-open')) mnav.querySelector('a').focus();
+    }));
+    else burger.focus();
+  }
+  burger.addEventListener('click', () => setOpen(!document.body.classList.contains('nav-open')));
+  mnav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setOpen(false)));
+  addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
+  /* confinar el foco dentro del menú abierto */
+  mnav.addEventListener('keydown', e => {
+    if (e.key !== 'Tab' || !document.body.classList.contains('nav-open')) return;
+    const links = mnav.querySelectorAll('a');
+    const first = links[0], last = links[links.length - 1];
+    if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+  });
+});
+
+/* ---------- intro de carga (si sigue en el DOM: primera visita) ---------- */
+const INTRO_HOLD = (function(){
+  try{
+    const el = document.getElementById('intro');
+    if (!el) return 0;
+    setTimeout(() => el.classList.add('out'), 1150);
+    setTimeout(() => el.remove(), 1650);
+    return 950; /* el hero arranca cuando la intro empieza a fundirse */
+  }catch(e){ console.error('GG intro:', e); return 0; }
+})();
+
+/* ---------- titular del hero: entrada por palabras ---------- */
+ggSafe(function(){
+  const h1 = document.getElementById('heroTitle');
+  if (!h1 || REDUCED) { document.getElementById('inicio').classList.add('loaded'); return; }
+  const parts = h1.innerHTML.trim().split(/(<em>.*?<\/em>)/).flatMap(seg => {
+    if (!seg) return [];
+    if (seg.startsWith('<em>')) return [seg];
+    return seg.split(/\s+/).filter(Boolean);
+  });
+  h1.innerHTML = parts.map(p => `<span class="w"><span>${p}</span></span>`).join(' ');
+  h1.querySelectorAll('.w > span').forEach((s,i) => s.style.transitionDelay = (0.25 + i*0.075) + 's');
+  setTimeout(() => requestAnimationFrame(() => requestAnimationFrame(() =>
+    document.getElementById('inicio').classList.add('loaded'))), INTRO_HOLD);
+});
+
+/* ---------- titulares display: revelado por líneas ---------- */
+ggSafe(function(){
+  if (REDUCED || !('IntersectionObserver' in window)) return;
+  const hs = [...document.querySelectorAll('h2.display')];
+  if (!hs.length) return;
+  function build(h){
+    /* trocear en palabras conservando los <em> palabra a palabra;
+       la puntuación suelta (": , ." tras un <em>) se pega a la palabra anterior */
+    const tmp = document.createElement('div'); tmp.innerHTML = h.dataset.orig;
+    const words = [];
+    tmp.childNodes.forEach(n => {
+      const em = n.nodeName === 'EM';
+      (n.textContent || '').split(/\s+/).filter(Boolean).forEach(w => {
+        const piece = em ? `<em>${w}</em>` : w;
+        if (/^[:;,.!?…»)\]]+$/.test(w) && words.length) words[words.length-1] += piece;
+        else words.push(piece);
+      });
+    });
+    h.innerHTML = words.map(w => `<span class="lw">${w}</span>`).join(' ');
+    /* agrupar por línea visual midiendo offsetTop (conservando los spans .lw
+       de palabra: el ultramotion les da stagger y blur propios) */
+    const lines = []; let top = null;
+    h.querySelectorAll('.lw').forEach(w => {
+      if (top === null || Math.abs(w.offsetTop - top) > 4){ lines.push([]); top = w.offsetTop; }
+      lines[lines.length - 1].push(w.outerHTML);
+    });
+    h.innerHTML = lines.map((ln,i) =>
+      `<span class="lr"><span class="lr-i" style="transition-delay:${(i*0.09).toFixed(2)}s">${ln.join(' ')}</span></span>`
+    ).join('');
+    /* stagger por palabra (acumulado sobre el delay de su línea) */
+    let wi = 0;
+    h.querySelectorAll('.lr-i').forEach((ln,i) => {
+      ln.querySelectorAll('.lw').forEach(w => {
+        w.style.transitionDelay = (i*0.09 + (wi++)*0.035).toFixed(2)+'s';
+      });
+    });
+  }
+  const io = new IntersectionObserver(es => es.forEach(en => {
+    if (en.isIntersecting){ en.target.classList.add('lr-in'); io.unobserve(en.target); }
+  }), {rootMargin:'0px 0px -12% 0px'});
+  hs.forEach(h => {
+    h.dataset.orig = h.innerHTML.trim();
+    h.classList.remove('rv','rv-l','rv-r'); /* el revelado de líneas sustituye al fade .rv */
+    build(h);
+    io.observe(h);
+  });
+  /* red de seguridad: si el observer no dispara por lo que sea (geometrías
+     raras, bugs de IO…), ningún titular visible se queda fantasma: cada 1,2 s
+     se revela cualquier h2 pendiente que ya esté en el viewport */
+  const failsafe = setInterval(() => {
+    let pend = 0;
+    hs.forEach(h => {
+      if (h.classList.contains('lr-in')) return;
+      const r = h.getBoundingClientRect();
+      if (r.top < innerHeight * .96 && r.bottom > 0){ h.classList.add('lr-in'); io.unobserve(h); }
+      else pend++;
+    });
+    if (!pend) clearInterval(failsafe);
+  }, 1200);
+  /* re-trocear si cambia el ancho y el titular aún no se ha revelado */
+  let pw = innerWidth;
+  addEventListener('resize', () => {
+    if (innerWidth === pw) return; pw = innerWidth;
+    hs.forEach(h => { if (!h.classList.contains('lr-in')) build(h); });
+  });
+});
+
+/* ---------- reveals on-scroll ---------- */
+ggSafe(function(){
+  const els = document.querySelectorAll('.rv');
+  if (REDUCED || !('IntersectionObserver' in window)) { els.forEach(e => e.classList.add('in')); return; }
+  /* stagger automático entre hermanos .rv del mismo contenedor */
+  const groups = new Map();
+  els.forEach(el => {
+    const p = el.parentElement;
+    if (!groups.has(p)) groups.set(p, 0);
+    el.style.transitionDelay = (groups.get(p) * 0.1) + 's';
+    groups.set(p, groups.get(p) + 1);
+  });
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, {rootMargin:'0px 0px -10% 0px'});
+  els.forEach(el => io.observe(el));
+  /* misma red de seguridad que en los titulares: ningún bloque .rv visible
+     puede quedarse a medio revelar si su observer no llega a disparar */
+  const failsafe = setInterval(() => {
+    let pend = 0;
+    els.forEach(el => {
+      if (el.classList.contains('in')) return;
+      const r = el.getBoundingClientRect();
+      if (r.top < innerHeight * .96 && r.bottom > 0){ el.classList.add('in'); io.unobserve(el); }
+      else pend++;
+    });
+    if (!pend) clearInterval(failsafe);
+  }, 1200);
+});
+
+/* ---------- botones magnéticos ---------- */
+ggSafe(function(){
+  if (REDUCED || !FINE) return;
+  document.querySelectorAll('.btn, .nav-cta').forEach(b => {
+    b.addEventListener('mousemove', e => {
+      const r = b.getBoundingClientRect();
+      const dx = e.clientX - (r.left + r.width/2), dy = e.clientY - (r.top + r.height/2);
+      b.style.transition = 'transform .1s, background .3s, color .3s, border-color .3s';
+      b.style.transform = `translate(${dx*.16}px, ${dy*.24}px)`;
+    });
+    b.addEventListener('mouseleave', () => {
+      b.style.transition = 'transform .5s cubic-bezier(.22,.61,.36,1), background .3s, color .3s, border-color .3s';
+      b.style.transform = '';
+    });
+  });
+});
+
+/* ---------- brújula de progreso (01–08, solo desktop) ---------- */
+ggSafe(function(){
+  const el = document.getElementById('sprog');
+  if (!el) return;
+  const num = el.querySelector('.sp-num');
+  const bar = el.querySelector('.sp-track i');
+  const ids = ['quienes','servicios','expedicion-intro','metodo','tarifas','sectores','faq','contacto'];
+  const secs = ids.map(id => document.getElementById(id)).filter(Boolean);
+  const exp = document.getElementById('expedicion');
+  let cur = -1;
+  /* el motor inercial dispara scroll en cada frame: las lecturas de layout
+     (offsetTop/scrollHeight) se cachean y solo se recalculan si cambia la altura */
+  let tops = [], expTop = 0, maxS = 0;
+  function measure(){
+    tops = secs.map(s => s.offsetTop);
+    expTop = exp ? exp.offsetTop : 0;
+    maxS = document.documentElement.scrollHeight - innerHeight;
+  }
+  function up(){
+    const mid = scrollY + innerHeight * .5;
+    let i = 0;
+    tops.forEach((t,k) => { if (t <= mid) i = k; });
+    if (i !== cur){ cur = i; num.textContent = String(i+1).padStart(2,'0'); }
+    const p = maxS > 0 ? Math.min(1, scrollY / maxS) : 0;
+    bar.style.transform = `translateX(${(p * 46).toFixed(1)}px)`; /* track 64px − marcador 18px */
+    const id = ids[i];
+    const dark = id === 'servicios' || id === 'contacto' ||
+      (id === 'expedicion-intro' && exp && mid > expTop + innerHeight * .6);
+    el.classList.toggle('sp-dark', dark);
+  }
+  addEventListener('scroll', up, {passive:true});
+  addEventListener('resize', () => { measure(); up(); });
+  addEventListener('load', () => { measure(); up(); });
+  if ('ResizeObserver' in window)
+    new ResizeObserver(() => { measure(); up(); }).observe(document.body);
+  measure(); up();
+});
+
+/* ---------- FAQ: cuaderno de a bordo (un solo abierto) ---------- */
+ggSafe(function(){
+  const items = [...document.querySelectorAll('.faq-item')];
+  if (!items.length) return;
+  items.forEach(it => {
+    const btn = it.querySelector('.faq-q');
+    btn.addEventListener('click', () => {
+      const wasOpen = it.classList.contains('open');
+      items.forEach(o => {
+        o.classList.remove('open');
+        o.querySelector('.faq-q').setAttribute('aria-expanded','false');
+      });
+      if (!wasOpen){
+        it.classList.add('open');
+        btn.setAttribute('aria-expanded','true');
+      }
+    });
+  });
+});
+
+/* ============================================================
+   CANVAS DEL HERO — carta de derrota animada (barato en CPU)
+   ============================================================ */
+ggSafe(function(){
+  const cv = document.getElementById('chartC');
+  const hero = document.getElementById('inicio');
+  if (!cv || !hero) return;
+  const ctx = cv.getContext('2d');
+  const DPR = Math.min(devicePixelRatio || 1, 1.5);
+  let W = 0, H = 0, grid = null;
+
+  function buildGrid(){
+    grid = document.createElement('canvas');
+    grid.width = W * DPR; grid.height = H * DPR;
+    const g = grid.getContext('2d');
+    g.setTransform(DPR, 0, 0, DPR, 0, 0);
+    /* retícula de puntos */
+    g.fillStyle = 'rgba(34,63,131,.14)';
+    for (let y = 28; y < H; y += 54)
+      for (let x = 28; x < W; x += 54)
+        g.fillRect(x, y, 1.6, 1.6);
+    /* cruces de carta cada pocas celdas */
+    g.strokeStyle = 'rgba(176,141,87,.32)'; g.lineWidth = 1;
+    for (let y = 28 + 54*3; y < H; y += 54*4)
+      for (let x = 28 + 54*2; x < W; x += 54*5){
+        g.beginPath(); g.moveTo(x-5, y); g.lineTo(x+5, y);
+        g.moveTo(x, y-5); g.lineTo(x, y+5); g.stroke();
+      }
+    /* paralelos sutiles */
+    g.strokeStyle = 'rgba(34,63,131,.07)';
+    for (let y = H*0.22; y < H; y += H*0.26){
+      g.beginPath(); g.moveTo(0, y); g.lineTo(W, y); g.stroke();
+    }
+  }
+  function resize(){
+    W = hero.clientWidth; H = hero.clientHeight;
+    cv.width = W * DPR; cv.height = H * DPR;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    buildGrid();
+    if (REDUCED) drawStatic();
+  }
+
+  const ROUTES = [
+    [[-.04,.84],[.16,.7],[.34,.78],[.55,.6],[.74,.68],[1.04,.5]],
+    [[-.04,.26],[.2,.36],[.46,.24],[.72,.34],[1.04,.22]]
+  ];
+  function routePts(r){ return r.map(p => [p[0]*W, p[1]*H]); }
+  function routeLen(pts){
+    const seg = []; let tot = 0;
+    for (let i = 1; i < pts.length; i++){
+      const d = Math.hypot(pts[i][0]-pts[i-1][0], pts[i][1]-pts[i-1][1]);
+      seg.push(d); tot += d;
+    }
+    return {seg, tot};
+  }
+  function pointAt(pts, info, d){
+    let acc = 0;
+    for (let i = 0; i < info.seg.length; i++){
+      if (d <= acc + info.seg[i]){
+        const k = (d - acc) / info.seg[i];
+        return [pts[i][0] + (pts[i+1][0]-pts[i][0])*k, pts[i][1] + (pts[i+1][1]-pts[i][1])*k];
+      }
+      acc += info.seg[i];
+    }
+    return pts[pts.length-1];
+  }
+  function drawRoute(pts, dashOff, alpha){
+    ctx.strokeStyle = `rgba(176,141,87,${alpha})`;
+    ctx.lineWidth = 1.2;
+    ctx.setLineDash([3, 8]); ctx.lineDashOffset = dashOff;
+    ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
+    for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+    ctx.stroke(); ctx.setLineDash([]);
+    /* waypoints */
+    ctx.fillStyle = 'rgba(34,63,131,.4)';
+    for (let i = 1; i < pts.length-1; i++){
+      ctx.beginPath(); ctx.arc(pts[i][0], pts[i][1], 2.4, 0, 7); ctx.fill();
+    }
+  }
+  function drawStatic(){
+    ctx.clearRect(0, 0, W, H);
+    ctx.drawImage(grid, 0, 0, W, H);
+    ROUTES.forEach(r => drawRoute(routePts(r), 0, .4));
+  }
+
+  resize(); addEventListener('resize', resize);
+  if (REDUCED){ drawStatic(); return; }
+
+  let active = true;
+  new IntersectionObserver(es => es.forEach(en => active = en.isIntersecting), {threshold:.02}).observe(hero);
+
+  (function loop(t){
+    requestAnimationFrame(loop);
+    if (!active || W < 2) return;
+    ctx.clearRect(0, 0, W, H);
+    ctx.drawImage(grid, 0, 0, W, H);
+    ROUTES.forEach((r, idx) => {
+      const pts = routePts(r), info = routeLen(pts);
+      drawRoute(pts, -t * 0.012, .42);
+      /* punto que navega la derrota */
+      const d = ((t * (0.028 + idx*0.012)) % info.tot);
+      const [px, py] = pointAt(pts, info, d);
+      const pulse = 3 + Math.sin(t*0.004 + idx*2) * 1.2;
+      ctx.fillStyle = '#223f83';
+      ctx.beginPath(); ctx.arc(px, py, 3, 0, 7); ctx.fill();
+      ctx.strokeStyle = 'rgba(34,63,131,.3)';
+      ctx.beginPath(); ctx.arc(px, py, 6 + pulse, 0, 7); ctx.stroke();
+    });
+  })(0);
+});
+
+/* ============================================================
+   LA EXPEDICIÓN — motor de partículas (1519 → nao → 1522 → G&G)
+   ============================================================ */
+ggSafe(function(){
+  const wrap = document.getElementById('expedicion');
+  const stage = document.getElementById('expStage');
+  const cv = document.getElementById('expCanvas');
+  if (!wrap || !cv) return;
+  /* reduced-motion: sin canvas ni pin, pero la historia se queda como contenido estático
+     (el CSS de @media (prefers-reduced-motion) apila los .exp-cap) */
+  if (REDUCED){ cv.remove(); wrap.style.height = 'auto'; return; }
+  const ctx = cv.getContext('2d');
+  let MOBILE = innerWidth < 880;
+  const N = MOBILE ? 1100 : 2200;
+  const DPR = Math.min(devicePixelRatio || 1, 1.5);
+  let W = 0, H = 0, cx = 0, cy = 0, scale = 1;
+
+  /* paleta náutica por capítulo: pergamino → noche → abismo → azul marca */
+  const CH_BG = [[244,239,226],[16,28,60],[7,13,32],[34,63,131]];
+  const CH_FG = ['#223f83', '#c9b07e', '#d8c294', '#f4efe2'];
+  const CH_DARK = [false, true, true, true];
+
+  /* ---------- formas de capítulo (offscreen 360x300) ---------- */
+  const OW = 360, OH = 300;
+  function shapeText(t, size, font){
+    return o => {
+      o.font = `bold ${size}px ${font}`;
+      o.textAlign = 'center'; o.textBaseline = 'middle';
+      o.fillText(t, OW/2, OH/2);
+    };
+  }
+  /* nao Victoria: casco + castillos + 3 mástiles + velas + bauprés */
+  function shapeNao(o){
+    /* casco (proa a la derecha) */
+    o.beginPath();
+    o.moveTo(52,198); o.lineTo(308,198); o.lineTo(282,244); o.lineTo(84,244); o.closePath(); o.fill();
+    /* castillo de popa (izquierda, alto) y de proa */
+    o.fillRect(56,162,62,36);
+    o.fillRect(252,172,52,26);
+    /* bauprés inclinado en proa */
+    o.save(); o.translate(300,178); o.rotate(-0.38); o.fillRect(0,-4,58,8); o.restore();
+    /* mástiles: mayor, trinquete (proa), mesana (popa) */
+    o.fillRect(176,58,9,140);   /* mayor */
+    o.fillRect(243,86,8,112);   /* trinquete */
+    o.fillRect(112,92,8,106);   /* mesana */
+    /* vela mayor (cuadra, con panza) */
+    o.beginPath();
+    o.moveTo(136,78); o.quadraticCurveTo(181,66,226,78);
+    o.lineTo(232,148); o.quadraticCurveTo(181,164,130,148); o.closePath(); o.fill();
+    /* vela del trinquete */
+    o.beginPath();
+    o.moveTo(214,98); o.quadraticCurveTo(247,90,280,98);
+    o.lineTo(284,150); o.quadraticCurveTo(247,160,210,150); o.closePath(); o.fill();
+    /* vela latina de mesana (triángulo) */
+    o.beginPath();
+    o.moveTo(86,104); o.lineTo(142,110); o.lineTo(112,176); o.closePath(); o.fill();
+    /* grímpola en el mayor */
+    o.beginPath(); o.moveTo(180,46); o.lineTo(208,53); o.lineTo(180,60); o.closePath(); o.fill();
+  }
+  /* logo G&G: marco + letras (cierre de la historia) */
+  function shapeLogo(o){
+    o.lineWidth = 13;
+    o.strokeRect(102,44,156,156);
+    o.font = 'bold 76px Arial, Helvetica, sans-serif';
+    o.textAlign = 'center'; o.textBaseline = 'middle';
+    o.fillText('G&G', 180, 120);
+    o.font = 'bold 38px Arial, Helvetica, sans-serif';
+    o.fillText('ELCANO', 180, 246);
+  }
+  const SHAPES = [
+    shapeText('1519', 128, 'Georgia, serif'),
+    shapeNao,
+    shapeText('1522', 128, 'Georgia, serif'),
+    shapeLogo
+  ];
+  function sample(draw){
+    const oc = document.createElement('canvas'); oc.width = OW; oc.height = OH;
+    const o = oc.getContext('2d');
+    o.fillStyle = '#000'; o.strokeStyle = '#000';
+    draw(o);
+    const d = o.getImageData(0, 0, OW, OH).data, pts = [];
+    for (let y = 0; y < OH; y += 3)
+      for (let x = 0; x < OW; x += 3)
+        if (d[(y*OW + x)*4 + 3] > 128) pts.push([x - OW/2, y - OH/2]);
+    if (!pts.length) pts.push([0, 0]); /* canvas readback bloqueado: evita TypeError en setTargets */
+    return pts;
+  }
+  const targets = SHAPES.map(sample);
+
+  /* ---------- poses del barco para el tránsito (dibujadas, sin sprites) ---------- */
+  function poseVelaHinchada(o){
+    /* casco */
+    o.beginPath();
+    o.moveTo(92,206); o.lineTo(268,206); o.lineTo(244,248); o.lineTo(114,248); o.closePath(); o.fill();
+    /* mástil */
+    o.fillRect(174,76,9,132);
+    /* vela mayor hinchada hacia proa (derecha) */
+    o.beginPath();
+    o.moveTo(184,86); o.quadraticCurveTo(262,108,252,184);
+    o.lineTo(184,176); o.closePath(); o.fill();
+    /* foque */
+    o.beginPath();
+    o.moveTo(172,96); o.lineTo(112,182); o.lineTo(172,182); o.closePath(); o.fill();
+    /* grímpola */
+    o.beginPath(); o.moveTo(178,64); o.lineTo(204,71); o.lineTo(178,78); o.closePath(); o.fill();
+  }
+  function poseEscorado(o){
+    /* mismo barco, escorado sobre una ola */
+    o.save();
+    o.translate(180,170); o.rotate(0.17); o.translate(-180,-170);
+    o.beginPath();
+    o.moveTo(96,202); o.lineTo(264,202); o.lineTo(242,242); o.lineTo(118,242); o.closePath(); o.fill();
+    o.fillRect(174,74,9,130);
+    o.beginPath();
+    o.moveTo(184,86); o.quadraticCurveTo(250,112,244,180);
+    o.lineTo(184,172); o.closePath(); o.fill();
+    o.beginPath();
+    o.moveTo(172,96); o.lineTo(118,178); o.lineTo(172,178); o.closePath(); o.fill();
+    o.restore();
+    /* ola bajo el casco: tres crestas */
+    o.beginPath(); o.arc(112,262,24,Math.PI,0); o.fill();
+    o.beginPath(); o.arc(182,266,26,Math.PI,0); o.fill();
+    o.beginPath(); o.arc(252,262,24,Math.PI,0); o.fill();
+  }
+  const boatPts = [sample(poseVelaHinchada), sample(poseEscorado)];
+
+  /* ---------- timeline de segmentos (scroll 0..1) ---------- */
+  const SEG = [
+    {type:'ch',  i:0, a:0,    b:.15},
+    {type:'fly', i:0, a:.15,  b:.28},
+    {type:'ch',  i:1, a:.28,  b:.42},
+    {type:'fly', i:1, a:.42,  b:.55},
+    {type:'ch',  i:2, a:.55,  b:.69},
+    {type:'fly', i:2, a:.69,  b:.82},
+    {type:'ch',  i:3, a:.82,  b:1.01}
+  ];
+  function segAt(p){ for (const s of SEG) if (p >= s.a && p < s.b) return s; return SEG[SEG.length-1]; }
+  function wantAt(p){
+    const sg = segAt(p);
+    return sg.type === 'ch' ? sg.i
+      : (((p - sg.a)/(sg.b - sg.a)) > .5 ? Math.min(3, sg.i + 1) : sg.i);
+  }
+
+  /* ---------- partículas ---------- */
+  const P = Array.from({length:N}, () => ({
+    x:(Math.random()-.5)*600, y:(Math.random()-.5)*500,
+    vx:0, vy:0, tx:0, ty:0,
+    s:.7 + Math.random()*1.7,
+    ph:Math.random()*6.28
+  }));
+  let curKey = '', dispCh = -1, flying = false, flyT0 = 0, flyDir = 1;
+  const gcd = (a,b) => b ? gcd(b, a % b) : a;
+  function setTargets(pts, mirror){
+    /* paso coprimo con pts.length: si no, solo se cubre una fracción de los puntos
+       del glifo (p. ej. '1519' muestrea 903 = 7×129 puntos → con paso 7 fijo solo
+       129 objetivos y la cifra queda ilegible) */
+    let st = 7;
+    while (gcd(st, pts.length) !== 1) st++;
+    P.forEach((p,i) => {
+      const t = pts[(i*st) % pts.length];
+      p.tx = mirror ? -t[0] : t[0]; p.ty = t[1];
+    });
+  }
+  const dots = document.querySelectorAll('#expDots span');
+  function setDots(ch){ dots.forEach((s,i) => s.classList.toggle('on', i <= ch)); }
+
+  /* ---------- resize / gating ---------- */
+  function resize(){
+    MOBILE = innerWidth < 880; /* el CSS cambia el layout en 880px: recalcular siempre */
+    W = stage.clientWidth; H = stage.clientHeight;
+    cv.width = W * DPR; cv.height = H * DPR;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    cx = W * (MOBILE ? .5 : .58);
+    cy = H * (MOBILE ? .42 : .5);
+    scale = Math.min(W/(MOBILE ? 420 : 760), H/520) * (MOBILE ? 1.05 : 1.35);
+  }
+  resize(); addEventListener('resize', resize);
+  let active = false;
+  new IntersectionObserver(es => es.forEach(en => active = en.isIntersecting), {threshold:.02}).observe(wrap);
+
+  /* ---------- fondo interpolado ----------
+     stops con un azul intermedio saturado para que el pergamino→noche
+     no atraviese grises desaturados, y con la transición acortada */
+  const lerp = (a,b,k) => a + (b-a)*k;
+  const BG_STOPS = [
+    [0,   CH_BG[0]],        /* pergamino */
+    [.10, CH_BG[0]],        /* el capítulo I entero sobre pergamino (contraste del 1519) */
+    [.20, [90,112,176]],    /* azul medio saturado (keyframe anti-gris) */
+    [.30, CH_BG[1]],        /* noche */
+    [.62, CH_BG[2]],        /* abismo */
+    [1,   CH_BG[3]]         /* azul marca */
+  ];
+  function bgAt(p){
+    let i = 0;
+    while (i < BG_STOPS.length - 2 && p > BG_STOPS[i+1][0]) i++;
+    const A = BG_STOPS[i], B = BG_STOPS[i+1];
+    const k = Math.max(0, Math.min(1, (p - A[0]) / (B[0] - A[0])));
+    return [lerp(A[1][0],B[1][0],k), lerp(A[1][1],B[1][1],k), lerp(A[1][2],B[1][2],k)];
+  }
+
+  /* ---------- loop ---------- */
+  const caps = [...document.querySelectorAll('.exp-cap')];
+  const hint = document.getElementById('expHint');
+  (function loop(t){
+    requestAnimationFrame(loop);
+    if (!active) return;
+    if (W < 2 || H < 2) resize();
+    const r = wrap.getBoundingClientRect();
+    const total = r.height - H;
+    const p = total > 0 ? Math.max(0, Math.min(1, -r.top / total)) : 0;
+
+    const want = wantAt(p);
+    if (dispCh === -1) dispCh = want;
+
+    /* cambio de capítulo → tránsito navegado (700 ms reales) */
+    if (!flying && want !== dispCh){
+      flying = true; flyT0 = t; flyDir = want > dispCh ? 1 : -1;
+      dispCh = want;
+    }
+
+    let ax = cx, ay = cy, as = scale, fg = CH_FG[dispCh], k = .07, damp = .84, trail = false;
+    if (flying){
+      const ft = (t - flyT0) / 700;
+      if (ft >= 1){
+        flying = false;
+        const nowW = wantAt(p);
+        if (nowW !== dispCh){ dispCh = nowW; curKey = ''; }
+      } else {
+        /* cabeceo: alterna vela hinchada / escorado a mitad del tránsito (350 ms cada pose) */
+        const pose = Math.floor((t - flyT0) / 350) % 2;
+        const mirror = flyDir < 0;
+        const key = 'fly' + pose + (mirror ? 'm' : '');
+        if (key !== curKey){ curKey = key; setTargets(boatPts[pose], mirror); }
+        ax = cx + Math.sin(ft*Math.PI) * W * .13 * flyDir;
+        ay = cy - Math.sin(ft*Math.PI*2) * H * .04 + Math.sin(t*.009) * 7;
+        as = scale * .72; k = .12; damp = .86; trail = true;
+        fg = CH_FG[dispCh];
+      }
+    }
+    if (!flying){
+      const key = 'ch' + dispCh;
+      if (key !== curKey){ curKey = key; setTargets(targets[dispCh], false); }
+    }
+    setDots(dispCh);
+
+    /* fondo */
+    const [br, bg2, bb] = bgAt(p);
+    stage.style.background = `rgb(${br|0},${bg2|0},${bb|0})`;
+    stage.classList.toggle('dark-ch', CH_DARK[dispCh]);
+    hint.style.opacity = p < .045 ? 1 : 0;
+
+    /* captions: visibles solo en el centro de su capítulo */
+    caps.forEach((c,i) => {
+      const sc = SEG.find(x => x.type === 'ch' && x.i === i);
+      const center = (sc.a + sc.b) / 2, d = Math.abs(p - center);
+      const a2 = Math.max(0, 1 - d*9);
+      c.style.opacity = a2;
+      c.style.transform = (MOBILE ? '' : 'translateY(-50%) ') + `translateY(${(1-a2)*18}px)`;
+    });
+
+    /* partículas (estela durante el tránsito) */
+    if (trail){ ctx.fillStyle = `rgba(${br|0},${bg2|0},${bb|0},.28)`; ctx.fillRect(0,0,W,H); }
+    else ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = fg;
+    const time = t * .001;
+    for (const q of P){
+      const wob = Math.sin(time*1.4 + q.ph) * 1.6;
+      q.vx = (q.vx + (q.tx*as + ax - q.x) * k) * damp;
+      q.vy = (q.vy + (q.ty*as + ay - q.y) * k) * damp;
+      q.x += q.vx; q.y += q.vy;
+      ctx.fillRect(q.x + wob, q.y + Math.cos(time + q.ph)*1.6, q.s, q.s);
+    }
+  })(0);
+});
+
+/* ============================================================
+   GLOBO TERRÁQUEO DE PUNTOS — sección contacto
+   Proyección ortográfica en canvas 2D, sin librerías.
+   Tierra muestreada en rejilla de 2,5° (144×72, 1 bit/celda, base64)
+   a partir del mapa equirectangular de Wikimedia Commons:
+   https://upload.wikimedia.org/wikipedia/commons/8/83/Equirectangular_projection_SW.jpg
+   Encima, la ruta de la primera circunnavegación (Magallanes–Elcano, 1519-1522).
+   ============================================================ */
+ggSafe(function(){
+  const cv = document.getElementById('globeC');
+  if (!cv || !cv.getContext) return;
+  const ctx = cv.getContext('2d');
+  const DPR = Math.min(devicePixelRatio || 1, 1.5);
+  const RAD = Math.PI / 180;
+
+  /* máscara de tierra (ver cabecera del bloque) */
+  const LAND = (
+    'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH+A+oAAAAAAAAAAAAA' +
+    'AAAAAD/j//8AAkAAACYAAAAAAAAAQAeP//+AAgAAAABAAAAAAAAAEAAAf/8AAAADAD/4A9gAAAADfO9AP/4AAAAEH///8/gA' +
+    'Af//PiN4L/wAAfgR3//////u4f////8eH8AAA/9/////////A/////p8HwHAD///////////A////+BkDgAAPv/////////8' +
+    'AeD//8ByAAAAP3///////+yAAGA///h/AAAGFv///////gOAAAAP//7/gAAPH//////v/gMAAAAH////wAAL/////////4IA' +
+    'AAAD///4YAAB/////////4AAAAAB//v8AAAB/////////oAAAAAB//r6AAAB6/Hv/////IAAAAAB///wAAAPlOTn////8AAA' +
+    'AAAB///AAAAPEr/3////4AAAAAAB///AAAAGcB//////owAAAAAA//+AAAAH8AP/////LAAAAAAAP/8AAAAP/MP/////gAAA' +
+    'AAAAP9kAAAAP///v////gAAAAAAAH4EAAAA////1////AAAAAAAAB4AAAAA///3+H//+AAAAAAAAA4iAAAB///7/D//4AAAA' +
+    'AAAAA9gYAAB///7+B8fQAAAAAAAAAPgAAAB///94B4fggAAAAAAAAA4AAAB////gAwHggAAAAAAAAAIYAAB///+QAwFgwAAA' +
+    'AAAAAAH/AAAf///wAgFAAAAAAAAAAAB/4AAPv//wAACCQAAAAAAAAAB/8AAAH//gAAKGAAAAAAAAAAD/+AAAD//AAAHeQAAA' +
+    'AAAAAAD//AAAH/+AAADfiAAAAAAAAAD//4AAD/8AAABFh8AAAAAAAAD//8AAB/8AAAAgBfAAAAAAAAB//8AAB/8AAAACAKAA' +
+    'AAAAAAB//4AAB/8AAAAACIAAEAAAAAA//4AAB/8QAAAAPIAAAAAAAAAf/4AAB/8wAAAAfsABAAAAAAAP/wAAB/xwAAAA/8AA' +
+    'AAAAAAAP/wAAB/xgAAAD/+AAAAAAAAAP/AAAA/xgAAAH//AAAAAAAAAP+AAAA/gAAAAH//gAAAAAAAAP8AAAAfgAAAAD//gA' +
+    'AAAAAAAP8AAAAfAAAAAD//gAAAAAAAAf4AAAAYAAAAADAfAAAAAAAAAfwAAAAAAAAAAAAPAEAAAAAAAfAAAAAAAAAAAAAAAG' +
+    'AAAAAAAcAAAAAAAAAAAAACAIAAAAAAA8AAAAAAAAAAAAAAAQAAAAAAA8AAAAAAAAAAAAAAAAAAAAAAA4AAAAAAAAEAAAAAAA' +
+    'AAAAAAA4gAAAAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' +
+    'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHAAAAAAAOAH///5AAAAAAAAAXAAAAAA7//f////4A' +
+    'AAAAAcAfAAA////////////wAABf+///AAP///////////+AAH//////4B////////////+g////////////////////////' +
+    '////////////////////////////////////////////////////////////////////////////////////////////////'
+  );
+  const bin = atob(LAND);
+  const SMALL = innerWidth < 700; /* móvil: la mitad de puntos */
+  const dots = [];
+  for (let j = 0; j < 72; j++)
+    for (let i = 0; i < 144; i++){
+      const idx = j*144 + i;
+      if (!((bin.charCodeAt(idx >> 3) >> (7 - (idx & 7))) & 1)) continue;
+      if (SMALL && ((i + j) & 1)) continue;
+      const lat = (90 - (j + .5) * 2.5) * RAD;
+      /* hacia los polos la rejilla lon/lat se compacta: aclarar columnas
+         para que la Antártida no forme anillos densos en el limbo */
+      const th = Math.max(1, Math.round(.45 / Math.cos(lat)));
+      if (th > 1 && (i + j*3) % th) continue;
+      dots.push({r: Math.cos(lat), y: Math.sin(lat), l: (-180 + (i + .5) * 2.5) * RAD});
+    }
+
+  /* ruta de la primera circunnavegación: waypoints aproximados [lat,lon] */
+  const WAY = [
+    [36.8,-6.4],   /* Sanlúcar de Barrameda, 1519 */
+    [28,-15.5],    /* Canarias */
+    [15,-23.5],    /* Cabo Verde */
+    [-22.9,-43.2], /* Río de Janeiro */
+    [-53.5,-70.9], /* estrecho de Magallanes */
+    [13.5,144.8],  /* Guam, tras cruzar el Pacífico */
+    [10.3,123.9],  /* Cebú, Filipinas */
+    [-0.8,127.4],  /* Molucas */
+    [-34.4,18.5],  /* cabo de Buena Esperanza */
+    [36.8,-6.4]    /* Sanlúcar, 1522: la vuelta completa */
+  ].map(w => {
+    const f = w[0]*RAD, m = w[1]*RAD;
+    return [Math.cos(f)*Math.sin(m), Math.sin(f), Math.cos(f)*Math.cos(m)];
+  });
+  /* interpolación por círculo máximo (slerp) a pasos de ~2° */
+  const route = [];
+  for (let s = 0; s < WAY.length - 1; s++){
+    const A = WAY[s], B = WAY[s+1];
+    const ang = Math.acos(Math.min(1, Math.max(-1, A[0]*B[0] + A[1]*B[1] + A[2]*B[2])));
+    const n = Math.max(2, Math.ceil(ang / (2*RAD))), sa = Math.sin(ang);
+    for (let k = (s === 0 ? 0 : 1); k <= n; k++){
+      const tt = k/n, w1 = Math.sin((1-tt)*ang)/sa, w2 = Math.sin(tt*ang)/sa;
+      const x = A[0]*w1 + B[0]*w2, y = A[1]*w1 + B[1]*w2, z = A[2]*w1 + B[2]*w2;
+      route.push({r: Math.hypot(x, z), y: y, l: Math.atan2(x, z)});
+    }
+  }
+  const RL = route.length;
+  const rX = new Float32Array(RL), rY = new Float32Array(RL), rZ = new Float32Array(RL);
+
+  /* inclinación del eje: el hemisferio sur (Magallanes, Buena Esperanza) un poco hacia el espectador */
+  const TILT = -0.20, cT = Math.cos(TILT), sT = Math.sin(TILT);
+  const TH0 = 0.55; /* arranque mirando al Atlántico */
+
+  let SZ = 0, C = 0, R = 0, bg = null;
+  function buildBg(){
+    bg = document.createElement('canvas');
+    bg.width = SZ*DPR; bg.height = SZ*DPR;
+    const g = bg.getContext('2d');
+    g.setTransform(DPR, 0, 0, DPR, 0, 0);
+    /* halo exterior muy sutil */
+    const h = g.createRadialGradient(C, C, R*.88, C, C, R*1.42);
+    h.addColorStop(0, 'rgba(176,141,87,.13)');
+    h.addColorStop(.4, 'rgba(176,141,87,.045)');
+    h.addColorStop(1, 'rgba(176,141,87,0)');
+    g.fillStyle = h; g.fillRect(0, 0, SZ, SZ);
+    /* cuerpo de la esfera, apenas insinuado */
+    const s = g.createRadialGradient(C - R*.35, C - R*.35, R*.1, C, C, R);
+    s.addColorStop(0, 'rgba(40,68,130,.28)');
+    s.addColorStop(.65, 'rgba(17,31,70,.26)');
+    s.addColorStop(1, 'rgba(7,13,32,.04)');
+    g.fillStyle = s;
+    g.beginPath(); g.arc(C, C, R, 0, 7); g.fill();
+    /* limbo */
+    g.strokeStyle = 'rgba(201,176,126,.26)'; g.lineWidth = 1;
+    g.beginPath(); g.arc(C, C, R, 0, 7); g.stroke();
+  }
+  function resize(){
+    const w = cv.clientWidth;
+    if (!w) return;
+    SZ = w; C = w/2; R = w*.42;
+    cv.width = w*DPR; cv.height = w*DPR;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    buildBg();
+    if (REDUCED) frame(0);
+  }
+
+  function strokeRoute(width, color, dash, off){
+    ctx.lineWidth = width; ctx.strokeStyle = color;
+    if (dash){ ctx.setLineDash(dash); ctx.lineDashOffset = off; }
+    let open = false;
+    ctx.beginPath();
+    for (let i = 0; i < RL; i++){
+      if (rZ[i] > .02){
+        if (!open){ ctx.moveTo(rX[i], rY[i]); open = true; }
+        else ctx.lineTo(rX[i], rY[i]);
+      } else open = false;
+    }
+    ctx.stroke();
+    if (dash) ctx.setLineDash([]);
+  }
+  function shipAt(u){
+    const i0 = Math.floor(u) % RL, i1 = (i0 + 1) % RL, k = u - Math.floor(u);
+    if (rZ[i0] < .03 || rZ[i1] < .03) return null;
+    return [rX[i0] + (rX[i1]-rX[i0])*k, rY[i0] + (rY[i1]-rY[i0])*k];
+  }
+
+  function frame(t){
+    ctx.clearRect(0, 0, SZ, SZ);
+    ctx.drawImage(bg, 0, 0, SZ, SZ);
+    /* oscilación ±60° alrededor del Atlántico (ciclo ~80 s): la tierra y la
+       derrota dorada siempre miran al espectador; la vuelta completa dejaba
+       20-30 s de Pacífico vacío que parecía un canvas roto */
+    const th = TH0 + (REDUCED ? 0 : Math.sin(t * Math.PI*2 / 80000) * 1.05);
+
+    /* puntos de tierra: latón, más tenues y pequeños hacia el limbo */
+    ctx.fillStyle = '#b08d57';
+    const ds = Math.max(1, R/200);
+    for (let i = 0; i < dots.length; i++){
+      const d = dots[i], a = d.l + th;
+      const x = d.r * Math.sin(a), z = d.r * Math.cos(a);
+      const y2 = d.y*cT - z*sT, z2 = d.y*sT + z*cT;
+      if (z2 < 0) continue; /* cara oculta: invisible */
+      const s = ds * (.7 + z2*.7);
+      ctx.globalAlpha = .25 + z2*.55;   /* suelo de alpha más alto: la esfera se lee siempre */
+      ctx.fillRect(C + R*x - s/2, C - R*y2 - s/2, s, s);
+    }
+    ctx.globalAlpha = 1;
+
+    /* proyectar la ruta */
+    for (let i = 0; i < RL; i++){
+      const q = route[i], a = q.l + th;
+      const x = q.r * Math.sin(a), z = q.r * Math.cos(a);
+      rX[i] = C + R*x;
+      rY[i] = C - R*(q.y*cT - z*sT);
+      rZ[i] = q.y*sT + z*cT;
+    }
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    strokeRoute(3, 'rgba(216,180,112,.14)', null, 0);                 /* aura del trazo */
+    strokeRoute(1.25, 'rgba(235,205,140,.85)', [5,7], -t*.007);       /* derrota dorada, dash lento */
+
+    /* la nao: un punto brillante recorriendo la ruta (~30 s/vuelta) con estela */
+    if (!REDUCED){
+      const u = (t % 30000) / 30000 * RL;
+      for (let k = 8; k >= 1; k--){
+        const p = shipAt((u - k*.7 + RL) % RL);
+        if (!p) continue;
+        const sw = 1.7 - k*.13;
+        ctx.globalAlpha = (1 - k/9) * .45;
+        ctx.fillStyle = '#ffe9b8';
+        ctx.fillRect(p[0]-sw/2, p[1]-sw/2, sw, sw);
+      }
+      ctx.globalAlpha = 1;
+      const p = shipAt(u);
+      if (p){
+        const gl = ctx.createRadialGradient(p[0], p[1], 0, p[0], p[1], 7);
+        gl.addColorStop(0, 'rgba(255,233,178,.45)');
+        gl.addColorStop(1, 'rgba(255,233,178,0)');
+        ctx.fillStyle = gl;
+        ctx.beginPath(); ctx.arc(p[0], p[1], 7, 0, 7); ctx.fill();
+        ctx.fillStyle = '#ffeec4';
+        ctx.beginPath(); ctx.arc(p[0], p[1], 1.9, 0, 7); ctx.fill();
+      }
+    }
+  }
+
+  resize(); addEventListener('resize', resize);
+  if (REDUCED) return; /* globo estático: sin rotación ni nave */
+
+  let active = false;
+  new IntersectionObserver(es => es.forEach(en => active = en.isIntersecting), {threshold:.05}).observe(cv);
+  (function loop(t){
+    requestAnimationFrame(loop);
+    if (!active) return;
+    if (SZ < 2) resize();
+    if (SZ < 2) return;
+    frame(t);
+  })(0);
+});
+</script>
+<script>
+/* ============================================================
+   ULTRAMOTION — motor de movimiento premium (un solo rAF maestro)
+   Kill-switch: si UM no arranca, no existe .um-on y la web queda
+   EXACTAMENTE como antes (canvas, intro, .rv, sticky y brújula intactos).
+   Solo desktop con puntero fino, hover real y sin reduced-motion.
+   ============================================================ */
+'use strict';
+(function(){
+  /* REDUCED y FINE vienen del script anterior (scope global) */
+  const UM_ON = !REDUCED && FINE && matchMedia('(hover: hover)').matches
+    && !('ontouchstart' in window) && innerWidth > 880;
+  if (!UM_ON) return;
+
+  const UM = {
+    on: true,
+    S: {                                  /* estado compartido por todos los módulos */
+      y: scrollY, target: scrollY,        /* smooth scroll */
+      vy: 0,                              /* velocidad suavizada (px/frame a 60fps) */
+      mx: innerWidth/2, my: innerHeight/2, moved: false,
+      t: 0, dt: 1
+    },
+    mods: [],
+    add(m){ if (m) this.mods.push(m); },
+    _rz: [],
+    onResize(fn){ this._rz.push(fn); },
+    hover: []                             /* handlers del mouseover delegado único */
+  };
+
+  /* ---------- P1.1 smooth scroll inercial (scroll NATIVO, sin transform) ---------- */
+  function modSmooth(){
+    const S = UM.S;
+    let lastApplied = scrollY;
+    /* el scrollHeight se cachea: leerlo cada frame era un read de layout
+       redundante; se recalcula en resize y cuando cambia la altura del body */
+    let maxS = document.documentElement.scrollHeight - innerHeight;
+    const measure = () => { maxS = document.documentElement.scrollHeight - innerHeight; };
+    UM.measure = measure;
+    UM.onResize(measure);
+    if ('ResizeObserver' in window) new ResizeObserver(measure).observe(document.body);
+
+    addEventListener('wheel', e => {
+      if (e.ctrlKey) return;                                    /* zoom del navegador */
+      if (document.body.classList.contains('nav-open')) return; /* menú abierto */
+      e.preventDefault();
+      /* con la intro de carga aún viva, la rueda no mueve nada: que nadie
+         aterrice en mitad de la página con el hero sin estrenar */
+      const intro = document.getElementById('intro');
+      if (intro && !intro.classList.contains('out')) return;
+      const d = e.deltaMode === 2 ? e.deltaY * innerHeight      /* páginas → px */
+        : e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY;         /* líneas → px (Firefox) */
+      S.target = Math.max(0, Math.min(maxS, S.target + d));
+    }, {passive:false});
+
+    /* teclado, barra, focus jumps: el navegador mueve el scroll → re-sincronizar */
+    addEventListener('scroll', () => {
+      if (Math.abs(scrollY - lastApplied) > 1){ S.target = S.y = lastApplied = scrollY; }
+    }, {passive:true});
+
+    /* anclas: con scroll-behavior:auto el salto sería seco → las animamos nosotros
+       (el skip-link se deja nativo para no romper el movimiento del foco) */
+    document.addEventListener('click', e => {
+      const a = e.target.closest && e.target.closest('a[href^="#"]');
+      if (!a || a.classList.contains('skip-link')) return;
+      const el = document.querySelector(a.getAttribute('href'));
+      if (!el) return;
+      e.preventDefault();
+      measure();
+      S.target = Math.max(0, Math.min(maxS,
+        el.getBoundingClientRect().top + scrollY - 80)); /* = scroll-margin-top */
+      history.pushState(null, '', a.getAttribute('href'));
+      el.setAttribute('tabindex','-1');                  /* el tab continúa en el destino */
+      el.focus({preventScroll:true});
+    });
+
+    return { update(){
+      S.target = Math.max(0, Math.min(maxS, S.target));
+      S.y += (S.target - S.y) * Math.min(1, 0.11 * S.dt);
+      if (Math.abs(S.target - S.y) < 0.4) S.y = S.target;
+      const r = Math.round(S.y);
+      if (r !== lastApplied){ lastApplied = r; scrollTo(0, r); }
+    }};
+  }
+
+  /* ---------- P1.2 cursor personalizado (punto; el aro lo sustituye
+       la estela de agua de la capa Atlántico) ---------- */
+  function modCursor(){
+    const cc = document.createElement('div');
+    cc.id = 'cc'; cc.setAttribute('aria-hidden','true');
+    cc.innerHTML = '<div class="cc-dot"></div>';
+    document.body.appendChild(cc);
+    const dot = cc.querySelector('.cc-dot');
+    let dx = UM.S.mx, dy = UM.S.my;
+    let live = false, out = false, fpT = 0, fpY = -1;
+
+    function applyState(el){
+      if (!el || !el.closest) return;
+      cc.classList.toggle('cc-link', !!el.closest('a,button,summary,.btn,#burger,.scroll-cue'));
+      cc.classList.toggle('cc-dark', !!el.closest('#servicios,#contacto,footer,.exp-stage.dark-ch,#mnav,#interludio,#zarpa'));
+    }
+    UM.hover.push(applyState);
+    document.documentElement.addEventListener('mouseleave', () => { out = true; });
+    document.documentElement.addEventListener('mouseenter', () => { out = false; });
+
+    return { write(){
+      const S = UM.S;
+      if (!live){ if (!S.moved) return; live = true; cc.classList.add('cc-live'); dx = S.mx; dy = S.my; }
+      cc.classList.toggle('cc-hidden', out || document.body.classList.contains('nav-open'));
+      dx += (S.mx - dx) * Math.min(1, .55 * S.dt);
+      dy += (S.my - dy) * Math.min(1, .55 * S.dt);
+      dot.style.transform = `translate3d(${dx.toFixed(1)}px,${dy.toFixed(1)}px,0) translate(-50%,-50%)`;
+      /* el fondo de la expedición cambia bajo el cursor quieto: refrescar
+         el estado a ~6 Hz y solo si hubo scroll */
+      if (S.t - fpT > 160 && Math.abs(S.y - fpY) > 1){
+        fpT = S.t; fpY = S.y;
+        applyState(document.elementFromPoint(S.mx, S.my));
+      }
+    }};
+  }
+
+  /* ---------- P1.5 skew por velocidad de scroll (lista cerrada) ---------- */
+  function modSkew(){
+    /* NUNCA: #expedicion ni ancestros de .exp-stage (mataría el sticky),
+       #inicio (canvas+parallax), header, footer, .mq (transform propio) */
+    const targets = [
+      '#quienes .sec-inner',
+      '#servicios .fleet',
+      '#metodo .route',
+      '#sectores .ports',
+      '#contacto .con-left'
+    ].map(s => document.querySelector(s)).filter(Boolean);
+    if (!targets.length) return null;
+    let sk = 0, idle = true, rects = null;
+    return {
+      read(){                            /* fase 1: solo lecturas de layout */
+        const want = Math.max(-1.5, Math.min(1.5, UM.S.vy * 0.045));
+        sk += (want - sk) * 0.12 * UM.S.dt;
+        idle = Math.abs(sk) < 0.02 && Math.abs(want) < 0.02;
+        rects = idle ? null : targets.map(el => el.getBoundingClientRect());
+      },
+      write(){                           /* fase 2: solo escrituras de estilo */
+        if (idle){
+          if (sk !== 0){ sk = 0; targets.forEach(el => el.style.transform = ''); }
+          return;                        /* en reposo: sin transform → sin capa extra */
+        }
+        const v = `skewY(${sk.toFixed(3)}deg)`;
+        targets.forEach((el,i) => {
+          const r = rects[i];
+          el.style.transform = (r.bottom < 0 || r.top > innerHeight) ? '' : v;
+        });
+      }
+    };
+  }
+
+  /* ---------- P1.4 parallax multicapa (propiedad `translate`: compone con
+       las animaciones/transiciones de transform de .rosa y los .rv) ---------- */
+  function modParallax(){
+    const hero = document.getElementById('inicio');
+    if (!hero) return null;
+    /* [el, rate scroll, rate ratón, cap px] */
+    const L = [
+      [document.getElementById('chartC'), .16, 6, 120],
+      [document.querySelector('.hero-grid'), .05, 0, 1e4],
+      [document.querySelector('.rosa'), -.10, -14, 1e4],
+      [document.querySelector('.hero-card'), -.05, 8, 1e4]
+    ].filter(x => x[0]);
+    const cue = document.querySelector('.scroll-cue');
+    const decor = [...document.querySelectorAll('[data-px]')];
+    let heroOn = false, nx = 0, ny = 0, decoK = null;
+    return {
+      read(){
+        const S = UM.S;
+        if (S.calm){ heroOn = false; decoK = null; return; } /* reposo: nada cambia */
+        heroOn = S.y < hero.offsetHeight;
+        nx = S.mx/innerWidth - .5; ny = S.my/innerHeight - .5;
+        decoK = decor.map(el => {
+          const r = el.getBoundingClientRect();
+          if (r.bottom < 0 || r.top > innerHeight) return null;
+          return (r.top + r.height/2 - innerHeight/2) / innerHeight;
+        });
+      },
+      write(){
+        const S = UM.S;
+        if (heroOn){                     /* hero solo mientras es visible */
+          L.forEach(([el, sr, mr, cap]) => {
+            const sy = Math.max(-cap, Math.min(cap, S.y * sr));
+            el.style.translate = `${(nx*mr).toFixed(1)}px ${(sy + ny*mr).toFixed(1)}px`;
+          });
+          if (cue){
+            const op = Math.max(0, 1 - S.y/300);
+            cue.style.opacity = op;
+            cue.style.visibility = op <= 0 ? 'hidden' : ''; /* invisible ⇒ fuera del tab order */
+          }
+        }
+        if (decoK) decor.forEach((el,i) => { /* parallax sutil de sección */
+          if (decoK[i] === null) return;
+          el.style.translate = `0 ${(decoK[i] * parseFloat(el.dataset.px) * 60).toFixed(1)}px`;
+        });
+      }
+    };
+  }
+
+  /* ---------- P1.7 marquesina reactiva al scroll ---------- */
+  function modMarquee(){
+    const tr = document.querySelector('.mq-track');
+    if (!tr) return null;
+    let x = 0, half = 0, vis = true;
+    const measure = () => { half = tr.scrollWidth / 2; };
+    measure();
+    UM.onResize(measure);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+    new IntersectionObserver(es => { vis = es[0].isIntersecting; }).observe(tr.parentElement);
+    return { write(){
+      if (!vis || half < 2) return;
+      const S = UM.S;
+      /* base ≈ velocidad CSS original; el scroll suma módulo Y dirección */
+      x += (0.9 + Math.min(14, Math.abs(S.vy) * 0.55)) * Math.sign(S.vy || 1) * S.dt;
+      x = ((x % half) + half) % half;
+      tr.style.transform = `translate3d(${-x}px,0,0)`;
+    }};
+  }
+
+  /* ---------- P1.6 doble capa magnética + P2.12 hint imantado ----------
+     El imán del botón entero ya existe (script anterior); aquí solo se
+     contra-mueve el CONTENIDO (.um-mag-i) y se imanta el hint "Navegar". */
+  function modMagnet(){
+    document.querySelectorAll('.btn, .nav-cta').forEach(b => {
+      b.classList.add('um-mag');
+      b.innerHTML = '<span class="um-mag-i">' + b.innerHTML + '</span>';
+    });
+    let cur = null, prevInner = null;
+    UM.hover.push(el => { cur = el.closest ? el.closest('.um-mag') : null; });
+
+    const cue = document.querySelector('.scroll-cue');
+    const quienes = document.getElementById('quienes');
+    if (cue && quienes){
+      /* al volverse clicable deja de ser decoración: control real también para teclado/AT */
+      cue.style.pointerEvents = 'auto';
+      cue.removeAttribute('aria-hidden');
+      cue.setAttribute('role','button');
+      cue.setAttribute('tabindex','0');
+      cue.setAttribute('aria-label','Bajar a Quiénes somos');
+      const go = () => {
+        UM.S.target = Math.max(0, quienes.getBoundingClientRect().top + scrollY - 80);
+      };
+      cue.addEventListener('click', go);
+      cue.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); go(); }
+      });
+    }
+    let curRect = null, cueRect = null, lastCue = '';
+    return {
+      read(){
+        const S = UM.S;
+        curRect = (cur && !S.calm) ? cur.getBoundingClientRect() : null;
+        cueRect = (cue && !S.calm && S.y < innerHeight) ? cue.getBoundingClientRect() : null;
+      },
+      write(){
+        const S = UM.S;
+        if (prevInner && (!cur || cur.firstElementChild !== prevInner)){
+          prevInner.style.transform = ''; prevInner = null;
+        }
+        if (cur && curRect){
+          const i = cur.firstElementChild, r = curRect;
+          const dx = S.mx - (r.left + r.width/2), dy = S.my - (r.top + r.height/2);
+          i.style.transform = `translate(${(dx*.07).toFixed(1)}px,${(dy*.1).toFixed(1)}px)`;
+          prevInner = i;
+        }
+        if (cueRect){                     /* imán del hint, radio 80px */
+          const r = cueRect;
+          const dx = S.mx - (r.left + r.width/2), dy = S.my - (r.top + r.height/2);
+          const near = Math.hypot(dx, dy) < 80;
+          const v = near ? `${(dx*.3).toFixed(1)}px ${(dy*.3).toFixed(1)}px` : '0px 0px';
+          if (v !== lastCue){ lastCue = v; cue.style.translate = v; }
+        }
+      }
+    };
+  }
+
+  /* ---------- P2.9 velo de transición claro→oscuro (clip-path propio) ---------- */
+  function modVeil(){
+    const secs = ['servicios','contacto'].map(id => document.getElementById(id)).filter(Boolean);
+    if (!secs.length) return null;
+    let prs = null;
+    return {
+      read(){
+        if (UM.S.calm){ prs = null; return; } /* sin scroll no cambia el clip */
+        prs = secs.map(sec => {
+          const r = sec.getBoundingClientRect();
+          if (r.top > innerHeight || r.bottom < 0) return -1;
+          return Math.max(0, Math.min(1, (innerHeight - r.top) / (innerHeight * .9)));
+        });
+      },
+      write(){
+        if (!prs) return;
+        secs.forEach((sec,i) => {
+          const pr = prs[i];
+          if (pr < 0 || pr >= 1){ if (sec.style.clipPath) sec.style.clipPath = ''; return; }
+          sec.style.clipPath =
+            `inset(0 ${((1-pr)*4).toFixed(2)}% 0 ${((1-pr)*4).toFixed(2)}% round ${((1-pr)*24)|0}px)`;
+        });
+      }
+    };
+  }
+
+  /* ---------- P2.10 tilt 3D con ratón (.ship + .hero-card) ---------- */
+  function modTilt(){
+    const els = [...document.querySelectorAll('.ship'), document.querySelector('.hero-card')].filter(Boolean);
+    if (!els.length) return null;
+    const heroSide = document.querySelector('.hero-side');
+    if (heroSide) heroSide.style.perspective = '900px';
+    const st = new Map();
+    els.forEach(el => st.set(el, {rx:0, ry:0, lift:0, on:false}));
+    let cur = null;
+    UM.hover.push(el => {
+      const t = el.closest ? el.closest('.ship,.hero-card') : null;
+      cur = (t && st.has(t)) ? t : null;
+    });
+    let curRect = null, settled = true;
+    return {
+      read(){
+        settled = !cur;
+        if (settled) st.forEach(o => {
+          if (o.on || Math.abs(o.rx) > .02 || Math.abs(o.ry) > .02 || Math.abs(o.lift) > .05) settled = false;
+        });
+        curRect = cur ? cur.getBoundingClientRect() : null;
+      },
+      write(){
+        if (settled) return;             /* nada en hover ni asentándose */
+        const S = UM.S;
+        st.forEach((o, el) => {
+          const hov = el === cur;
+          let trx = 0, tryy = 0, tl = 0;
+          if (hov && curRect){
+            const r = curRect;
+            tryy = ((S.mx - r.left)/r.width - .5) * 8;     /* rotateY ±4° */
+            trx  = -((S.my - r.top)/r.height - .5) * 8;    /* rotateX ±4° */
+            tl = el.classList.contains('ship') ? -9 : 0;   /* lift del hover original */
+          }
+          const k = Math.min(1, .12 * S.dt);
+          o.rx += (trx - o.rx) * k; o.ry += (tryy - o.ry) * k; o.lift += (tl - o.lift) * k;
+          if (!hov && Math.abs(o.rx) < .02 && Math.abs(o.ry) < .02 && Math.abs(o.lift) < .05){
+            if (o.on){ o.on = false; el.style.transform = ''; el.style.transition = ''; }
+            return;
+          }
+          /* no pisar la entrada .rv si aún no se ha revelado */
+          if (el.classList.contains('rv') && !el.classList.contains('in')) return;
+          if (!o.on){ o.on = true; el.style.transition = 'transform 0s, border-color .4s, background .4s'; }
+          const base = (el.matches('.ship:nth-child(2)') && innerWidth > 980) ? 30 : 0;
+          el.style.transform = `translateY(${(base + o.lift).toFixed(2)}px) rotateX(${o.rx.toFixed(2)}deg) rotateY(${o.ry.toFixed(2)}deg)`;
+        });
+      }
+    };
+  }
+
+  /* ---------- P1.8 footer reveal (footer fijo que main "descubre") ---------- */
+  function footerReveal(){
+    const f = document.querySelector('footer'), m = document.getElementById('contenido');
+    if (!f || !m) return;
+    const apply = () => {
+      const h = f.offsetHeight;
+      if (h > innerHeight * 0.85){       /* footer más alto que el viewport: abortar */
+        document.documentElement.classList.remove('um-foot');
+        m.style.marginBottom = '';
+        return;
+      }
+      document.documentElement.classList.add('um-foot');
+      m.style.marginBottom = h + 'px';   /* hueco que el scroll descubre */
+      if (UM.measure) UM.measure();      /* la altura de la página acaba de cambiar */
+    };
+    apply();
+    new ResizeObserver(apply).observe(f); /* cubre los <details> de Legal */
+    UM.onResize(apply);
+  }
+
+  /* ---------- P2.11 coordenadas con scramble ---------- */
+  function scrambleInit(){
+    const els = [...document.querySelectorAll('.coords span')];
+    if (!els.length) return;
+    const CHARS = '0123456789°′NSO·';
+    const io = new IntersectionObserver(es => es.forEach(en => {
+      if (!en.isIntersecting) return;
+      io.unobserve(en.target);
+      const tn = en.target.firstChild;   /* solo el nodo de texto; el <i> queda intacto */
+      if (!tn || tn.nodeType !== 3) return;
+      const orig = tn.nodeValue, t0 = performance.now();
+      (function step(t){
+        const k = (t - t0) / 700;
+        if (k >= 1){ tn.nodeValue = orig; return; }
+        requestAnimationFrame(step);
+        tn.nodeValue = orig.split('').map((c, i) =>
+          (c === ' ' || i / orig.length < k) ? c : CHARS[(Math.random()*CHARS.length)|0]).join('');
+      })(t0);
+    }), {rootMargin:'0px 0px -10% 0px'});
+    els.forEach(e => io.observe(e));
+  }
+
+  /* ===== arranque (cualquier fallo ⇒ kill-switch limpio) ===== */
+  try{
+    document.documentElement.classList.add('um-on');
+
+    /* listeners únicos compartidos */
+    addEventListener('mousemove', e => {
+      UM.S.mx = e.clientX; UM.S.my = e.clientY; UM.S.moved = true;
+    }, {passive:true});
+    document.addEventListener('mouseover', e => {
+      if (e.target && e.target.closest) UM.hover.forEach(f => f(e.target));
+    });
+    let rzT;
+    addEventListener('resize', () => {
+      clearTimeout(rzT); rzT = setTimeout(() => UM._rz.forEach(f => f()), 150);
+    });
+
+    UM.add(modSmooth());     /* 1º: produce S.y; el resto consume el mismo frame */
+    UM.add(modCursor());
+    UM.add(modSkew());
+    UM.add(modParallax());
+    UM.add(modMarquee());
+    UM.add(modMagnet());
+    UM.add(modVeil());
+    UM.add(modTilt());
+    footerReveal();          /* sin tick: solo eventos */
+    scrambleInit();
+
+    /* ===== rAF maestro: update (scroll) → reads (layout) → writes (estilos).
+       Separar las fases evita los forced reflows de intercalar rect+style,
+       y S.calm permite a los módulos saltarse el frame en reposo total ===== */
+    let prevT = 0, prevY = UM.S.y, pmx = -1, pmy = -1;
+    (function tick(t){
+      requestAnimationFrame(tick);
+      const S = UM.S;
+      S.dt = Math.min(2.5, (t - prevT) / 16.7 || 1); prevT = t; S.t = t;
+      const mouseStill = S.mx === pmx && S.my === pmy; pmx = S.mx; pmy = S.my;
+      S.calm = mouseStill && Math.abs(S.target - S.y) < 0.5 && Math.abs(S.vy) < 0.05;
+      for (const m of UM.mods) if (m.update) m.update();
+      for (const m of UM.mods) if (m.read) m.read();
+      for (const m of UM.mods) if (m.write) m.write();
+      const vy = (S.y - prevY) / S.dt; prevY = S.y;
+      S.vy += (vy - S.vy) * 0.15;        /* velocidad suavizada compartida */
+    })(0);
+
+    /* gancho para la capa Atlántico: registra módulos en ESTE rAF maestro
+       (un solo loop para toda la página) */
+    window.GG_UM = UM;
+  }catch(err){
+    /* sin .um-on/.um-foot la hoja original manda: web exactamente como antes */
+    document.documentElement.classList.remove('um-on','um-foot');
+    const m = document.getElementById('contenido');
+    if (m) m.style.marginBottom = '';
+    console.error('Ultramotion desactivado:', err);
+  }
+})();
+</script>
+<script>
+/* ============================================================
+   AVENTURA ATLÁNTICA — barco compañero, cursor de agua, olas,
+   interludio con espiral y fondo evolutivo del viaje.
+   - Reutiliza el rAF maestro del ultramotion (window.GG_UM).
+   - Sin ultramotion (móvil/touch): un único rAF propio, solo
+     para las olas/parallax visibles; gotas y barco no existen.
+   - Reduced-motion: olas y espiral estáticas, cero loops.
+   ============================================================ */
+'use strict';
+(function(){
+  const UMX = (window.GG_UM && document.documentElement.classList.contains('um-on'))
+    ? window.GG_UM : null;
+  const AS = UMX ? UMX.S : {t:0, y:scrollY, vy:0, dt:1, mx:innerWidth/2, my:innerHeight/2, calm:false};
+  const FALL = [];                            /* módulos del loop propio (sin UM) */
+  function reg(m){ if (!m) return; if (UMX) UMX.add(m); else FALL.push(m); }
+  const DPRC = Math.min(devicePixelRatio || 1, 1.5);
+  const TAU = Math.PI * 2;
+
+  /* ¿puede correr la simulación de fluidos (3d/fluid.js)? Si sí, la estela 2D
+     de burbujas no se monta: el fluido la reemplaza con agua de verdad */
+  window.GG_FLUID = !REDUCED && matchMedia('(pointer: fine)').matches
+    && innerWidth > 880
+    && (function(){ try { return !!document.createElement('canvas').getContext('webgl2'); } catch(e){ return false; } })();
+
+  /* ---------- A2 cursor de agua: estela fluida + gotas + ondas ---------- */
+  ggSafe(function(){
+    if (!UMX) return;                         /* mismo gating que el cursor custom */
+    if (window.GG_FLUID) return;              /* el fluido GPU reemplaza esta estela */
+    const cv = document.createElement('canvas');
+    cv.id = 'waterC'; cv.setAttribute('aria-hidden','true');
+    document.body.appendChild(cv);
+    const ctx = cv.getContext('2d');
+    if (!ctx) return;
+    let W = 0, H = 0;
+    function rs(){ W = innerWidth; H = innerHeight;
+      cv.width = W*DPRC; cv.height = H*DPRC; ctx.setTransform(DPRC,0,0,DPRC,0,0); }
+    rs(); addEventListener('resize', rs);
+    const N = 7, nodes = Array.from({length:N}, () => ({x:AS.mx, y:AS.my}));
+    const drops = [], ripples = [];
+    let pmx = AS.mx, pmy = AS.my, wasIdle = false;
+    addEventListener('mousedown', e => {
+      if (document.body.classList.contains('nav-open')) return;
+      /* dos ondas concéntricas, la segunda con retardo (parte de radio negativo) */
+      ripples.push({x:e.clientX, y:e.clientY, r:3, a:.5},
+                   {x:e.clientX, y:e.clientY, r:-10, a:.38});
+    }, {passive:true});
+    const cc = document.getElementById('cc');
+    reg({ write(){
+      const sx = AS.mx - pmx, sy = AS.my - pmy, sp = Math.hypot(sx, sy);
+      pmx = AS.mx; pmy = AS.my;
+      nodes[0].x += (AS.mx - nodes[0].x)*.45; nodes[0].y += (AS.my - nodes[0].y)*.45;
+      for (let i = 1; i < N; i++){
+        nodes[i].x += (nodes[i-1].x - nodes[i].x)*.3;
+        nodes[i].y += (nodes[i-1].y - nodes[i].y)*.3;
+      }
+      /* al mover rápido la estela suelta gotas que caen */
+      if (sp > 24 && drops.length < 36){
+        for (let i = 0; i < 2; i++) drops.push({
+          x: AS.mx - sx*.3, y: AS.my - sy*.3,
+          vx: (Math.random()-.5)*1.8 + sx*.04,
+          vy: -(Math.random()*1.6) + sy*.04, l: 1 });
+      }
+      const idle = sp < .4 && !drops.length && !ripples.length &&
+        Math.hypot(nodes[N-1].x - AS.mx, nodes[N-1].y - AS.my) < 1.2;
+      if (idle){ if (!wasIdle){ ctx.clearRect(0,0,W,H); wasIdle = true; } return; }
+      wasIdle = false;
+      ctx.clearRect(0,0,W,H);
+      if (cc && cc.classList.contains('cc-hidden')) return;
+      const dark = cc && cc.classList.contains('cc-dark');
+      const C = dark ? '212,186,136' : '34,63,131';   /* espuma/latón ⟷ azul agua */
+      /* blobs encadenados: gota/mercurio acuoso (lighter solo sobre oscuro,
+         sobre claro el aditivo no se ve y se pinta translúcido normal) */
+      ctx.globalCompositeOperation = dark ? 'lighter' : 'source-over';
+      for (let i = 0; i < N; i++){
+        const r = 13 - i*1.2, a = (dark ? .20 : .14) * (1 - i/(N+2));
+        const g = ctx.createRadialGradient(nodes[i].x, nodes[i].y, 0, nodes[i].x, nodes[i].y, r);
+        g.addColorStop(0, `rgba(${C},${a.toFixed(3)})`);
+        g.addColorStop(.7, `rgba(${C},${(a*.5).toFixed(3)})`);
+        g.addColorStop(1, `rgba(${C},0)`);
+        ctx.fillStyle = g;
+        ctx.beginPath(); ctx.arc(nodes[i].x, nodes[i].y, r, 0, TAU); ctx.fill();
+      }
+      for (let i = drops.length - 1; i >= 0; i--){
+        const d = drops[i];
+        d.vy += .24; d.x += d.vx; d.y += d.vy; d.l -= .03;
+        if (d.l <= 0 || d.y > H + 4){ drops.splice(i,1); continue; }
+        ctx.fillStyle = `rgba(${C},${(d.l*.4).toFixed(3)})`;
+        ctx.beginPath(); ctx.arc(d.x, d.y, 1.1 + d.l*1.2, 0, TAU); ctx.fill();
+      }
+      ctx.globalCompositeOperation = 'source-over';
+      for (let i = ripples.length - 1; i >= 0; i--){
+        const o = ripples[i];
+        o.r += 2.2; if (o.r > 0) o.a *= .955;
+        if (o.a < .02){ ripples.splice(i,1); continue; }
+        if (o.r <= 1) continue;
+        ctx.strokeStyle = `rgba(${C},${o.a.toFixed(3)})`; ctx.lineWidth = 1.4;
+        ctx.beginPath(); ctx.arc(o.x, o.y, o.r, 0, TAU); ctx.stroke();
+        ctx.globalAlpha = .5;
+        ctx.beginPath(); ctx.arc(o.x, o.y, o.r*.62, 0, TAU); ctx.stroke();
+        ctx.globalAlpha = 1;
+      }
+    }});
+  });
+
+  /* ---------- A1 el barco compañero (derrota del margen derecho) ---------- */
+  ggSafe(function(){
+    if (!UMX) return;
+    const nav = document.getElementById('navio');
+    const ship = document.getElementById('nvShip');
+    if (!nav || !ship) return;
+    const forms = [...nav.querySelectorAll('.nv-f')];
+    /* forma por sección: plegadas → llenas → (oculto en la expedición) →
+       tormenta → llenas → farolillo en la arribada */
+    const FORM = {inicio:0, quienes:1, servicios:1, interludio:1, expedicion:-1,
+                  metodo:2, sectores:1, contacto:3, zarpa:3};
+    const secs = ['inicio','quienes','servicios','interludio','expedicion','metodo','sectores','contacto','zarpa']
+      .map(id => document.getElementById(id)).filter(Boolean);
+    const knots = secs.map(() => {
+      const k = document.createElement('span'); k.className = 'nv-knot';
+      nav.insertBefore(k, ship); return k;
+    });
+    const wake = Array.from({length:7}, () => {
+      const w = document.createElement('span'); w.className = 'nv-wake';
+      nav.insertBefore(w, ship); return w;
+    });
+    let tops = [], maxS = 1, vh = innerHeight;
+    function measure(){
+      vh = innerHeight;
+      maxS = Math.max(1, document.documentElement.scrollHeight - vh);
+      tops = secs.map(s => {
+        const r = s.getBoundingClientRect();
+        return {top: r.top + scrollY, id: s.id, mid: r.top + scrollY + r.height/2};
+      });
+      tops.forEach((tp, i) => {
+        /* el rumbo arranca a 11vh: bajo el CTA del header, nunca debajo */
+        const f = Math.max(0, Math.min(1, (tp.mid - vh/2) / maxS));
+        knots[i].style.top = (11 + f*85) + 'vh';
+      });
+    }
+    measure();
+    UMX.onResize(measure);
+    if ('ResizeObserver' in window)
+      new ResizeObserver(measure).observe(document.body);
+    const hist = [];
+    let sy = -1, cf = -1, hidden = false, fr = 0;
+    reg({ write(){
+      const p = Math.max(0, Math.min(1, AS.y / maxS));
+      const targetY = vh * (.11 + p*.85);   /* misma escala que los nudos */
+      if (sy < 0) sy = targetY;
+      sy += (targetY - sy) * Math.min(1, .07 * AS.dt);   /* llega con retardo perezoso */
+      const mid = AS.y + vh*.5;
+      let cur = tops[0];
+      for (const tp of tops) if (mid >= tp.top) cur = tp;
+      const want = cur ? FORM[cur.id] : 0;
+      const hide = want === -1;                          /* en la expedición zarpa "dentro" */
+      if (hide !== hidden){ hidden = hide; nav.classList.toggle('nv-hide', hide); }
+      if (!hide && want !== cf){
+        cf = want;
+        forms.forEach(f => f.classList.toggle('on', +f.dataset.f === cf));
+      }
+      knots.forEach((k, i) => k.classList.toggle('on', mid >= tops[i].top));
+      /* cabeceo senoidal + escora con la velocidad de scroll */
+      const rot = Math.sin(AS.t*.0016)*3.4 + Math.max(-9, Math.min(9, AS.vy*.5));
+      const dy = Math.sin(AS.t*.0022)*2.5;
+      ship.style.transform =
+        `translate3d(0,${(sy - 31 + dy).toFixed(1)}px,0) rotate(${rot.toFixed(2)}deg)`;
+      /* estela: posiciones pasadas que se desvanecen, solo visible en marcha */
+      if ((fr++ & 3) === 0){ hist.unshift(sy + dy); if (hist.length > 7) hist.pop(); }
+      const speed = Math.min(1, Math.abs(AS.vy) / 4);
+      wake.forEach((w, i) => {
+        const hy = hist[i];
+        if (hy === undefined || hide || speed < .06){ w.style.opacity = 0; return; }
+        w.style.top = (hy + 24).toFixed(1) + 'px';
+        w.style.opacity = ((1 - i/7) * .55 * speed).toFixed(2);
+      });
+    }});
+  });
+
+  /* ---------- A3 olas vivas: separadores de sección + mar del hero ----------
+     fBm (ruido de valor 1D, 2 octavas) en vez de senos puros: sin periodo
+     visible. La agitación se acopla a la velocidad de scroll (AS.vy), como
+     la escora del barquito lateral. En móvil (sin capa 3D) el hero gana un
+     mar de tinta por capas con una nao cabalgando la cresta en parallax. */
+  ggSafe(function(){
+    const list = [...document.querySelectorAll('canvas.wave-sep')];
+    const hero = document.getElementById('heroSea');
+    if (hero) list.push(hero);
+    const MOVIL_MAR = matchMedia('(max-width: 900px), (pointer: coarse)').matches;
+    function n1(x, s){
+      const i = Math.floor(x), f = x - i, u = f*f*(3-2*f);
+      const h = n => { const v = Math.sin(n*127.1 + s*311.7)*43758.5453; return v - Math.floor(v); };
+      return h(i)*(1-u) + h(i+1)*u;
+    }
+    /* nao de tinta para el mar móvil (clon del SVG del navío mini) */
+    let nao = null, naoOn = false;
+    if (MOVIL_MAR && hero){
+      const inicio = document.getElementById('inicio');
+      inicio.classList.add('hero-mar-movil');
+      nao = document.createElement('div');
+      nao.id = 'naoMovil';
+      nao.setAttribute('aria-hidden', 'true');
+      const svg = document.getElementById('navioMini')?.querySelector('svg');
+      if (svg){ nao.appendChild(svg.cloneNode(true)); inicio.appendChild(nao); naoOn = true; }
+    }
+    list.forEach(cv => {
+      const ctx = cv.getContext && cv.getContext('2d');
+      if (!ctx) return;
+      const line = cv.id === 'heroSea';
+      const fill = cv.dataset.fill || '#101c3c';
+      const PH = [Math.random()*9.7, Math.random()*9.7, Math.random()*9.7];
+      const spray = [];
+      let W = 0, H = 0, active = false;
+      function ySup(x, t){    /* capa superior del mar móvil: la que monta la nao */
+        return H*.40 + (n1(x*.006 + t*.00045, 9) - .5)*30
+             + (n1(x*.016 + 7.7 + t*.0008, 9) - .5)*12;
+      }
+      function draw(t){
+        ctx.clearRect(0, 0, W, H);
+        const agit = 1 + Math.min(1.8, Math.abs(AS.vy || 0)*.16);
+        if (line && MOVIL_MAR){
+          /* mar de tinta por capas */
+          const capas = [
+            {y: x => ySup(x, t), a: .30, f: '#223f83'},
+            {y: x => H*.60 + (n1(x*.0045 + 3.3 + t*.00035, 5) - .5)*28*agit, a: .20, f: '#223f83'},
+            {y: x => H*.80 + (n1(x*.004 + 6.1 + t*.00028, 3) - .5)*22*agit, a: .13, f: '#101c3c'},
+          ];
+          for (const c of capas){
+            ctx.globalAlpha = c.a;
+            ctx.fillStyle = c.f;
+            ctx.beginPath(); ctx.moveTo(0, H + 2);
+            for (let x = 0; x <= W; x += 6) ctx.lineTo(x, c.y(x));
+            ctx.lineTo(W, H + 2); ctx.closePath(); ctx.fill();
+          }
+          ctx.globalAlpha = 1;
+          /* cresta dibujada de la capa superior */
+          ctx.strokeStyle = 'rgba(34,63,131,.5)';
+          ctx.lineWidth = 1.4;
+          ctx.beginPath();
+          for (let x = 0; x <= W; x += 6){
+            const y = ySup(x, t) - 1;
+            x ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+          }
+          ctx.stroke();
+          if (naoOn){
+            const xn = W*.24;
+            const dy = ySup(xn + 14, t) - ySup(xn - 14, t);
+            const rot = Math.atan2(dy, 28)*57.3 + Math.sin(t*.0011)*2.5;
+            const par = Math.min(34, (scrollY || 0)*.06);  /* parallax suave */
+            /* el div ancla su borde inferior en el techo del canvas; +30 hunde
+               el casco hasta la línea de flotación de la cresta */
+            nao.style.transform = `translate3d(${(xn - 46).toFixed(1)}px,`
+              + `${(ySup(xn, t) + 30 + par).toFixed(1)}px,0) rotate(${rot.toFixed(2)}deg)`;
+          }
+        } else if (line){
+          /* hero desktop sin 3D: dos trazos de mar, sin relleno */
+          for (let i = 0; i < 2; i++){
+            ctx.strokeStyle = i ? 'rgba(176,141,87,.30)' : 'rgba(34,63,131,.30)';
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            for (let x = 0; x <= W; x += 7){
+              const y = H*.58 + i*11 + (n1(x*.009 + t*.0007 + i*3.1, i + 1) - .5)*13
+                + (n1(x*.024 + t*.0012, i + 1) - .5)*5;
+              x ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+            }
+            ctx.stroke();
+          }
+        } else {
+          /* separador: 3 capas de fBm desfasadas del color de la sección entrante */
+          const cfg = [[.30,.42,.00055,15],[.55,.55,.0009,11],[1,.70,.0013,7]];
+          ctx.fillStyle = fill;
+          cfg.forEach((c, i) => {
+            ctx.globalAlpha = c[0];
+            ctx.beginPath(); ctx.moveTo(0, H + 2);
+            for (let x = 0; x <= W; x += 8){
+              const u = x*.004 + t*c[2]*.7 + PH[i];
+              const y = H*c[1] + (n1(u, i + 1) - .5)*2*c[3]*agit
+                + (n1(u*2.7 + 13.7, i + 1) - .5)*c[3]*.7*agit;
+              ctx.lineTo(x, y);
+            }
+            ctx.lineTo(W, H + 2); ctx.closePath(); ctx.fill();
+          });
+          ctx.globalAlpha = 1;
+        }
+        /* espuma: gotas discretas saltando de las crestas (más con scroll vivo) */
+        if (!REDUCED){
+          if (spray.length < 14 && Math.random() < .09*agit){
+            const sx = Math.random()*W;
+            spray.push({x: sx, y: line ? (MOVIL_MAR ? ySup(sx, t) : H*.58) : H*.5,
+              vx: (Math.random()-.5)*.5, vy: -(.6 + Math.random()*1.1), l: 1});
+          }
+          ctx.fillStyle = line ? 'rgba(34,63,131,.55)' : 'rgba(244,239,226,.65)';
+          for (let i = spray.length - 1; i >= 0; i--){
+            const s = spray[i];
+            s.vy += .05; s.x += s.vx; s.y += s.vy; s.l -= .022;
+            if (s.l <= 0 || s.y > H){ spray.splice(i,1); continue; }
+            ctx.globalAlpha = s.l*.7;
+            ctx.beginPath(); ctx.arc(s.x, s.y, 1.4, 0, TAU); ctx.fill();
+          }
+          ctx.globalAlpha = 1;
+        }
+      }
+      function rs(){
+        W = cv.clientWidth; H = cv.clientHeight;
+        cv.width = W*DPRC; cv.height = H*DPRC;
+        ctx.setTransform(DPRC, 0, 0, DPRC, 0, 0);
+        if (REDUCED) draw(0);                 /* reduced: olas estáticas */
+      }
+      rs(); addEventListener('resize', rs);
+      if (REDUCED) return;
+      if ('IntersectionObserver' in window)
+        new IntersectionObserver(es => es.forEach(en => active = en.isIntersecting)).observe(cv);
+      else active = true;
+      reg({ write(){ if (active && W > 1) draw(AS.t); } });
+    });
+  });
+
+  /* ---------- A4/A5 interludio: parallax profundo + espiral áurea ---------- */
+  ggSafe(function(){
+    const sec = document.getElementById('interludio');
+    if (!sec) return;
+    const img = sec.querySelector('.ilu-img');
+    const sp = document.getElementById('spiralPath');
+    let L = 0;
+    if (sp){
+      /* espiral logarítmica (áurea) generada a mano: r = a·e^(bθ) */
+      let d = '';
+      for (let th = 0; th <= 17.4; th += .12){
+        const r = 1.45 * Math.exp(.22*th);
+        d += (d ? 'L' : 'M') + (100 + r*Math.cos(th)).toFixed(1) + ',' +
+          (100 + r*Math.sin(th)).toFixed(1) + ' ';
+      }
+      sp.setAttribute('d', d.trim());
+      L = sp.getTotalLength();
+      sp.style.strokeDasharray = L;
+      sp.style.strokeDashoffset = REDUCED ? 0 : L;  /* reduced: ya dibujada */
+    }
+    if (REDUCED) return;
+    let rect = null, vh = innerHeight;
+    addEventListener('resize', () => { vh = innerHeight; }, {passive:true});
+    reg({
+      read(){ if (!AS.calm || !rect) rect = sec.getBoundingClientRect(); },
+      write(){
+        if (!rect || rect.bottom < -40 || rect.top > vh + 40) return;
+        const k = (rect.top + rect.height/2 - vh/2) / vh;
+        if (img) img.style.transform = `translate3d(0,${(-k*46).toFixed(1)}px,0)`;
+        if (sp && L){
+          const pr = Math.max(0, Math.min(1, (vh*.85 - rect.top) / (vh*.9)));
+          sp.style.strokeDashoffset = (L * (1 - pr)).toFixed(1);
+        }
+      }
+    });
+  });
+
+  /* ---------- A6 fondo evolutivo: amanecer → mar → tormenta → noche → oro ---------- */
+  ggSafe(function(){
+    if (REDUCED) return;
+    const el = document.createElement('div');
+    el.id = 'voyage'; el.setAttribute('aria-hidden','true');
+    document.body.appendChild(el);
+    const ST = [
+      [0,   [255,212,150], .055],   /* amanecer pergamino */
+      [.24, [64,96,170],   .05 ],   /* mar abierto */
+      [.5,  [16,28,60],    .07 ],   /* tormenta azul */
+      [.74, [7,13,32],     .085],   /* noche */
+      [1,   [176,141,87],  .075]    /* arribada dorada */
+    ];
+    let maxS = Math.max(1, document.documentElement.scrollHeight - innerHeight), lp = -1;
+    if ('ResizeObserver' in window)
+      new ResizeObserver(() => {
+        maxS = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+      }).observe(document.body);
+    reg({ write(){
+      const p = Math.max(0, Math.min(1, AS.y / maxS));
+      if (Math.abs(p - lp) < .003) return; lp = p;
+      let i = 0;
+      while (i < ST.length - 2 && p > ST[i+1][0]) i++;
+      const A = ST[i], B = ST[i+1];
+      const k = Math.max(0, Math.min(1, (p - A[0]) / (B[0] - A[0])));
+      const r = (A[1][0] + (B[1][0]-A[1][0])*k)|0,
+            g = (A[1][1] + (B[1][1]-A[1][1])*k)|0,
+            b = (A[1][2] + (B[1][2]-A[1][2])*k)|0,
+            a = A[2] + (B[2]-A[2])*k;
+      el.style.background =
+        `radial-gradient(120% 75% at 50% -10%, rgba(${r},${g},${b},${a.toFixed(3)}) 0%, rgba(${r},${g},${b},0) 60%),` +
+        `linear-gradient(0deg, rgba(${r},${g},${b},${(a*.85).toFixed(3)}) 0%, rgba(${r},${g},${b},0) 26%)`;
+    }});
+  });
+
+  /* ---------- A1 mini nao: se esconde mientras manda la expedición ---------- */
+  ggSafe(function(){
+    const mini = document.getElementById('navioMini');
+    const exp = document.getElementById('expedicion');
+    if (!mini || !exp || !('IntersectionObserver' in window)) return;
+    new IntersectionObserver(es => es.forEach(en =>
+      mini.classList.toggle('nv-hide', en.isIntersecting)
+    ), {threshold:.02}).observe(exp);
+  });
+
+  /* ---------- loop propio SOLO si no hay rAF maestro (móvil/touch) ---------- */
+  if (!UMX && FALL.length && !REDUCED){
+    let prev = 0, py = scrollY;
+    (function tick(t){
+      requestAnimationFrame(tick);
+      AS.dt = Math.min(2.5, (t - prev)/16.7 || 1); prev = t; AS.t = t;
+      const y = scrollY;
+      AS.vy += ((y - py)/AS.dt - AS.vy)*.15; py = y; AS.y = y;
+      for (const m of FALL) if (m.read) m.read();
+      for (const m of FALL) if (m.write) m.write();
+    })(0);
+  }
+})();
+</script>
+<!-- ===== Capa 3D del prototipo (aditiva) ===== -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module" src="3d/proto3d.js"></script>
+<script type="module" src="3d/fluid.js"></script>
+</body>
+</html>
