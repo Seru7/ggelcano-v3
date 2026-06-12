@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>G&amp;G Elcano — El cuaderno de la primera vuelta</title>
+<meta name="description" content="La primera vuelta al mundo contada por la pluma que la escribió — y la travesía que empieza hoy: la de tu negocio. Webs, apps y reservas con IA desde Bizkaia.">
+<meta name="theme-color" content="#070d20">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,420;0,9..144,560;0,9..144,640;1,9..144,420;1,9..144,560&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   EL CUADERNO DE LA PRIMERA VUELTA — gramática Noomo, alma Elcano
+   Movimiento PERPETUO: vídeos-pintura en bucle, la pluma siempre
+   a la deriva, polvo de oro, fluido del cursor. El scroll navega
+   la historia; el mundo nunca se detiene.
+   ============================================================ */
+:root{
+  --abismo:#070d20; --noche:#101c3c; --azul:#223f83; --azul-soft:#3a5aa8;
+  --gold:#b08d57; --gold-light:#c9b07e; --cream:#faf7ee; --paper:#f4efe2;
+  --serif:'Fraunces',Georgia,serif; --sans:'Inter',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);background:var(--abismo);color:var(--cream);
+  line-height:1.6;font-size:16px;-webkit-font-smoothing:antialiased;
+  overflow-x:clip;
+}
+::selection{background:var(--gold);color:var(--abismo)}
+a{color:inherit}
+img{max-width:100%}
+
+/* ---------- capas perpetuas ---------- */
+#polvo{position:fixed;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
+#pluma{
+  position:fixed;left:0;top:0;width:min(20vw,260px);z-index:6;pointer-events:none;
+  filter:drop-shadow(0 18px 40px rgba(0,0,0,.45));will-change:transform;
+}
+#fluid{position:fixed;inset:0;z-index:8;pointer-events:none}
+main{position:relative;z-index:3}
+
+/* ---------- escenas ---------- */
+.escena{position:relative;min-height:100svh;display:flex;align-items:center;overflow:clip}
+.escena video,.escena .fondo{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;
+}
+.velo{position:absolute;inset:0;z-index:1;background:
+  linear-gradient(90deg,rgba(7,13,32,.78) 0%,rgba(7,13,32,.45) 42%,rgba(7,13,32,.12) 75%);
+}
+.velo-total{background:linear-gradient(180deg,rgba(7,13,32,.55),rgba(7,13,32,.78))}
+.contenido{position:relative;z-index:2;max-width:1240px;margin:0 auto;padding:96px clamp(22px,6vw,72px);width:100%}
+
+.fecha{
+  font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.26em;
+  text-transform:uppercase;color:var(--gold-light);display:flex;align-items:center;
+  gap:14px;margin-bottom:26px;
+}
+.fecha::before{content:'';width:46px;height:1px;background:var(--gold-light)}
+h1,h2{font-family:var(--serif);font-weight:420;line-height:1.04;letter-spacing:-.015em}
+h1{font-size:clamp(44px,7.2vw,104px)}
+h2{font-size:clamp(34px,4.6vw,64px);max-width:14em}
+h1 em,h2 em{font-style:italic;color:var(--gold-light)}
+.entrada-texto{
+  margin-top:26px;max-width:560px;font-size:clamp(15.5px,1.35vw,18.5px);
+  color:#cdd4e8;
+}
+.entrada-texto b{color:var(--cream)}
+.firma{
+  margin-top:34px;font-family:var(--serif);font-style:italic;font-size:19px;
+  color:var(--gold-light);
+}
+
+/* reveals */
+.rv{opacity:0;transform:translateY(44px);transition:opacity 1.1s var(--ease),transform 1.1s var(--ease)}
+.rv.in{opacity:1;transform:none}
+
+/* ---------- portada ---------- */
+#portada{background:radial-gradient(130% 90% at 50% 0%,#16275c 0%,var(--noche) 45%,var(--abismo) 100%)}
+#portada .contenido{text-align:center;max-width:1100px}
+.portada-kicker{
+  font-family:var(--mono);font-size:12.5px;font-weight:600;letter-spacing:.34em;
+  text-transform:uppercase;color:var(--gold-light);margin-bottom:30px;
+}
+.portada-sub{margin:30px auto 0;max-width:640px;color:#b9c1d8;font-size:clamp(16px,1.4vw,19px)}
+.cue{
+  position:absolute;left:50%;bottom:30px;transform:translateX(-50%);z-index:2;
+  font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold-light);animation:cue 2.6s var(--ease) infinite;
+}
+@keyframes cue{0%,100%{transform:translate(-50%,0);opacity:.9}50%{transform:translate(-50%,10px);opacity:.4}}
+
+/* ---------- hoy: servicios ---------- */
+.flota3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2vw,26px);margin-top:54px}
+.nave{
+  background:rgba(7,13,32,.58);border:1px solid rgba(201,176,126,.28);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  padding:34px 30px;transition:transform .5s var(--ease),border-color .4s;
+}
+.nave:hover{transform:translateY(-8px);border-color:var(--gold-light)}
+.nave h3{font-family:var(--serif);font-weight:560;font-size:24px;margin-bottom:12px}
+.nave p{font-size:14px;color:#b9c1d8}
+.nave .num{
+  font-family:var(--mono);font-size:11px;color:var(--gold-light);letter-spacing:.2em;
+  display:flex;align-items:center;gap:12px;margin-bottom:20px;
+}
+.nave .num::after{content:'';flex:1;height:1px;background:rgba(201,176,126,.3)}
+
+/* ---------- el flete: tarifas ---------- */
+.flete{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(12px,1.6vw,22px);margin-top:54px}
+.plan{
+  background:rgba(250,247,238,.94);color:#1b2238;padding:30px 26px 26px;
+  display:flex;flex-direction:column;position:relative;
+  transition:transform .5s var(--ease),box-shadow .5s;
+}
+.plan:hover{transform:translateY(-8px);box-shadow:0 24px 50px -22px rgba(0,0,0,.6)}
+.plan.destacado{background:var(--noche);color:var(--cream);border:1px solid var(--gold)}
+.plan h3{font-family:var(--serif);font-weight:560;font-size:22px}
+.plan .precio{font-family:var(--serif);font-weight:640;font-size:42px;color:var(--azul);margin-top:16px}
+.plan.destacado .precio{color:var(--gold-light)}
+.plan .mes{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#4c536b}
+.plan.destacado .mes{color:#9aa3bf}
+.plan .alta{font-size:12px;color:#4c536b;margin-top:10px;padding-bottom:18px;border-bottom:1px solid rgba(34,63,131,.16);margin-bottom:18px}
+.plan.destacado .alta{color:#9aa3bf;border-color:rgba(201,176,126,.25)}
+.plan a{
+  margin-top:auto;text-align:center;text-decoration:none;font-weight:600;font-size:13.5px;
+  border:1.5px solid var(--azul);color:var(--azul);padding:11px 14px;border-radius:2px;
+  transition:background .3s,color .3s;
+}
+.plan a:hover{background:var(--azul);color:#fff}
+.plan.destacado a{border-color:var(--gold-light);color:var(--gold-light)}
+.plan.destacado a:hover{background:rgba(201,176,126,.15)}
+.bandera{
+  position:absolute;top:-12px;left:22px;background:var(--gold);color:var(--abismo);
+  font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.16em;
+  text-transform:uppercase;padding:5px 11px;
+}
+.flete-nota{margin-top:26px;font-size:12.5px;color:#9aa3bf;font-style:italic;max-width:640px}
+
+/* ---------- preguntas + contacto ---------- */
+.preguntas{margin-top:48px;max-width:760px;border-top:1px solid rgba(201,176,126,.25)}
+.pq{border-bottom:1px solid rgba(201,176,126,.25)}
+.pq button{
+  width:100%;background:none;border:0;cursor:pointer;text-align:left;color:var(--cream);
+  font-family:var(--serif);font-size:clamp(16px,1.6vw,20px);font-weight:560;
+  padding:20px 36px 20px 2px;position:relative;
+}
+.pq button::after{
+  content:'+';position:absolute;right:6px;top:50%;transform:translateY(-50%);
+  color:var(--gold-light);font-family:var(--mono);transition:transform .4s var(--ease);
+}
+.pq.open button::after{transform:translateY(-50%) rotate(45deg)}
+.pq .resp{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s var(--ease)}
+.pq .resp>div{overflow:hidden}
+.pq .resp p{padding:0 2px 22px;color:#b9c1d8;font-size:14.5px;max-width:600px}
+.pq.open .resp{grid-template-rows:1fr}
+
+.cta-final{
+  display:inline-flex;align-items:center;gap:12px;margin-top:38px;text-decoration:none;
+  background:var(--cream);color:var(--azul);font-weight:600;font-size:15.5px;
+  padding:16px 32px;border-radius:2px;transition:background .3s,transform .4s var(--ease);
+}
+.cta-final:hover{background:var(--gold-light);color:var(--abismo);transform:translateY(-3px)}
+
+footer{
+  position:relative;z-index:3;background:var(--abismo);border-top:1px solid rgba(201,176,126,.18);
+  padding:38px clamp(22px,6vw,72px);display:flex;justify-content:space-between;gap:18px;
+  flex-wrap:wrap;font-size:12.5px;color:#7c85a3;
+}
+footer .mono{font-family:var(--mono);letter-spacing:.1em;font-size:11px}
+footer a{color:#aeb6cf}
+
+/* ---------- botón sonido ---------- */
+#sndBtn{
+  position:fixed;right:22px;bottom:20px;z-index:200;width:46px;height:46px;border-radius:50%;
+  border:1.5px solid var(--gold);background:rgba(7,13,32,.7);backdrop-filter:blur(6px);
+  display:grid;place-items:center;color:var(--gold-light);cursor:pointer;
+  transition:transform .3s var(--ease),background .3s;
+}
+#sndBtn:hover{transform:scale(1.08)}
+#sndBtn svg{width:20px;height:20px}
+#sndBtn .on-wave{opacity:0;transition:opacity .35s}
+#sndBtn.on{background:var(--gold);color:var(--abismo);border-color:var(--gold)}
+#sndBtn.on .on-wave{opacity:1}
+
+/* ---------- responsive ---------- */
+@media (max-width:980px){
+  .flota3{grid-template-columns:1fr}
+  .flete{grid-template-columns:1fr 1fr}
+  #pluma{width:30vw}
+}
+@media (max-width:620px){
+  .flete{grid-template-columns:1fr}
+  .velo{background:linear-gradient(180deg,rgba(7,13,32,.82),rgba(7,13,32,.55))}
+}
+@media (prefers-reduced-motion:reduce){
+  .rv{opacity:1!important;transform:none!important}
+  .cue{animation:none}
+  #pluma,#polvo{display:none}
+}
+</style>
+</head>
+<body>
+
+<canvas id="polvo" aria-hidden="true"></canvas>
+<img id="pluma" src="assets/pluma.png" alt="" aria-hidden="true">
+
+<main>
+
+<!-- ============ PORTADA ============ -->
+<section class="escena" id="portada">
+  <div class="contenido">
+    <p class="portada-kicker rv">G&amp;G Elcano · Bizkaia · 1519 → hoy</p>
+    <h1 class="rv">El cuaderno de<br>la <em>primera vuelta</em>.</h1>
+    <p class="portada-sub rv">Cinco naves zarparon a lo desconocido. Una pluma lo fue
+      escribiendo todo. Esta es esa historia — y la travesía que esa misma tinta
+      empieza hoy: <b style="color:var(--cream)">la de tu negocio</b>.</p>
+  </div>
+  <div class="cue">Desliza para zarpar</div>
+</section>
+
+<!-- ============ ENTRADA I · ZARPA ============ -->
+<section class="escena" data-pluma="derecha">
+  <video src="../3d/planchas/v_niebla.mp4" muted loop playsinline preload="none"></video>
+  <div class="velo"></div>
+  <div class="contenido">
+    <p class="fecha rv">Entrada I · 20 de septiembre de 1519</p>
+    <h2 class="rv">Zarpamos de Sanlúcar<br>hacia <em>lo que no existe</em>.</h2>
+    <p class="entrada-texto rv">«Doscientos treinta y nueve hombres. Cinco naves.
+      Buscamos una ruta que no aparece en ningún mapa, y nadie en este puerto
+      sabe decir si es posible. <b>Zarpamos igual.</b>»</p>
+    <p class="firma rv">— del cuaderno de a bordo</p>
+  </div>
+</section>
+
+<!-- ============ ENTRADA II · EL ESTRECHO ============ -->
+<section class="escena" data-pluma="izquierda">
+  <video src="../3d/planchas/tormenta_anim.mp4" muted loop playsinline preload="none"></video>
+  <div class="velo"></div>
+  <div class="contenido">
+    <p class="fecha rv">Entrada II · El Estrecho, 1520</p>
+    <h2 class="rv">El mar nos puso<br>a <em>prueba</em>.</h2>
+    <p class="entrada-texto rv">«Hay tormentas que no se pueden evitar: solo se
+      pueden navegar. Perdimos naves, perdimos hombres, y aprendimos lo único que
+      importa aprender: <b>se sigue adelante con rumbo, no con suerte.</b>»</p>
+    <p class="firma rv">— del cuaderno de a bordo</p>
+  </div>
+</section>
+
+<!-- ============ ENTRADA III · EL MAR SIN FIN ============ -->
+<section class="escena" data-pluma="derecha">
+  <video src="../3d/planchas/v_flota.mp4" muted loop playsinline preload="none"></video>
+  <div class="velo"></div>
+  <div class="contenido">
+    <p class="fecha rv">Entrada III · El mar interminable, 1521</p>
+    <h2 class="rv">Tres meses sin ver<br><em>tierra alguna</em>.</h2>
+    <p class="entrada-texto rv">«El océano más grande que ojos humanos hayan visto.
+      Día tras día, la misma línea del horizonte. La diferencia entre perderse y
+      llegar no fue el viento: <b>fue no soltar el timón.</b>»</p>
+    <p class="firma rv">— del cuaderno de a bordo</p>
+  </div>
+</section>
+
+<!-- ============ ENTRADA IV · LA ARRIBADA ============ -->
+<section class="escena" data-pluma="izquierda">
+  <video src="../3d/planchas/v_noche.mp4" muted loop playsinline preload="none"></video>
+  <div class="velo"></div>
+  <div class="contenido">
+    <p class="fecha rv">Entrada IV · 6 de septiembre de 1522</p>
+    <h2 class="rv">Volvimos siendo<br><em>los primeros</em>.</h2>
+    <p class="entrada-texto rv">«Dieciocho hombres y una nao. Tres años. El rey nos
+      concedió un escudo con el mundo y una leyenda: <b><i>Primus circumdedisti
+      me</i></b> — fuiste el primero en rodearme. Lo imposible solo lo era hasta
+      que alguien lo escribió.»</p>
+    <p class="firma rv">— Juan Sebastián Elcano, Getaria</p>
+  </div>
+</section>
+
+<!-- ============ LA ENTRADA DE HOY · SERVICIOS ============ -->
+<section class="escena" data-pluma="derecha">
+  <video src="../3d/planchas/v_puerto.mp4" muted loop playsinline preload="none"></video>
+  <div class="velo velo-total"></div>
+  <div class="contenido">
+    <p class="fecha rv">La entrada de hoy · Bizkaia, 2026</p>
+    <h2 class="rv">La misma tinta escribe ahora<br><em>tu travesía</em>.</h2>
+    <p class="entrada-texto rv">«Quinientos años después seguimos zarpando desde esta
+      costa. Hoy las rutas se llaman internet, y los negocios locales que las navegan
+      llegan más lejos. <b>Tres naves esperan en el puerto:</b>»</p>
+    <div class="flota3">
+      <div class="nave rv">
+        <p class="num">NAVE I</p>
+        <h3>Webs profesionales</h3>
+        <p>Tu negocio, fácil de encontrar. Diseñamos, alojamos y mantenemos la web
+          que tus clientes ven cuando te buscan — también cuando pregunta una IA.</p>
+      </div>
+      <div class="nave rv">
+        <p class="num">NAVE II</p>
+        <h3>Apps a medida</h3>
+        <p>Herramientas hechas para tu forma de trabajar: paneles, automatizaciones
+          y aplicaciones que te devuelven horas cada semana.</p>
+      </div>
+      <div class="nave rv">
+        <p class="num">NAVE III</p>
+        <h3>Reservas con IA</h3>
+        <p>Tus clientes reservan solos, por web o por teléfono, y todo cae en un
+          único panel. La IA atiende; tú decides.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EL FLETE · TARIFAS ============ -->
+<section class="escena" id="flete" data-pluma="izquierda">
+  <div class="fondo" style="background:
+    radial-gradient(120% 80% at 70% 0%,#16275c 0%,var(--noche) 50%,var(--abismo) 100%)"></div>
+  <div class="contenido">
+    <p class="fecha rv">El flete · tarifas a la vista</p>
+    <h2 class="rv">Sin sorpresas,<br>sin <em>letra pequeña</em>.</h2>
+    <div class="flete">
+      <div class="plan rv">
+        <h3>Básico</h3>
+        <p class="precio">19&nbsp;€</p><p class="mes">/ mes</p>
+        <p class="alta">+ puesta en marcha única, según el proyecto</p>
+        <a href="mailto:accounting@ggelcano.com?subject=Propuesta%20para%20mi%20negocio">Pide tu propuesta</a>
+      </div>
+      <div class="plan destacado rv">
+        <span class="bandera">Rumbo recomendado</span>
+        <h3>Profesional</h3>
+        <p class="precio">35&nbsp;€</p><p class="mes">/ mes</p>
+        <p class="alta">+ puesta en marcha única, según el proyecto</p>
+        <a href="mailto:accounting@ggelcano.com?subject=Propuesta%20para%20mi%20negocio">Pide tu propuesta</a>
+      </div>
+      <div class="plan rv">
+        <h3>Avanzado</h3>
+        <p class="precio">55&nbsp;€</p><p class="mes">/ mes</p>
+        <p class="alta">+ puesta en marcha única, según el proyecto</p>
+        <a href="mailto:accounting@ggelcano.com?subject=Propuesta%20para%20mi%20negocio">Pide tu propuesta</a>
+      </div>
+      <div class="plan rv">
+        <h3>Premium</h3>
+        <p class="precio">89&nbsp;€</p><p class="mes">/ mes</p>
+        <p class="alta">+ puesta en marcha única, según el proyecto</p>
+        <a href="mailto:accounting@ggelcano.com?subject=Propuesta%20para%20mi%20negocio">Pide tu propuesta</a>
+      </div>
+    </div>
+    <p class="flete-nota rv">Precios sin IVA (21%). La puesta en marcha depende de la
+      web que hagamos y de la calidad de su acabado: te la damos cerrada por escrito
+      junto a una propuesta real de tu web — y solo pagas si la apruebas. Sin permanencia.</p>
+  </div>
+</section>
+
+<!-- ============ PREGUNTAS + CONTACTO ============ -->
+<section class="escena" data-pluma="centro">
+  <video src="../3d/planchas/v_noche.mp4" muted loop playsinline preload="none"></video>
+  <div class="velo velo-total"></div>
+  <div class="contenido">
+    <p class="fecha rv">Últimas páginas del cuaderno</p>
+    <h2 class="rv">Preguntas antes<br>de <em>zarpar</em>.</h2>
+    <div class="preguntas rv">
+      <div class="pq"><button aria-expanded="false">¿Cuánto cuesta tener la web?</button>
+        <div class="resp"><div><p>Desde 19&nbsp;€ al mes más una puesta en marcha única que
+          depende de la web y su acabado. El precio exacto, cerrado por escrito con tu
+          propuesta — antes de pagar nada.</p></div></div></div>
+      <div class="pq"><button aria-expanded="false">¿Hay permanencia?</button>
+        <div class="resp"><div><p>No. Mes a mes. Te quedas porque quieres, no porque firmaste.</p></div></div></div>
+      <div class="pq"><button aria-expanded="false">¿Y si la veo y no me convence?</button>
+        <div class="resp"><div><p>No pagas nada y aquí no ha pasado nada. Trabajamos antes de
+          cobrar para que decidas viendo tu web de verdad, no un boceto.</p></div></div></div>
+      <div class="pq"><button aria-expanded="false">¿Quién mantiene la web?</button>
+        <div class="resp"><div><p>Nosotros: alojamiento, SSL y mantenimiento incluidos en la
+          cuota. Tú a lo tuyo; del barco nos ocupamos nosotros.</p></div></div></div>
+    </div>
+    <a class="cta-final rv" href="mailto:accounting@ggelcano.com?subject=Propuesta%20para%20mi%20negocio&body=Hola%2C%20mi%20negocio%20se%20llama%20">
+      Escribe tu nombre en el cuaderno
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <span>© 2026 G&amp;G Elcano · Bizkaia, España · <a href="../">volver a la carta náutica</a></span>
+  <span class="mono">43°15′N 2°55′O — LA TINTA NUNCA SE DETIENE</span>
+</footer>
+
+<button id="sndBtn" aria-pressed="false" aria-label="Activar el sonido del puerto" title="El sonido del puerto">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+    <path d="M2 12c2-2.2 4-2.2 6 0s4 2.2 6 0 4-2.2 6 0"/>
+    <path class="on-wave" d="M2 17c2-2.2 4-2.2 6 0s4 2.2 6 0 4-2.2 6 0"/>
+    <path class="on-wave" d="M2 7c2-2.2 4-2.2 6 0s4 2.2 6 0 4-2.2 6 0"/>
+  </svg>
+</button>
+
+<script>
+'use strict';
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+function ggSafe(fn){ try{ fn(); }catch(e){ console.error('GG:', e); } }
+
+/* ---------- reveals ---------- */
+ggSafe(function(){
+  const els = [...document.querySelectorAll('.rv')];
+  if (REDUCED || !('IntersectionObserver' in window)){ els.forEach(e => e.classList.add('in')); return; }
+  const io = new IntersectionObserver(es => es.forEach(en => {
+    if (en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
+  }), { threshold: .18 });
+  els.forEach(e => io.observe(e));
+});
+
+/* ---------- vídeos-pintura: bucle perpetuo, en pausa fuera de pantalla ---------- */
+ggSafe(function(){
+  const vids = [...document.querySelectorAll('video')];
+  if (!('IntersectionObserver' in window)){ vids.forEach(v => { v.preload = 'auto'; v.play().catch(()=>{}); }); return; }
+  const io = new IntersectionObserver(es => es.forEach(en => {
+    const v = en.target;
+    if (en.isIntersecting){ v.preload = 'auto'; if (!REDUCED) v.play().catch(()=>{}); }
+    else v.pause();
+  }), { rootMargin: '50% 0%' });
+  vids.forEach(v => io.observe(v));
+});
+
+/* ---------- LA PLUMA: deriva perpetua + estaciones por escena ----------
+   Nunca se detiene: lissajous lento + cabeceo + influencia suave del ratón.
+   El scroll solo cambia su "estación" (lado, altura, escala, giro). */
+ggSafe(function(){
+  if (REDUCED) return;
+  const el = document.getElementById('pluma');
+  const escenas = [...document.querySelectorAll('.escena')];
+  const EST = {
+    derecha:  { x: .78, y: .30, s: .9,  r: 14 },
+    izquierda:{ x: .10, y: .34, s: .85, r: -12 },
+    centro:   { x: .74, y: .56, s: .8,  r: 8 },
+    portada:  { x: .76, y: .64, s: 1.05, r: 10 },
+  };
+  let obj = { ...EST.portada }, cur = { x: .5, y: .6, s: 1.1, r: 0 };
+  let mx = .5, my = .5;
+  addEventListener('pointermove', e => {
+    mx = e.clientX / innerWidth; my = e.clientY / innerHeight;
+  }, { passive: true });
+  function estacion(){
+    const mid = scrollY + innerHeight * .5;
+    let est = EST.portada;
+    for (const s of escenas){
+      if (mid >= s.offsetTop && mid < s.offsetTop + s.offsetHeight){
+        est = s.id === 'portada' ? EST.portada : (EST[s.dataset.pluma] || EST.centro);
+        break;
+      }
+    }
+    obj = est;
+  }
+  addEventListener('scroll', estacion, { passive: true });
+  estacion();
+  let t0 = performance.now();
+  (function vuela(now){
+    requestAnimationFrame(vuela);
+    const t = (now - t0) / 1000;
+    /* persecución suave de la estación */
+    cur.x += (obj.x - cur.x) * .03;
+    cur.y += (obj.y - cur.y) * .03;
+    cur.s += (obj.s - cur.s) * .03;
+    cur.r += (obj.r - cur.r) * .03;
+    /* deriva perpetua (lissajous + respiración) + ratón */
+    const dx = Math.sin(t * .42) * 26 + Math.sin(t * .13) * 40 + (mx - .5) * 34;
+    const dy = Math.sin(t * .31 + 1.4) * 22 + Math.cos(t * .087) * 30 + (my - .5) * 22;
+    const rot = cur.r + Math.sin(t * .5) * 7 + Math.sin(t * .121) * 5;
+    const esc = cur.s * (1 + Math.sin(t * .23) * .035);
+    el.style.transform =
+      `translate3d(${(cur.x * innerWidth - el.offsetWidth / 2 + dx).toFixed(1)}px,` +
+      `${(cur.y * innerHeight - el.offsetHeight / 2 + dy).toFixed(1)}px,0)` +
+      ` rotate(${rot.toFixed(2)}deg) scale(${esc.toFixed(3)})`;
+  })(t0);
+});
+
+/* ---------- polvo de oro: partículas perpetuas ---------- */
+ggSafe(function(){
+  if (REDUCED) return;
+  const cv = document.getElementById('polvo');
+  const ctx = cv.getContext('2d');
+  let W = 0, H = 0;
+  function rs(){ W = innerWidth; H = innerHeight; cv.width = W; cv.height = H; }
+  rs(); addEventListener('resize', rs);
+  const N = 70;
+  const P = Array.from({ length: N }, () => ({
+    x: Math.random() * 2 - .5, y: Math.random(),
+    z: .3 + Math.random() * .7,            /* profundidad: tamaño + velocidad */
+    f: Math.random() * 9,
+  }));
+  let ult = performance.now();
+  (function tick(now){
+    requestAnimationFrame(tick);
+    const dt = Math.min(.05, (now - ult) / 1000); ult = now;
+    ctx.clearRect(0, 0, W, H);
+    for (const p of P){
+      p.x += dt * .013 * p.z;                       /* deriva lateral perpetua */
+      p.y -= dt * .009 * p.z;                       /* ascenso lento */
+      if (p.x > 1.15) p.x = -.15;
+      if (p.y < -.05) p.y = 1.05;
+      const tw = .45 + .55 * Math.abs(Math.sin(now * .0008 * p.z + p.f));
+      ctx.globalAlpha = .14 + .3 * tw * p.z;
+      ctx.fillStyle = '#c9b07e';
+      ctx.beginPath();
+      ctx.arc(p.x * W, p.y * H, .7 + p.z * 1.7, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  })(ult);
+});
+
+/* ---------- FAQ ---------- */
+ggSafe(function(){
+  const pqs = [...document.querySelectorAll('.pq')];
+  pqs.forEach(pq => pq.querySelector('button').addEventListener('click', () => {
+    const abierta = pq.classList.contains('open');
+    pqs.forEach(o => { o.classList.remove('open'); o.querySelector('button').setAttribute('aria-expanded', 'false'); });
+    if (!abierta){ pq.classList.add('open'); pq.querySelector('button').setAttribute('aria-expanded', 'true'); }
+  }));
+});
+
+/* ---------- estela fluida (receta ley, paleta Elcano) ---------- */
+if (matchMedia('(pointer: fine)').matches && !REDUCED && innerWidth > 880){
+  import('https://cdn.jsdelivr.net/npm/webgl-fluid-enhanced@0.8.0/+esm').then((mod) => {
+    const cont = document.createElement('div');
+    cont.id = 'fluid';
+    document.body.appendChild(cont);
+    const sim = new mod.default(cont);
+    Object.assign(cont.style, { position: 'fixed', inset: '0', width: '100%', height: '100%', zIndex: '8', pointerEvents: 'none' });
+    dispatchEvent(new Event('resize'));
+    sim.setConfig({
+      simResolution: 128, dyeResolution: 1024, densityDissipation: 2.2,
+      velocityDissipation: 1.4, pressureIterations: 10, curl: 28,
+      splatRadius: 0.1, splatForce: 5000, hover: false, colorful: false,
+      colorPalette: ['#223f83', '#3a5aa8', '#b08d57'], transparent: true,
+      bloom: false, sunrays: false,
+    });
+    sim.start();
+    let lx = null, ly = null;
+    addEventListener('pointermove', (e) => {
+      if (lx !== null){
+        const dx = (e.clientX - lx) * 2.5, dy = (e.clientY - ly) * 2.5;
+        if (Math.abs(dx) + Math.abs(dy) > 4) sim.splatAtLocation(e.clientX, e.clientY, dx, dy);
+      }
+      lx = e.clientX; ly = e.clientY;
+    }, { passive: true });
+    document.addEventListener('visibilitychange', () => sim.pause());
+  }).catch(() => {});
+}
+
+/* ---------- el sonido del puerto (motor procedural compacto) ---------- */
+ggSafe(function(){
+  const btn = document.getElementById('sndBtn');
+  let ctx = null, master = null, on = false;
+  function ruido(seg){
+    const sr = ctx.sampleRate, n = sr * seg, b = ctx.createBuffer(1, n, sr), d = b.getChannelData(0);
+    let v = 0;
+    for (let i = 0; i < n; i++){ v = (v + .02 * (Math.random() * 2 - 1)) / 1.02; d[i] = v * 3.5; }
+    return b;
+  }
+  function arranca(){
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    master = ctx.createGain(); master.gain.value = 0; master.connect(ctx.destination);
+    const mk = (seg, tipo, f, q, g) => {
+      const s = ctx.createBufferSource(); s.buffer = ruido(seg); s.loop = true;
+      const fl = ctx.createBiquadFilter(); fl.type = tipo; fl.frequency.value = f; fl.Q.value = q;
+      const gn = ctx.createGain(); gn.gain.value = g;
+      s.connect(fl); fl.connect(gn); gn.connect(master); s.start();
+      return gn;
+    };
+    mk(7, 'lowpass', 440, .4, .55);
+    mk(6, 'bandpass', 2300, .5, .09);
+    const gR = mk(5, 'bandpass', 1150, .7, 0);
+    (function ola(){
+      if (!ctx) return;
+      const t = ctx.currentTime, dur = 2.2 + Math.random() * 2.2;
+      gR.gain.cancelScheduledValues(t);
+      gR.gain.setValueAtTime(Math.max(gR.gain.value, .0001), t);
+      gR.gain.linearRampToValueAtTime(.22 + Math.random() * .2, t + dur * .4);
+      gR.gain.exponentialRampToValueAtTime(.003, t + dur);
+      setTimeout(ola, (4 + Math.random() * 6) * 1000);
+    })();
+  }
+  btn.addEventListener('click', () => {
+    on = !on;
+    btn.classList.toggle('on', on);
+    btn.setAttribute('aria-pressed', String(on));
+    if (on){
+      if (!ctx) arranca();
+      if (ctx.state === 'suspended') ctx.resume();
+      master.gain.setTargetAtTime(.5, ctx.currentTime, 1.2);
+    } else if (ctx) master.gain.setTargetAtTime(.0001, ctx.currentTime, .5);
+  });
+});
+</script>
+</body>
+</html>
