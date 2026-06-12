@@ -34,7 +34,7 @@ function init() {
   const DECAE_PRESION = 0.99;
   const CURL = 10;
   const ITER_PRESION = 2;
-  const RADIO_SPLAT = 0.001;
+  const RADIO_SPLAT = 0.0016;      // estela ancha como la referencia (~200px)
   const EPS_NORMAL = 0.005;
   const FUERZA_GESTO = 6000;       // la velocidad del gesto (uv/frame) → campo
   const IDLE_MS = 8000;            // sin ratón: la sim se duerme y libera CPU
@@ -43,6 +43,9 @@ function init() {
   const cv = document.createElement('canvas');
   cv.id = 'waterC';                // reutiliza el CSS del efecto antiguo
   cv.setAttribute('aria-hidden', 'true');
+  /* la espuma se funde en aditivo con la página (negro = invisible),
+     como la capa de agua de la referencia */
+  cv.style.mixBlendMode = 'screen';
   document.body.appendChild(cv);
   const renderer = new THREE.WebGLRenderer({
     canvas: cv, alpha: true, antialias: false, depth: false, stencil: false,
@@ -227,35 +230,58 @@ function init() {
       gl_FragColor = vec4(abs(R - C) + abs(B - C), 1.0);
     }`, { uNormalT: { value: null } });
 
-  /* presentación: la tinta como agua — relieve iluminado, filo brillante,
-     chispa especular; tinte azul sobre claro / latón sobre oscuro */
+  /* presentación: ESPUMA nacarada como la referencia — cuerpo vaporoso
+     luminoso + filos rizados brillantes (delta de normales) + grano de
+     espuma que viaja con el fluido + chispa especular. Sale sobre negro
+     y el mix-blend-mode:screen del canvas la funde con la página. */
   const matAgua = mat(`
     precision highp float;
     varying vec2 vUv;
     uniform sampler2D uTinta, uNormalT, uDelta;
     uniform vec3 uTinte, uBrillo;
-    uniform float uOpacidad;
+    uniform float uOpacidad, uModo;
+    float hashGG(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
     void main(){
       vec3 tinta = texture2D(uTinta, vUv).rgb;
-      /* presencia desde el canal de "carga" (b): translúcido, nunca un manchón */
-      float pres = clamp(tinta.b * 0.085, 0.0, 1.0);
-      if (pres < 0.012) { gl_FragColor = vec4(0.0); return; }
+      float pres = clamp(tinta.b * 0.12, 0.0, 1.0);
+      /* transparente en ambos modos: en screen el negro transparente no suma */
+      if (pres < 0.008) { gl_FragColor = vec4(0.0); return; }
       vec3 N = normalize(texture2D(uNormalT, vUv).xzy); // y-up → z hacia cámara
       vec3 L = normalize(vec3(-0.35, 0.55, 0.75));
       float dif = clamp(dot(N, L), 0.0, 1.0);
-      float esp = pow(clamp(dot(reflect(-L, N), vec3(0.0, 0.0, 1.0)), 0.0, 1.0), 36.0);
+      float esp = pow(clamp(dot(reflect(-L, N), vec3(0.0, 0.0, 1.0)), 0.0, 1.0), 30.0);
       vec3 filoC = texture2D(uDelta, vUv).rgb;
-      float filo = clamp((filoC.x + filoC.z) * 1.6, 0.0, 1.0);
-      vec3 col = uTinte * (0.55 + 0.45 * dif);
-      col = mix(col, uBrillo, filo * 0.6);
-      col += uBrillo * esp * 0.45;
-      gl_FragColor = vec4(col, smoothstep(0.0, 0.85, pres) * uOpacidad);
+      float filo = clamp((filoC.x + filoC.z) * 2.2, 0.0, 1.0);
+      /* grano de espuma: ruido fino arrastrado por el propio campo */
+      float gr = hashGG(vUv * 640.0 + tinta.rg * 2.5);
+      float burbuja = smoothstep(0.55, 1.0, gr) * pres;
+      if (uModo > 0.5) {
+        /* secciones oscuras: espuma nacarada ADITIVA (canvas en screen) —
+           el cuerpo es tenue; la estructura la dan filos y granos */
+        vec3 col = uBrillo * pres * (0.12 + 0.10 * dif)   // cuerpo vaporoso
+                 + uBrillo * filo * 0.95                   // filos rizados
+                 + uBrillo * burbuja * 0.55                // granos de espuma
+                 + uBrillo * esp * 0.35                    // chispa especular
+                 + uTinte * pres * 0.15;                   // tinte de la sección
+        gl_FragColor = vec4(col * uOpacidad, 1.0);
+      } else {
+        /* secciones claras: la misma espuma en tinta azul (alpha normal):
+           sobre papel solo se ve lo más oscuro que el papel */
+        vec3 col = uTinte * (0.62 + 0.20 * dif);
+        col = mix(col, uTinte * 0.55, burbuja);            // granos más densos
+        col = mix(col, uTinte * 0.78, filo * 0.7);         // filos marcados
+        col += uBrillo * esp * 0.25;
+        float a = smoothstep(0.0, 0.9, pres + filo * 0.25) * uOpacidad;
+        gl_FragColor = vec4(col, a);
+      }
     }`, {
     uTinta: { value: null }, uNormalT: { value: null }, uDelta: { value: null },
     uTinte: { value: new THREE.Color(0x223f83) },
     uBrillo: { value: new THREE.Color(0xf4efe2) },
     uOpacidad: { value: 0.55 },
+    uModo: { value: 0 },
   });
+  matAgua.transparent = true;
 
   /* ---------- render targets (ping-pong) ---------- */
   function rt(w, h) {
@@ -358,7 +384,7 @@ function init() {
 
     if (punt.movido && (Math.abs(punt.dx) > 1e-5 || Math.abs(punt.dy) > 1e-5)) {
       salpica(punt.x, punt.y, punt.x - punt.dx, punt.y - punt.dy,
-        new THREE.Vector3(punt.dx * FUERZA_GESTO, punt.dy * FUERZA_GESTO, 0.35),
+        new THREE.Vector3(punt.dx * FUERZA_GESTO, punt.dy * FUERZA_GESTO, 0.22),
         RADIO_SPLAT);
       punt.dx = 0; punt.dy = 0;
     }
@@ -424,9 +450,11 @@ function init() {
     const c = cc();
     if (!c || !c.classList.contains('cc-hidden')) {
       const oscuro = c && c.classList.contains('cc-dark');
+      cv.style.mixBlendMode = oscuro ? 'screen' : 'normal';
+      matAgua.uniforms.uModo.value = oscuro ? 1 : 0;
       matAgua.uniforms.uTinte.value.lerp(oscuro ? tinteOscuro : tinteClaro, 0.08);
       matAgua.uniforms.uBrillo.value.lerp(oscuro ? brilloOscuro : brilloClaro, 0.08);
-      matAgua.uniforms.uOpacidad.value = oscuro ? 0.62 : 0.5;
+      matAgua.uniforms.uOpacidad.value = oscuro ? 0.85 : 0.55;
       matAgua.uniforms.uTinta.value = tinta.read.texture;
       matAgua.uniforms.uNormalT.value = normalRT.texture;
       matAgua.uniforms.uDelta.value = deltaRT.texture;

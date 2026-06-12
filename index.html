@@ -564,6 +564,21 @@ h2.display.lr-in .lr-i{transform:translateY(0)}
 #sprog.sp-dark{color:var(--gold-light)}
 @media (min-width:1081px){#sprog{display:flex}}
 
+/* ============ BOTÓN DE SONIDO (OLAS DEL PUERTO) ============ */
+#sndBtn{
+  position:fixed;right:22px;bottom:20px;z-index:200;width:46px;height:46px;border-radius:50%;
+  border:1.5px solid var(--gold);background:rgba(244,239,226,.85);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  display:grid;place-items:center;color:var(--azul);
+  transition:transform .3s var(--ease),background .3s,color .3s,border-color .3s;
+}
+#sndBtn:hover{transform:scale(1.08)}
+#sndBtn svg{width:20px;height:20px}
+#sndBtn .on-wave{opacity:0;transition:opacity .35s}
+#sndBtn.on{background:var(--azul);color:var(--cream);border-color:var(--azul)}
+#sndBtn.on .on-wave{opacity:1}
+@media (max-width:880px){#sndBtn{right:14px;bottom:78px}}
+
 /* ============ DESTELLO NÁUTICO EN EL NAV ============ */
 nav.main a:not(.nav-cta)::before{
   content:'✦';position:absolute;right:-15px;top:-5px;font-size:8.5px;color:var(--gold);
@@ -3133,6 +3148,97 @@ ggSafe(function(){
       else active = true;
       reg({ write(){ if (active && W > 1) draw(AS.t); } });
     });
+  });
+
+  /* ---------- A6 el sonido del puerto: olas procedurales (Web Audio) ----------
+     Rumor grave del mar con vaivén lento + rompientes aleatorias cada pocos
+     segundos paseándose por el estéreo. Sintetizado al vuelo con ruido marrón
+     filtrado: ni un byte de audio que descargar. Arranca solo con gesto del
+     usuario (política de autoplay) y recuerda la preferencia. */
+  ggSafe(function(){
+    const btn = document.createElement('button');
+    btn.id = 'sndBtn';
+    btn.setAttribute('aria-pressed', 'false');
+    btn.setAttribute('aria-label', 'Activar el sonido del puerto');
+    btn.title = 'El sonido del puerto';
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">'
+      + '<path d="M2 12c2-2.2 4-2.2 6 0s4 2.2 6 0 4-2.2 6 0"/>'
+      + '<path class="on-wave" d="M2 17c2-2.2 4-2.2 6 0s4 2.2 6 0 4-2.2 6 0"/>'
+      + '<path class="on-wave" d="M2 7c2-2.2 4-2.2 6 0s4 2.2 6 0 4-2.2 6 0"/></svg>';
+    document.body.appendChild(btn);
+
+    let ctx = null, master = null, prendido = false, timer = 0;
+    function ruidoMarron(seg){
+      const sr = ctx.sampleRate, n = Math.floor(sr*seg);
+      const buf = ctx.createBuffer(1, n, sr);
+      const d = buf.getChannelData(0);
+      let v = 0;
+      for (let i = 0; i < n; i++){
+        v = (v + 0.02*(Math.random()*2 - 1)) / 1.02;
+        d[i] = v * 3.5;
+      }
+      return buf;
+    }
+    function arranca(){
+      ctx = new (window.AudioContext || window.webkitAudioContext)();
+      master = ctx.createGain(); master.gain.value = 0;
+      master.connect(ctx.destination);
+      /* mar de fondo: rumor grave que respira despacio */
+      const fondo = ctx.createBufferSource(); fondo.buffer = ruidoMarron(7); fondo.loop = true;
+      const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 260; lp.Q.value = .4;
+      const gF = ctx.createGain(); gF.gain.value = .4;
+      const lfo = ctx.createOscillator(); lfo.frequency.value = .07;
+      const lfoG = ctx.createGain(); lfoG.gain.value = .15;
+      lfo.connect(lfoG); lfoG.connect(gF.gain);
+      fondo.connect(lp); lp.connect(gF); gF.connect(master);
+      fondo.start(); lfo.start();
+      /* rompientes: soplo de espuma que llega cada 4-10 s, de babor a estribor */
+      const romp = ctx.createBufferSource(); romp.buffer = ruidoMarron(5); romp.loop = true;
+      const bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 850; bp.Q.value = .8;
+      const gR = ctx.createGain(); gR.gain.value = 0;
+      const pan = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
+      romp.connect(bp); bp.connect(gR);
+      if (pan){ gR.connect(pan); pan.connect(master); } else gR.connect(master);
+      romp.start();
+      (function ola(){
+        if (!ctx) return;
+        const t = ctx.currentTime, dur = 2.2 + Math.random()*2.2, pico = .10 + Math.random()*.12;
+        gR.gain.cancelScheduledValues(t);
+        gR.gain.setValueAtTime(Math.max(gR.gain.value, 0.0001), t);
+        gR.gain.linearRampToValueAtTime(pico, t + dur*.4);
+        gR.gain.exponentialRampToValueAtTime(.003, t + dur);
+        if (pan) pan.pan.setTargetAtTime((Math.random()*2 - 1)*.5, t, 1.2);
+        timer = setTimeout(ola, (4 + Math.random()*6)*1000);
+      })();
+    }
+    function pon(estado){
+      prendido = estado;
+      btn.classList.toggle('on', estado);
+      btn.setAttribute('aria-pressed', String(estado));
+      btn.setAttribute('aria-label', estado ? 'Silenciar el sonido del puerto' : 'Activar el sonido del puerto');
+      try{ localStorage.setItem('ggPuerto', estado ? '1' : '0'); }catch(e){}
+      if (estado){
+        if (!ctx) arranca();
+        if (ctx.state === 'suspended') ctx.resume();
+        master.gain.cancelScheduledValues(ctx.currentTime);
+        master.gain.setTargetAtTime(.32, ctx.currentTime, 1.2);
+      } else if (ctx){
+        master.gain.setTargetAtTime(.0001, ctx.currentTime, .5);
+      }
+    }
+    btn.addEventListener('click', () => pon(!prendido));
+    /* preferencia recordada: si lo dejó puesto, arranca con su primer gesto */
+    let pref = null;
+    try{ pref = localStorage.getItem('ggPuerto'); }catch(e){}
+    if (pref === '1'){
+      const despierta = () => {
+        removeEventListener('pointerdown', despierta);
+        removeEventListener('keydown', despierta);
+        pon(true);
+      };
+      addEventListener('pointerdown', despierta);
+      addEventListener('keydown', despierta);
+    }
   });
 
   /* ---------- A4/A5 interludio: parallax profundo + espiral áurea ---------- */
