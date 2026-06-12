@@ -584,8 +584,9 @@ html.frames #inicio>div{position:relative;z-index:2}
   opacity:0;transition:opacity .6s;
 }
 html.actos main,html.um-foot.actos main{position:relative;z-index:2;background:transparent}
-/* el footer-reveal queda DEBAJO del lienzo (que se desvanece al llegar al final) */
-html.actos footer{z-index:0}
+/* el footer-reveal queda DEBAJO del lienzo (que se desvanece al llegar al final);
+   el doble selector bate a la regla de z del modo um-foot, que va después */
+html.actos footer,html.um-foot.actos footer{z-index:0}
 /* el papel vive en las SECCIONES no-acto; main debe ser cristal o tapa el mundo */
 html.actos #quienes,html.actos .exp-intro,html.actos #faq{background:var(--paper)}
 html.actos .mq{background:var(--paper)}
@@ -3311,18 +3312,23 @@ ggSafe(function(){
     }
     function pinta(){
       const mid = scrollY + innerHeight * .5;
-      c2.clearRect(0, 0, W, H);
-      let visible = false;
+      /* el lienzo SIEMPRE pinta papel de base: el suelo de la página es papel,
+         no el footer fijo (que solo asoma al final, en su reveal) */
+      c2.globalAlpha = 1;
+      c2.fillStyle = '#f4efe2';
+      c2.fillRect(0, 0, W, H);
       for (const r of rangos){
         if (mid > r.top - innerHeight * 1.5 && mid < r.fin + innerHeight) carga(r.id);
         if (mid >= r.top && mid <= r.fin){
           const p = (mid - r.top) / (r.fin - r.top);
           const borde = Math.max(0, Math.min(p / .1, (1 - p) / .1, 1));
-          dibuja(r.id, p, borde);
-          visible = true;
+          dibuja(r.id, p, borde);          /* la plancha se funde sobre el papel */
         }
       }
-      cv.style.opacity = visible ? '1' : '0';
+      /* relevo al footer: cuando el borde INFERIOR del viewport rebasa el
+         final del último acto, el lienzo cede el sitio (footer-reveal) */
+      const ultimo = rangos.length ? rangos[rangos.length - 1].fin : 0;
+      cv.style.opacity = (scrollY + innerHeight) > ultimo + 12 ? '0' : '1';
     }
     function rs(){
       W = innerWidth; H = innerHeight;
