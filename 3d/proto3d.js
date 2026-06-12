@@ -151,7 +151,9 @@ async function init() {
   gsap.registerPlugin(ScrollTrigger);
 
   const [shipG, camHeroG, camGlobeG] = await Promise.all([
-    loader.loadAsync('3d/ship.glb'),
+    /* nao generada por IA (Tripo v3.1 desde imagen Magnific): malla única
+       texturizada de nivel artista; ship.glb (procedural) queda de reserva */
+    loader.loadAsync('3d/ship-ia.glb'),
     loader.loadAsync('3d/cam-hero.glb'),
     loader.loadAsync('3d/cam-globe.glb'),
   ]);
@@ -355,8 +357,8 @@ async function init() {
     const m = o.material;
     if (!m) continue;
     m.fog = true;
+    m.side = THREE.DoubleSide;   // las velas de la malla IA son láminas finas
     const viento = ES_VELA.test(o.name) ? 'vela' : ES_BANDERA.test(o.name) ? 'bandera' : null;
-    if (viento) m.side = THREE.DoubleSide;
     if (viento === 'vela' && !/^Cruz/.test(o.name)) {
       m.emissive = new THREE.Color(0xfff0d8);
       m.emissiveIntensity = 0.12;
@@ -364,6 +366,7 @@ async function init() {
     parcheMaterial(m, viento, BASE_BANDERA[o.name] || 0);
   }
   const naoGrupo = new THREE.Group();
+  nao.position.y = -0.4;     // asienta el casco en el agua (calado creíble)
   naoGrupo.add(nao);
   heroSc.add(naoGrupo);
 
