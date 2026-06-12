@@ -140,7 +140,7 @@ for nombre, (px, py), rz, esc in (("NaoLider", (0, 10), 196, 0),
                                   ("NaoAla1", (-19, 30), 203, 2),
                                   ("NaoAla2", (16, 36), 190, -2)):
     nivel = aplana(m2, px, py)
-    nao(nombre, (px, py, nivel + 2.5), rz, escora=esc)
+    nao(nombre, (px, py, nivel + 2.65), rz, escora=esc)
 mundo("matte_atardecer.jpg", 1.0, (1.0, 0.66, 0.34), 3.2,
       (math.radians(75), 0, math.radians(-150)))
 render("acto2_flota.png", (3, -24, 4.2), (-1, 30, 1.0), lens=31, mist=(25, 110))
@@ -150,7 +150,7 @@ print("ACTO2_OK")
 escena_limpia()
 m4 = mar(2.6, (0.025, 0.04, 0.07), 0.32)
 nivel4 = aplana(m4, -2, 14, rx=12.0, ry=5.5)
-nao("NaoTormenta", (-2, 14, nivel4 + 2.35), 188, escora=6)
+nao("NaoTormenta", (-2, 14, nivel4 + 2.55), 188, escora=6)
 mundo("matte_tormenta.jpg", 0.22, (0.6, 0.68, 0.9), 1.1,
       (math.radians(70), 0, math.radians(-120)))
 # el haz dorado del matte toca el agua tras la nao
