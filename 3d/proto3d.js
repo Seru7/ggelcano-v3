@@ -164,20 +164,36 @@ async function init() {
   heroCv.id = 'hero3d';
   heroSec.appendChild(heroCv);
   const heroR = rendererEn(heroCv);
+  /* tone mapping de cine: contraste rico en la nao (el mar usa shader propio
+     sin tonemapping, así su fundido a papel sigue casando con la página) */
+  heroR.toneMapping = THREE.ACESFilmicToneMapping;
+  heroR.toneMappingExposure = 1.15;
   const heroSc = new THREE.Scene();
   heroSc.fog = new THREE.FogExp2(C.paper, 0.085); // arranca denso: la nao está "en la niebla"
 
-  // sol cálido + relleno de cielo (el especular del agua usa la misma dirección)
-  const luzSol = new THREE.DirectionalLight(0xfff4dd, 1.35);
-  luzSol.position.set(6, 9, 5);
-  heroSc.add(luzSol, new THREE.HemisphereLight(0xfdf6e3, 0x223f83, 0.75));
+  /* hora dorada: sol bajo y cálido a contraluz (el final de la secuencia
+     recorta la nao contra el reguero de sol), relleno frío de cielo y rim
+     dorado por detrás para despegar la silueta */
+  const luzSol = new THREE.DirectionalLight(0xffc287, 2.3);
+  luzSol.position.set(-12, 4, 10);
+  const luzRim = new THREE.DirectionalLight(0xffe0b0, 0.9);
+  luzRim.position.set(12, 6, -10);
+  heroSc.add(luzSol, luzRim, new THREE.HemisphereLight(0xcdd6ee, 0x2a3050, 0.55));
   const sunDir = luzSol.position.clone().normalize();
+
+  // disco de sol velado en la niebla, clavado en la dirección de la luz
+  const solGlow = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: texturaHalo(), transparent: true, opacity: 0.5, depthWrite: false, fog: false,
+  }));
+  solGlow.position.copy(sunDir).multiplyScalar(130);
+  solGlow.scale.setScalar(85);
+  heroSc.add(solGlow);
 
   /* ---- mar Gerstner: crestas pellizcadas, sol, fresnel, espuma y estela ---- */
   const seaUniforms = {
     uTime: { value: 0 },
-    uDeep: { value: new THREE.Color(C.azul) },
-    uSoft: { value: new THREE.Color(C.azulSoft) },
+    uDeep: { value: new THREE.Color(0x16275c) },   // mar más hondo y dramático
+    uSoft: { value: new THREE.Color(0x32509c) },
     uPaper: { value: new THREE.Color(C.paper) },
     uCrest: { value: new THREE.Color(0xf0ead8) },
     uFogDensity: { value: 0.085 },
@@ -259,8 +275,9 @@ async function init() {
           // sol: brillo ancho + chispa fina
           vec3 Hv = normalize(uSunDir + V);
           float nh = max(dot(N, Hv), 0.0);
-          float spec = pow(nh, 90.0) + 0.5 * pow(nh, 240.0);
-          col += vec3(1.0, 0.85, 0.6) * spec * 0.8;
+          /* reguero de sol del atardecer: brillo ancho + chispa, más caliente */
+          float spec = pow(nh, 60.0) + 0.6 * pow(nh, 240.0);
+          col += vec3(1.0, 0.72, 0.42) * spec * 1.15;
           // fresnel: el agua refleja el cielo-papel al mirarla rasante
           float fres = pow(1.0 - max(dot(N, V), 0.0), 3.0);
           col = mix(col, uPaper, fres * 0.42);
@@ -298,42 +315,13 @@ async function init() {
   sea.rotation.x = -Math.PI / 2;
   heroSc.add(sea);
 
-  /* ---- la nao: toon + contorno estable, menos niebla, velas con viento ---- */
-  const escalones = new THREE.DataTexture(
-    new Uint8Array([110, 110, 110, 255, 185, 185, 185, 255, 255, 255, 255, 255]),
-    3, 1, THREE.RGBAFormat
-  );
-  escalones.needsUpdate = true;
-  // la tela sombrea más claro que la madera: sin escalón oscuro las velas no
-  // parecen de cristal contra el cielo-papel
-  const escalonesTela = new THREE.DataTexture(
-    new Uint8Array([178, 178, 178, 255, 218, 218, 218, 255, 255, 255, 255, 255]),
-    3, 1, THREE.RGBAFormat
-  );
-  escalonesTela.needsUpdate = true;
-
-  const tinta = new THREE.Color(0x2a2017);
-  const outlineMat = new THREE.ShaderMaterial({
-    uniforms: { uColor: { value: tinta }, uGrosor: { value: 0.04 } },
-    vertexShader: `
-      uniform float uGrosor;
-      void main(){
-        vec3 n = normalize(normalMatrix * normal);
-        vec4 mv = modelViewMatrix * vec4(position, 1.0);
-        // grosor proporcional a la distancia: línea de tinta constante en pantalla
-        mv.xyz += n * uGrosor * clamp(-mv.z / 14.0, 0.45, 1.8);
-        gl_Position = projectionMatrix * mv;
-      }`,
-    fragmentShader: `uniform vec3 uColor; void main(){ gl_FragColor = vec4(uColor, 1.0); }`,
-    side: THREE.BackSide,
-  });
-
   /* parche común de material: menos niebla que el mar (la nao conserva su color
-     a media distancia) y, según el tipo, viento de vela o flameo de bandera */
+     a media distancia); viento de vela o flameo de bandera; y en la madera,
+     vetas y grano procedurales (varían color y rugosidad, sin texturas) */
   function parcheMaterial(m, viento, baseX) {
     m.onBeforeCompile = sh => {
       sh.uniforms.uTime = uT;
-      let vs = 'uniform float uTime;\n' + sh.vertexShader;
+      let vs = 'uniform float uTime;\nvarying vec3 vPosGG;\n' + sh.vertexShader;
       if (viento === 'vela') {
         vs = vs.replace('#include <begin_vertex>', `#include <begin_vertex>
           transformed.x += 0.030 * sin(uTime * 1.6 + position.y * 1.7 + position.z * 0.8)
@@ -345,28 +333,54 @@ async function init() {
           transformed.z += 0.09 * mGG * sin(uTime * 3.4 + position.x * 2.2 + 1.7);`);
       }
       vs = vs.replace('#include <fog_vertex>', '#include <fog_vertex>\n vFogDepth *= 0.45;');
+      vs = vs.replace('#include <begin_vertex>', '#include <begin_vertex>\n vPosGG = position;');
       sh.vertexShader = vs;
+      let fs = 'varying vec3 vPosGG;\n' + sh.fragmentShader;
+      if (!viento) {
+        fs = fs.replace('#include <color_fragment>', `#include <color_fragment>
+          { // vetas por tablón + grano fino: rompe el color plano de videojuego
+            float veta = 0.86 + 0.14 * fract(sin(floor(vPosGG.z * 15.0) * 12.9898
+                       + floor(vPosGG.y * 4.0) * 78.233) * 43758.5453);
+            float grano = 0.94 + 0.06 * fract(sin(dot(floor(vPosGG.xz * 34.0),
+                       vec2(12.9898, 78.233))) * 43758.5453);
+            diffuseColor.rgb *= veta * grano;
+          }`);
+        fs = fs.replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
+          roughnessFactor *= 0.9 + 0.1 * fract(sin(floor(vPosGG.z * 15.0) * 7.77) * 437.58);`);
+      } else {
+        fs = fs.replace('#include <color_fragment>', `#include <color_fragment>
+          { // trama de lona: leve variación de hilo en la tela
+            float hilo = 0.965 + 0.035 * sin(vPosGG.y * 90.0) * sin(vPosGG.z * 90.0);
+            diffuseColor.rgb *= hilo;
+          }`);
+      }
+      sh.fragmentShader = fs;
     };
     return m;
   }
 
   const nao = shipG.scene;
-  const SIN_CONTORNO = /Obenque|Estay|Braza|Flechaste|Bal\d|Aro|Pasamanos|Bobstay|Cruz|Ventana|Vigota|CabestranteBarra|Grimpola|Bandera|Espolon|AnclaCepo/;
   const ES_VELA = /^(VelaMayor|GaviaMayor|VelaTrinquete|VelaMesana|Cebadera|Cruz)/;
   const ES_BANDERA = /^(Grimpola|Bandera)/;
   const BASE_BANDERA = { GrimpolaMayor: 0.0, BanderaTrinquete: 3.1, BanderaMesana: -3.85 };
   const mallas = [];
   nao.traverse(o => { if (o.isMesh) mallas.push(o); }); // recoger ANTES de mutar el árbol
+  /* materiales físicos (adiós cartoon): madera rugosa que coge el contraluz,
+     velas de lona con leve transmisión de luz (emissive cálido tenue) */
   for (const o of mallas) {
     const base = o.material?.color ? o.material.color.clone() : new THREE.Color(0x8a6242);
     const viento = ES_VELA.test(o.name) ? 'vela' : ES_BANDERA.test(o.name) ? 'bandera' : null;
-    const m = new THREE.MeshToonMaterial({
-      color: base, gradientMap: viento ? escalonesTela : escalones,
-      side: THREE.DoubleSide, fog: true,
+    /* la lona transmite luz cálida; la cruz y las banderas guardan su color */
+    const lona = viento === 'vela' && !/^Cruz/.test(o.name);
+    const m = new THREE.MeshStandardMaterial({
+      color: base, side: THREE.DoubleSide, fog: true,
+      roughness: viento ? 0.9 : 0.82,
+      metalness: 0.04,
+      emissive: lona ? 0xfff0d8 : 0x000000,
+      emissiveIntensity: lona ? 0.16 : 0,
     });
     parcheMaterial(m, viento, BASE_BANDERA[o.name] || 0);
     o.material = m;
-    if (!SIN_CONTORNO.test(o.name)) o.add(new THREE.Mesh(o.geometry, outlineMat));
   }
   const naoGrupo = new THREE.Group();
   naoGrupo.add(nao);
