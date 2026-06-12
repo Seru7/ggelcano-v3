@@ -2873,10 +2873,10 @@ ggSafe(function(){
     && innerWidth > 880
     && (function(){ try { return !!document.createElement('canvas').getContext('webgl2'); } catch(e){ return false; } })();
 
-  /* hero animático: el vídeo IA de la nao troceado en frames y scrubbed por
-     el scroll sustituye a la escena 3D del hero (el globo 3D se mantiene).
-     Mismos requisitos que el resto de capas pesadas. */
-  window.GG_FRAMES = window.GG_FLUID;
+  /* hero animático (vídeo IA en frames): APAGADO — ha vuelto el 3D con la
+     nao v3 texturizada y tela simulada. Para recuperar el animático, poner
+     window.GG_FRAMES = window.GG_FLUID. */
+  window.GG_FRAMES = false;
   if (window.GG_FRAMES) document.documentElement.classList.add('frames');
 
   /* ---------- A2 cursor de agua: estela fluida + gotas + ondas ---------- */

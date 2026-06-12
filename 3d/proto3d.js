@@ -319,12 +319,12 @@ async function init() {
   heroSc.add(sea);
 
   /* parche común de material: menos niebla que el mar (la nao conserva su color
-     a media distancia); viento de vela o flameo de bandera; y en la madera,
-     vetas y grano procedurales (varían color y rugosidad, sin texturas) */
+     a media distancia) y, según el tipo, viento de vela o flameo de bandera.
+     Las vetas/trama ya NO se fingen aquí: vienen en las texturas del GLB v3. */
   function parcheMaterial(m, viento, baseX) {
     m.onBeforeCompile = sh => {
       sh.uniforms.uTime = uT;
-      let vs = 'uniform float uTime;\nvarying vec3 vPosGG;\n' + sh.vertexShader;
+      let vs = 'uniform float uTime;\n' + sh.vertexShader;
       if (viento === 'vela') {
         vs = vs.replace('#include <begin_vertex>', `#include <begin_vertex>
           transformed.x += 0.030 * sin(uTime * 1.6 + position.y * 1.7 + position.z * 0.8)
@@ -336,28 +336,7 @@ async function init() {
           transformed.z += 0.09 * mGG * sin(uTime * 3.4 + position.x * 2.2 + 1.7);`);
       }
       vs = vs.replace('#include <fog_vertex>', '#include <fog_vertex>\n vFogDepth *= 0.45;');
-      vs = vs.replace('#include <begin_vertex>', '#include <begin_vertex>\n vPosGG = position;');
       sh.vertexShader = vs;
-      let fs = 'varying vec3 vPosGG;\n' + sh.fragmentShader;
-      if (!viento) {
-        fs = fs.replace('#include <color_fragment>', `#include <color_fragment>
-          { // vetas por tablón + grano fino: rompe el color plano de videojuego
-            float veta = 0.86 + 0.14 * fract(sin(floor(vPosGG.z * 15.0) * 12.9898
-                       + floor(vPosGG.y * 4.0) * 78.233) * 43758.5453);
-            float grano = 0.94 + 0.06 * fract(sin(dot(floor(vPosGG.xz * 34.0),
-                       vec2(12.9898, 78.233))) * 43758.5453);
-            diffuseColor.rgb *= veta * grano;
-          }`);
-        fs = fs.replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
-          roughnessFactor *= 0.9 + 0.1 * fract(sin(floor(vPosGG.z * 15.0) * 7.77) * 437.58);`);
-      } else {
-        fs = fs.replace('#include <color_fragment>', `#include <color_fragment>
-          { // trama de lona: leve variación de hilo en la tela
-            float hilo = 0.965 + 0.035 * sin(vPosGG.y * 90.0) * sin(vPosGG.z * 90.0);
-            diffuseColor.rgb *= hilo;
-          }`);
-      }
-      sh.fragmentShader = fs;
     };
     return m;
   }
@@ -368,22 +347,21 @@ async function init() {
   const BASE_BANDERA = { GrimpolaMayor: 0.0, BanderaTrinquete: 3.1, BanderaMesana: -3.85 };
   const mallas = [];
   nao.traverse(o => { if (o.isMesh) mallas.push(o); }); // recoger ANTES de mutar el árbol
-  /* materiales físicos (adiós cartoon): madera rugosa que coge el contraluz,
-     velas de lona con leve transmisión de luz (emissive cálido tenue) */
+  /* la nao v3 trae materiales DE AUTOR en el GLB (texturas de madera con
+     tablones, lona con trama, oro metálico): se respetan tal cual y solo se
+     les inyecta niebla atenuada + viento. La lona gana una leve transmisión
+     cálida de luz (la cruz conserva su rojo). */
   for (const o of mallas) {
-    const base = o.material?.color ? o.material.color.clone() : new THREE.Color(0x8a6242);
+    const m = o.material;
+    if (!m) continue;
+    m.fog = true;
     const viento = ES_VELA.test(o.name) ? 'vela' : ES_BANDERA.test(o.name) ? 'bandera' : null;
-    /* la lona transmite luz cálida; la cruz y las banderas guardan su color */
-    const lona = viento === 'vela' && !/^Cruz/.test(o.name);
-    const m = new THREE.MeshStandardMaterial({
-      color: base, side: THREE.DoubleSide, fog: true,
-      roughness: viento ? 0.9 : 0.82,
-      metalness: 0.04,
-      emissive: lona ? 0xfff0d8 : 0x000000,
-      emissiveIntensity: lona ? 0.16 : 0,
-    });
+    if (viento) m.side = THREE.DoubleSide;
+    if (viento === 'vela' && !/^Cruz/.test(o.name)) {
+      m.emissive = new THREE.Color(0xfff0d8);
+      m.emissiveIntensity = 0.12;
+    }
     parcheMaterial(m, viento, BASE_BANDERA[o.name] || 0);
-    o.material = m;
   }
   const naoGrupo = new THREE.Group();
   naoGrupo.add(nao);
