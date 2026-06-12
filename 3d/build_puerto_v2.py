@@ -173,7 +173,7 @@ m_agua = bpy.data.materials.new("Agua")
 m_agua.use_nodes = True
 ba = m_agua.node_tree.nodes["Principled BSDF"]
 ba.inputs["Base Color"].default_value = (0.05, 0.09, 0.2, 1)
-ba.inputs["Roughness"].default_value = 0.13
+ba.inputs["Roughness"].default_value = 0.1
 ntA = m_agua.node_tree
 ruido = ntA.nodes.new("ShaderNodeTexNoise")
 ruido.inputs["Scale"].default_value = 60
@@ -190,14 +190,29 @@ w.use_nodes = True
 nt = w.node_tree
 env = nt.nodes.new("ShaderNodeTexEnvironment")
 env.image = bpy.data.images.load(CC0 + "/sunset_puresky_2k.hdr")
-fondo = nt.nodes["Background"]
+fondo = nt.nodes["Background"]            # ilumina la escena (HDRI real)
 nt.links.new(env.outputs["Color"], fondo.inputs["Color"])
 fondo.inputs["Strength"].default_value = 1.1
 mapeo = nt.nodes.new("ShaderNodeMapping")
 coords = nt.nodes.new("ShaderNodeTexCoord")
 nt.links.new(coords.outputs["Generated"], mapeo.inputs["Vector"])
 nt.links.new(mapeo.outputs["Vector"], env.inputs["Vector"])
-mapeo.inputs["Rotation"].default_value[2] = math.radians(205)  # sol tras el barco de fondo
+mapeo.inputs["Rotation"].default_value[2] = math.radians(205)
+# matte painting IA visible SOLO a cámara (truco clásico de cine):
+# la luz viene del HDRI, el cielo que se ve es el pintado
+matte = nt.nodes.new("ShaderNodeTexImage")
+matte.image = bpy.data.images.load(CC0 + "/matte_atardecer.jpg")
+nt.links.new(coords.outputs["Window"], matte.inputs["Vector"])
+fondoM = nt.nodes.new("ShaderNodeBackground")
+fondoM.inputs["Strength"].default_value = 1.0
+nt.links.new(matte.outputs["Color"], fondoM.inputs["Color"])
+lp = nt.nodes.new("ShaderNodeLightPath")
+mixw = nt.nodes.new("ShaderNodeMixShader")
+nt.links.new(lp.outputs["Is Camera Ray"], mixw.inputs["Fac"])
+nt.links.new(fondo.outputs["Background"], mixw.inputs[1])
+nt.links.new(fondoM.outputs["Background"], mixw.inputs[2])
+salida = nt.nodes["World Output"]
+nt.links.new(mixw.outputs["Shader"], salida.inputs["Surface"])
 s.world = w
 
 s.render.engine = "CYCLES"
@@ -225,10 +240,26 @@ luzfaro.data.color = (1.0, 0.78, 0.45)
 luzfaro.location = (FX, FY, FZ + 9.0)
 s.collection.objects.link(luzfaro)
 
+bpy.ops.mesh.primitive_plane_add(location=(30, 95, 26), size=1)
+refl = bpy.context.active_object
+refl.name = "ReflectorCielo"
+refl.scale = (160, 1, 30)
+refl.rotation_euler = (math.radians(78), 0, 0)
+m_refl = bpy.data.materials.new("ReflCielo")
+m_refl.use_nodes = True
+br = m_refl.node_tree.nodes["Principled BSDF"]
+br.inputs["Emission Color"].default_value = (1.0, 0.42, 0.12, 1)
+br.inputs["Emission Strength"].default_value = 28.0
+refl.data.materials.append(m_refl)
+refl.visible_camera = False
 s.render.filepath = DIR + "/puerto2_atardecer.png"
 bpy.ops.render.render(write_still=True)
 
 fondo.inputs["Strength"].default_value = 0.06
+matte.image = bpy.data.images.load(CC0 + "/matte_noche.jpg")
+br.inputs["Emission Color"].default_value = (0.55, 0.68, 1.0, 1)
+br.inputs["Emission Strength"].default_value = 0.5
+fondoM.inputs["Strength"].default_value = 0.85
 s.render.filepath = DIR + "/puerto2_noche.png"
 bpy.ops.render.render(write_still=True)
 print("PUERTO2_OK")
