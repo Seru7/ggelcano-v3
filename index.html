@@ -802,6 +802,9 @@ html.um-on .scroll-cue{transition:translate .4s var(--ease-out)}
 /* ---------- A3 olas separadoras + línea de mar del hero ---------- */
 .wave-sep{position:absolute;left:0;right:0;bottom:-1px;width:100%;height:88px;
   pointer-events:none;z-index:3;display:block}
+/* agua 3D cenital (sustituye al separador 2D en desktop con WebGL) */
+.agua3dC{position:absolute;left:0;right:0;bottom:-1px;width:100%;height:120px;
+  pointer-events:none;z-index:3;display:block}
 #heroSea{position:absolute;left:0;right:0;bottom:0;width:100%;height:76px;pointer-events:none}
 /* mar de tinta móvil (cuando la capa 3D no se activa): más lienzo y nao a flote */
 #inicio.hero-mar-movil #heroSea{height:150px}
@@ -3421,5 +3424,6 @@ ggSafe(function(){
 </script>
 <script type="module" src="3d/proto3d.js"></script>
 <script type="module" src="3d/fluid.js"></script>
+<script type="module" src="3d/agua3d.js"></script>
 </body>
 </html>
