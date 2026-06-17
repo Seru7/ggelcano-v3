@@ -151,9 +151,10 @@ async function init() {
   gsap.registerPlugin(ScrollTrigger);
 
   const [shipG, camHeroG, camGlobeG] = await Promise.all([
-    /* nao generada por IA (Tripo v3.1 desde imagen Magnific): malla única
-       texturizada de nivel artista; ship.glb (procedural) queda de reserva */
-    loader.loadAsync('3d/ship-ia.glb'),
+    /* Nao Victoria V4 (Tripo v3.1 detallado desde foto Magnific Nano Banana Pro,
+       referencia histórica: cruz de Santiago, castillo de popa alto, mesana latina;
+       malla simplificada+meshopt+webp a 2.4 MB); ship-ia/ship.glb quedan de reserva */
+    loader.loadAsync('3d/nao-victoria-v5.glb'),
     loader.loadAsync('3d/cam-hero.glb'),
     loader.loadAsync('3d/cam-globe.glb'),
   ]);

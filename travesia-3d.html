@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La Travesía — boceto 3D (Hito 1: agua real)</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,560;1,9..144,420&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:#070d20;overflow-x:hidden}
+#c{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;display:block}
+#scroll{position:relative;height:760vh;z-index:1;pointer-events:none}
+#dom{position:fixed;inset:0;z-index:2;pointer-events:none;color:#faf7ee;font-family:'Fraunces',serif}
+.actxt{position:absolute;left:7vw;bottom:13vh;max-width:42rem;opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease}
+.actxt.on{opacity:1;transform:none}
+.actxt .eb{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:#c9b07e;display:block;margin-bottom:1.1em}
+.actxt h2{font-weight:560;font-size:clamp(2rem,4.6vw,3.5rem);line-height:1.12;letter-spacing:-.01em;margin-bottom:.5em;text-shadow:0 2px 30px rgba(0,0,0,.4)}
+.actxt h2 em{font-style:italic;color:#e8c98a}
+.actxt p{font-family:'JetBrains Mono',monospace;font-size:.8rem;letter-spacing:.04em;color:#e7ecf3;opacity:.9;line-height:1.6;text-shadow:0 1px 16px rgba(0,0,0,.5)}
+#hud{position:fixed;left:22px;bottom:16px;z-index:3;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#c9b07e;mix-blend-mode:difference}
+#bar{position:fixed;left:0;top:0;height:3px;background:#c9b07e;width:0;z-index:4}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas><div id="scroll"></div><div id="dom"></div><div id="bar"></div>
+<div id="hud">BOCETO 3D · t=<span id="t">0.00</span></div>
+
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.169.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.169.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
+import {Water} from 'three/addons/objects/Water.js';
+import {Sky} from 'three/addons/objects/Sky.js';
+
+const canvas=document.getElementById('c');
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(2,devicePixelRatio));renderer.setSize(innerWidth,innerHeight);
+renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=0.62;
+
+const scene=new THREE.Scene();
+scene.fog=new THREE.FogExp2(0xbcc6cf,0.0026);
+const camera=new THREE.PerspectiveCamera(38,innerWidth/innerHeight,0.5,16000);
+
+const sunDir=new THREE.Vector3();
+const hemi=new THREE.HemisphereLight(0xcfe0f2,0x33414e,0.9);scene.add(hemi);
+const dir=new THREE.DirectionalLight(0xfff2dc,2.4);scene.add(dir);
+
+// ---- CIELO real ----
+const sky=new Sky();sky.scale.setScalar(12000);scene.add(sky);
+const skyU=sky.material.uniforms;
+skyU['turbidity'].value=7;skyU['rayleigh'].value=2.2;skyU['mieCoefficient'].value=0.006;skyU['mieDirectionalG'].value=0.86;
+
+// ---- AGUA real (THREE.Water) ----
+const waterGeo=new THREE.PlaneGeometry(16000,16000);
+const water=new Water(waterGeo,{textureWidth:512,textureHeight:512,
+  waterNormals:new THREE.TextureLoader().load('3d/waternormals.jpg',t=>{t.wrapS=t.wrapT=THREE.RepeatWrapping;}),
+  sunDirection:new THREE.Vector3(),sunColor:0xffffff,waterColor:0x143842,distortionScale:3.4,fog:true});
+water.rotation.x=-Math.PI/2;scene.add(water);
+const wU=water.material.uniforms;
+
+function setSun(elevDeg,aziDeg){const phi=THREE.MathUtils.degToRad(90-elevDeg),th=THREE.MathUtils.degToRad(aziDeg);
+  sunDir.setFromSphericalCoords(1,phi,th);skyU['sunPosition'].value.copy(sunDir);
+  wU['sunDirection'].value.copy(sunDir).normalize();dir.position.copy(sunDir).multiplyScalar(100);}
+
+// ---- GLOBO (Hito 2: Tierra real recoloreada + ruta de Elcano) ----
+function radialTex(){const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d');const g=x.createRadialGradient(32,32,0,32,32,32);g.addColorStop(0,'rgba(255,235,180,1)');g.addColorStop(.4,'rgba(255,200,120,.5)');g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(0,0,64,64);return new THREE.CanvasTexture(c);}
+const GR=30;
+const WP=[[36.78,-6.35,1],[28.47,-16.25,0],[14.93,-23.51,0],[-22.91,-43.17,0],[-34.90,-56.20,0],[-49.31,-67.73,0],[-52.50,-69.50,1],[-52.70,-74.70,0],[13.44,144.79,1],[10.30,123.95,0],[0.69,127.40,1],[-10.50,110.00,0],[-34.36,18.47,1],[16.00,-24.00,0],[36.78,-6.35,1]];
+function latLon(lat,lon,r){const phi=(90-lat)*Math.PI/180,th=(lon+180)*Math.PI/180;
+  return new THREE.Vector3(-r*Math.sin(phi)*Math.cos(th),r*Math.cos(phi),r*Math.sin(phi)*Math.sin(th));}
+const globeGroup=new THREE.Group();globeGroup.rotation.z=THREE.MathUtils.degToRad(16);globeGroup.visible=false;scene.add(globeGroup);
+// globo: Tierra real recoloreada a paleta de marca
+const globeUni={uMap:{value:null},uFade:{value:0},uLightDir:{value:new THREE.Vector3(0.6,0.35,0.8).normalize()}};
+const globo=new THREE.Mesh(new THREE.SphereGeometry(GR,96,64),new THREE.ShaderMaterial({transparent:true,uniforms:globeUni,
+ vertexShader:`varying vec2 vUv;varying vec3 vN;void main(){vUv=uv;vN=normalize(normalMatrix*normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+ fragmentShader:`uniform sampler2D uMap;uniform float uFade;uniform vec3 uLightDir;varying vec2 vUv;varying vec3 vN;
+  const vec3 TINT_SEA=vec3(0.16,0.34,0.50);const vec3 TINT_LAND=vec3(0.82,0.66,0.40);
+  void main(){vec3 src=texture2D(uMap,vUv).rgb;
+   float blueDom=src.b-max(src.r,src.g);float seaMask=smoothstep(-0.02,0.08,blueDom);
+   vec3 tint=mix(TINT_LAND,TINT_SEA,seaMask);
+   vec3 col=tint*(0.55+0.65*src);                 // conserva costas/desiertos/relieve reales
+   float ndl=clamp(dot(normalize(vN),uLightDir),0.0,1.0);
+   col*=0.82+0.18*ndl;                            // terminador suave (no franja oscura sucia)
+   gl_FragColor=vec4(col,uFade);}`}));
+globeGroup.add(globo);
+new THREE.TextureLoader().load('3d/earth.jpg',tx=>{tx.colorSpace=THREE.SRGBColorSpace;globeUni.uMap.value=tx;});
+// atmósfera (fresnel rim)
+const atmoUni={uColor:{value:new THREE.Color(0x5a93d6)},uFade:{value:0}};
+const atmo=new THREE.Mesh(new THREE.SphereGeometry(GR*1.08,64,64),new THREE.ShaderMaterial({side:THREE.BackSide,blending:THREE.AdditiveBlending,transparent:true,depthWrite:false,uniforms:atmoUni,
+ vertexShader:`varying vec3 vN;varying vec3 vP;void main(){vN=normalize(normalMatrix*normal);vec4 wp=modelViewMatrix*vec4(position,1.);vP=wp.xyz;gl_Position=projectionMatrix*wp;}`,
+ fragmentShader:`uniform vec3 uColor;uniform float uFade;varying vec3 vN;varying vec3 vP;void main(){float rim=1.-abs(dot(normalize(vN),normalize(-vP)));float g=pow(rim,2.2)*2.2;gl_FragColor=vec4(uColor*g,g*uFade);}`}));
+globeGroup.add(atmo);
+// retícula náutica tenue
+const grid=new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.SphereGeometry(GR*1.004,28,18)),new THREE.LineBasicMaterial({color:0xc9b07e,transparent:true,opacity:0}));globeGroup.add(grid);
+// RUTA de Elcano: tube por CatmullRom abrazando la esfera, dibujada por scroll
+const rawPts=WP.map(w=>latLon(w[0],w[1],GR*1.012));
+const base=new THREE.CatmullRomCurve3(rawPts,false,'centripetal');
+const dens=[];for(let i=0;i<=500;i++){dens.push(base.getPoint(i/500).normalize().multiplyScalar(GR*1.012));}
+const routeCurve=new THREE.CatmullRomCurve3(dens);
+const routeGeo=new THREE.TubeGeometry(routeCurve,700,0.17,6,false);
+const routeMat=new THREE.MeshBasicMaterial({color:0xe8c074,transparent:true,opacity:0});routeMat.polygonOffset=true;routeMat.polygonOffsetFactor=-1;
+const routeMesh=new THREE.Mesh(routeGeo,routeMat);globeGroup.add(routeMesh);
+const routeIdx=routeGeo.index.count;
+// hitos (6) como puntos dorados
+const dots=[];WP.filter(w=>w[2]).forEach(w=>{const d=new THREE.Mesh(new THREE.SphereGeometry(0.34,12,12),new THREE.MeshBasicMaterial({color:0xffe6a8,transparent:true,opacity:0}));d.position.copy(latLon(w[0],w[1],GR*1.02));globeGroup.add(d);dots.push(d);});
+// nao = faro dorado que recorre la ruta
+const naoGlow=new THREE.Sprite(new THREE.SpriteMaterial({map:radialTex(),color:0xffd27a,blending:THREE.AdditiveBlending,depthWrite:false,transparent:true,opacity:0}));naoGlow.scale.set(2.4,2.4,1);globeGroup.add(naoGlow);
+
+// estrellas
+const SN=1000,sg=new THREE.BufferGeometry(),sp=new Float32Array(SN*3);
+for(let i=0;i<SN;i++){const v=new THREE.Vector3().randomDirection().multiplyScalar(2200+Math.random()*1800);sp[i*3]=v.x;sp[i*3+1]=Math.abs(v.y)*.8+30;sp[i*3+2]=v.z;}
+sg.setAttribute('position',new THREE.BufferAttribute(sp,3));
+const stars=new THREE.Points(sg,new THREE.PointsMaterial({color:0xfff0d6,size:2.3,sizeAttenuation:false,transparent:true,opacity:0,depthWrite:false}));scene.add(stars);
+
+// gaviotas
+function gullTex(){const c=document.createElement('canvas');c.width=c.height=32;const x=c.getContext('2d');x.strokeStyle='rgba(30,28,26,.9)';x.lineWidth=2.4;x.lineCap='round';x.beginPath();x.moveTo(4,20);x.quadraticCurveTo(13,11,16,16);x.quadraticCurveTo(19,11,28,20);x.stroke();return new THREE.CanvasTexture(c);}
+const gulls=[],gtm=new THREE.SpriteMaterial({map:gullTex(),transparent:true,depthWrite:false,opacity:0});
+for(let i=0;i<7;i++){const s=new THREE.Sprite(gtm.clone());const sc=1.4+Math.random()*1.8;s.scale.set(sc,sc*.5,1);
+  s.userData={x:-30+Math.random()*80,y:16+Math.random()*16,z:-14+Math.random()*44,ph:Math.random()*6.28,sp:.25+Math.random()*.35};scene.add(s);gulls.push(s);}
+
+// lluvia (tormenta)
+const RN=1400,rg=new THREE.BufferGeometry(),rp=new Float32Array(RN*3);
+for(let i=0;i<RN;i++){rp[i*3]=(Math.random()-.5)*140;rp[i*3+1]=Math.random()*70;rp[i*3+2]=(Math.random()-.5)*140;}
+rg.setAttribute('position',new THREE.BufferAttribute(rp,3));
+const rain=new THREE.Points(rg,new THREE.PointsMaterial({color:0xb6c4d6,size:.22,transparent:true,opacity:0}));scene.add(rain);
+
+// ---- RELÁMPAGOS (tormenta): destello de luz + rayo quebrado ----
+const flashLight=new THREE.DirectionalLight(0xdfeaff,0);flashLight.position.set(20,200,-30);scene.add(flashLight);
+const BSEG=15;
+const boltMat=new THREE.MeshBasicMaterial({color:0xf2f6ff,transparent:true,opacity:0,blending:THREE.AdditiveBlending,depthWrite:false});
+const bolt=new THREE.Mesh(new THREE.BufferGeometry(),boltMat);bolt.visible=false;bolt.frustumCulled=false;scene.add(bolt);
+function strike(){const ox=(Math.random()-.5)*44-4,oz=-14-Math.random()*30;let x=ox,z=oz;const pts=[];
+  for(let i=0;i<=BSEG;i++){pts.push(new THREE.Vector3(x,95-i*(95/BSEG),z));x+=(Math.random()-.5)*7;z+=(Math.random()-.5)*5;}
+  const g=new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),BSEG*2,0.95,6,false);
+  bolt.geometry.dispose();bolt.geometry=g;flashLight.position.set(ox,200,oz);}
+let flashE=0,flashT=0;
+// ---- GOD-RAYS: resplandor del sol (bloom volumétrico barato) ----
+function glowTex(){const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d');const g=x.createRadialGradient(64,64,0,64,64,64);g.addColorStop(0,'rgba(255,244,210,.95)');g.addColorStop(.28,'rgba(255,222,150,.4)');g.addColorStop(1,'rgba(255,210,140,0)');x.fillStyle=g;x.fillRect(0,0,128,128);return new THREE.CanvasTexture(c);}
+const sunGlow=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex(),color:0xffe6b0,blending:THREE.AdditiveBlending,depthWrite:false,transparent:true,opacity:0}));sunGlow.scale.set(1100,1100,1);scene.add(sunGlow);
+// ---- ESTELA DE ESPUMA tras los barcos ----
+function foamTex(){const c=document.createElement('canvas');c.width=160;c.height=64;const x=c.getContext('2d');const g=x.createRadialGradient(80,32,2,80,32,76);g.addColorStop(0,'rgba(255,255,255,.92)');g.addColorStop(.45,'rgba(226,238,244,.32)');g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;x.fillRect(0,0,160,64);return new THREE.CanvasTexture(c);}
+const foamMat=new THREE.SpriteMaterial({map:foamTex(),transparent:true,depthWrite:false,opacity:0});
+const foams=[];
+
+// ---- PUERTO ----
+const loader=new GLTFLoader();loader.setMeshoptDecoder(MeshoptDecoder);
+const port=new THREE.Group();port.position.set(-46,0,-54);port.rotation.y=0;port.visible=false;scene.add(port);
+const fanal=new THREE.PointLight(0xffcf7a,0,90);fanal.position.set(-2,9,-2);port.add(fanal);
+const dockLight=new THREE.PointLight(0xffd6a0,0,60);dockLight.position.set(-43,5,-34);scene.add(dockLight);
+// luz cálida que ilumina las FACHADAS del puerto de frente (lado cámara)
+const portLight=new THREE.DirectionalLight(0xffe2b4,0);portLight.position.set(-30,26,2);scene.add(portLight);
+portLight.target.position.set(-50,6,-58);scene.add(portLight.target);
+// PUERTO 3D real (modelado en Blender desde la referencia medieval)
+loader.loadAsync('3d/puerto-medieval.glb').then(g=>{port.add(g.scene);});
+
+// ---- NAOS ----
+const FLEET=[[0,0,0],[-15,12,-9],[-16,-13,9],[-31,7,-6],[-32,-9,6]];
+// viento en las velas: flutter sutil por shader en las partes altas (velas/jarcia)
+const windU={value:0};
+function windify(mat){ if(!mat||mat.__wind) return; mat.__wind=true;
+  mat.onBeforeCompile=(sh)=>{ sh.uniforms.uTime=windU;
+    sh.vertexShader='uniform float uTime;\n'+sh.vertexShader.replace('#include <begin_vertex>',
+      '#include <begin_vertex>\n float wy=max(0.0,position.y-2.0);\n transformed.x+=sin(uTime*1.4+position.y*0.6+position.x*0.4)*0.05*wy;\n transformed.z+=cos(uTime*1.05+position.y*0.55)*0.035*wy;'); };
+  mat.needsUpdate=true; }
+const BASE_FLOAT=0.65;let dockShip=null;const ships=[];const naoGrp=new THREE.Group();scene.add(naoGrp);
+loader.loadAsync('3d/nao-victoria-v5.glb').then(g=>{
+  FLEET.forEach((s,i)=>{const o=i===0?g.scene:g.scene.clone(true);
+    o.userData={x:s[0],z:-s[1],head:THREE.MathUtils.degToRad(-s[2]),ph:Math.random()*6.28};
+    o.position.set(s[0],BASE_FLOAT,-s[1]);o.rotation.y=o.userData.head;naoGrp.add(o);ships.push(o);
+    const f=new THREE.Sprite(foamMat.clone());f.scale.set(9,4,1);f.frustumCulled=false;scene.add(f);foams.push({s:f,ship:o});});
+  dockShip=g.scene.clone(true);dockShip.userData={ph:1.4};dockShip.position.set(-44,BASE_FLOAT,-40);
+  dockShip.rotation.y=THREE.MathUtils.degToRad(4);dockShip.visible=false;
+  dockShip.traverse(n=>{if(n.material)n.material=n.material.clone();});scene.add(dockShip);
+  naoGrp.traverse(n=>{if(n.isMesh)windify(n.material);}); dockShip.traverse(n=>{if(n.isMesh)windify(n.material);});
+});
+
+// ---- cámara (hero recuperado: bajo y dramático, con agua visible) ----
+const KF=[
+ {t:0.0,p:[24,5,16],l:[2,3,-10]},      // HERO: la nao emerge, ángulo bajo, agua delante
+ {t:0.85,p:[20,6,4],l:[0,3,-12]},
+ {t:1.0,p:[14,8,-14],l:[-6,3,-6]},     // viraje
+ {t:1.6,p:[2,11,-32],l:[-15,3,-4]},    // flota
+ {t:2.0,p:[-8,13,-42],l:[-15,3,-3]},
+ {t:2.4,p:[0,28,-80],l:[0,2,-4]},      // sube hacia el globo (fuera)
+ {t:2.72,p:[42,22,-62],l:[0,0,0]},     // orbita el globo
+ {t:3.0,p:[62,9,-14],l:[0,0,0]},       // sigue orbitando
+ {t:3.3,p:[34,7,38],l:[0,0,0]},        // se acerca para la caída
+ {t:3.6,p:[18,7,12],l:[0,3,-8]},       // tormenta
+ {t:4.0,p:[16,7,4],l:[0,3,-10]},{t:4.4,p:[12,7,-8],l:[-12,3,-30]},
+ {t:5.0,p:[-30,9,-20],l:[-44,4,-42]},{t:5.5,p:[-42,7,-24],l:[-44,1,-40]},
+ {t:6.0,p:[-45,4.5,-30],l:[-44,1,-40]}];
+const v3=a=>new THREE.Vector3(a[0],a[1],a[2]);const sm=x=>x*x*(3-2*x);
+function camAt(t){let a=KF[0],b=KF[KF.length-1];for(let i=0;i<KF.length-1;i++){if(t>=KF[i].t&&t<=KF[i+1].t){a=KF[i];b=KF[i+1];break;}}
+ const k=b.t>a.t?sm((t-a.t)/(b.t-a.t)):0;camera.position.lerpVectors(v3(a.p),v3(b.p),k);
+ camera.lookAt(new THREE.Vector3().lerpVectors(v3(a.l),v3(b.l),k));}
+
+const seg=(t,a,b)=>Math.max(0,Math.min(1,(t-a)/(b-a)));const lerp=(a,b,t)=>a+(b-a)*t;
+const sstep=(x,a,b)=>{const k=Math.max(0,Math.min(1,(x-a)/(b-a)));return k*k*(3-2*k);};
+const _space=new THREE.Color(0x05080f),_dayBg=new THREE.Color(0x9fb4c4);
+function setO(g,o){g.traverse(n=>{if(n.material){n.material.transparent=true;n.material.opacity=o;}});g.visible=o>.01;}
+// clima por acto: [t, sunElev, sunAzi, turbidity, rayleigh, expo, fogCol, fogD, waterColor]
+const CLIMA=[
+ [0.0, 4, 150, 9, 3.0, 0.55, 0xc4ccd2, 0.0030, 0x123440],
+ [1.0, 14,140, 7, 2.4, 0.60, 0xc4ccd2, 0.0024, 0x143842],
+ [2.0, 22,130, 5, 2.0, 0.64, 0xc7d2dc, 0.0018, 0x16404c],
+ [3.0, 14,150, 6, 2.2, 0.68, 0x182640, 0.0040, 0x16404c],
+ [3.6, 6, 200, 16,3.5, 0.42, 0x39414c, 0.0090, 0x1a2730],
+ [4.2, 12, 60, 9, 2.8, 0.58, 0xc9b48a, 0.0050, 0x2a6a72],
+ [5.0, 16, 50, 7, 2.6, 0.66, 0xd8b488, 0.0040, 0x2f8a86],
+ [6.0,-6, 255, 3, 1.0, 0.70, 0x0a1326, 0.0070, 0x0a1828]];
+function climaAt(t){let a=CLIMA[0],b=CLIMA[CLIMA.length-1];for(let i=0;i<CLIMA.length-1;i++){if(t>=CLIMA[i][0]&&t<=CLIMA[i+1][0]){a=CLIMA[i];b=CLIMA[i+1];break;}}
+ const k=b[0]>a[0]?(t-a[0])/(b[0]-a[0]):0;
+ setSun(lerp(a[1],b[1],k),lerp(a[2],b[2],k));
+ skyU['turbidity'].value=lerp(a[3],b[3],k);skyU['rayleigh'].value=lerp(a[4],b[4],k);
+ renderer.toneMappingExposure=lerp(a[5],b[5],k);
+ scene.fog.color.copy(new THREE.Color(a[6]).lerp(new THREE.Color(b[6]),k));scene.fog.density=lerp(a[7],b[7],k);
+ wU['waterColor'].value.copy(new THREE.Color(a[8]).lerp(new THREE.Color(b[8]),k));}
+
+function worldAt(t){
+ // MUNDO: ocultar mar+cielo, mostrar globo+estrellas (transición se pule en Hito 2)
+ const inGlobe=t>2.35&&t<3.2;
+ const oceanVis=Math.max(1-seg(t,2.30,2.62),seg(t,2.95,3.25));
+ wU['alpha'].value=oceanVis;water.visible=oceanVis>0.01;sky.visible=oceanVis>0.01;
+ if(t>2.35&&t<3.2)renderer.toneMappingExposure=lerp(0.62,0.92,seg(t,2.40,2.70));
+ const go=seg(t,2.35,2.62)*(1-seg(t,3.0,3.25));
+ globeGroup.visible=go>.01;
+ globeUni.uFade.value=go;atmoUni.uFade.value=go;grid.material.opacity=go*0.10;
+ globeGroup.scale.setScalar(lerp(0.62,1.0,seg(t,2.35,2.72)));
+ globeGroup.rotation.y=-0.6+t*0.16;
+ const rp=seg(t,2.55,3.0);
+ routeMat.opacity=go*seg(t,2.5,2.7)*0.95;
+ routeGeo.setDrawRange(0,Math.floor(routeIdx*rp));
+ if(rp>0.001){naoGlow.position.copy(routeCurve.getPointAt(Math.min(0.999,rp)).clone().normalize().multiplyScalar(GR*1.03));}
+ naoGlow.material.opacity=go*sstep(rp,0.0,0.05);
+ const np=2.4+Math.sin(clock*4)*0.5;naoGlow.scale.set(np,np,1);
+ const MF=[0,0.43,0.57,0.71,0.86,1.0];
+ dots.forEach((d,i)=>{d.material.opacity=go*sstep(rp,MF[i]-0.02,MF[i]+0.04);});
+ stars.material.opacity=Math.max(go,seg(t,5.3,6))*0.95;
+ const bgK=seg(t,2.30,2.70)*(1-seg(t,2.95,3.25));
+ scene.background=bgK>0.001?_dayBg.clone().lerp(_space,bgK):null;
+ if(inGlobe)scene.fog.density=0.00006;
+ // naos: fade en globo, vuelven en tormenta, se van en puerto
+ let no=1;if(t>2.1)no=1-seg(t,2.1,2.4);if(t>3.35)no=Math.max(no,seg(t,3.35,3.65));if(t>4.6)no=1-seg(t,4.6,5.1);
+ setO(naoGrp,no);
+ rain.material.opacity=seg(t,3.40,3.62)*(1-seg(t,3.92,4.25))*.9;rain.visible=rain.material.opacity>.01;
+ port.visible=t>4.0;fanal.intensity=seg(t,4.8,6)*4;dockLight.intensity=seg(t,4.6,6)*3.5;
+ portLight.intensity=seg(t,4.15,4.7)*(1-seg(t,5.8,6))*2.4;
+ if(dockShip)dockShip.visible=t>4.15;
+ gulls.forEach(s=>s.material.opacity=Math.max(1-seg(t,0.9,1.6),seg(t,4.4,4.9)*(1-seg(t,5.8,6)))*.85);
+}
+
+const ACTS=[
+ {a:.05,b:.95,eb:'01 · La travesía',h:'Tecnología con <em>rumbo</em> para tu negocio.',p:'Estudio digital en Bizkaia · Webs, apps y reservas con IA.'},
+ {a:1.05,b:1.95,eb:'02 · La armada',h:'No zarpamos solos.',p:'Cinco naves, un mismo rumbo: que tu negocio llegue lejos.'},
+ {a:2.55,b:3.0,eb:'03 · La vuelta al mundo',h:'La nao Victoria.',p:'La única que completó la primera vuelta al mundo, 1519–1522.'},
+ {a:3.62,b:3.98,eb:'04 · El método',h:'Primero el trabajo; después decides.',p:'Te enseñamos tu web hecha antes de cobrarte nada.'},
+ {a:4.5,b:4.97,eb:'05 · El puerto',h:'Buen puerto, buenas tarifas.',p:'Cuota mensual, sin permanencia.'},
+ {a:5.4,b:6,eb:'06 · La arribada',h:'Empecemos tu travesía.',p:'accounting@ggelcano.com'}];
+const dom=document.getElementById('dom');
+const nodes=ACTS.map(A=>{const d=document.createElement('div');d.className='actxt';d.innerHTML=`<span class="eb">${A.eb}</span><h2>${A.h}</h2><p>${A.p}</p>`;dom.appendChild(d);return d;});
+
+let tS=0,last=performance.now(),clock=0;
+const tEl=document.getElementById('t'),bar=document.getElementById('bar');
+const progress=()=>{const max=document.getElementById('scroll').offsetHeight-innerHeight;return Math.max(0,Math.min(1,scrollY/Math.max(1,max)));};
+function frame(now){const dt=Math.min(1/30,(now-last)/1000);last=now;clock+=dt;
+ const p=progress();tS+=(p*6-tS)*(1-Math.pow(0.002,dt));
+ climaAt(tS);worldAt(tS);camAt(tS);
+ // ---- TORMENTA: olas grandes + relámpagos ----
+ const stormK=Math.min(1,seg(tS,3.40,3.60))*(1-seg(tS,3.92,4.25));
+ wU['time'].value+=dt*(0.45+stormK*0.9);      // olas más rápidas en tormenta
+ wU['distortionScale'].value=lerp(3.4,7.6,stormK);
+ wU['size'].value=lerp(1.0,2.3,stormK);
+ windU.value=clock*(1+stormK*1.2);            // viento en las velas (más en tormenta)
+ if(stormK>0.25){flashT-=dt;if(flashT<=0){strike();flashE=1;flashT=0.5+Math.random()*2.3;}}
+ flashE=Math.max(0,flashE-dt*3.2);
+ flashLight.intensity=flashE*flashE*6.5*stormK;
+ boltMat.opacity=(flashE>0.4?flashE:0)*stormK;bolt.visible=boltMat.opacity>0.02;
+ renderer.toneMappingExposure+=flashE*flashE*0.55*stormK;   // destello breve sobre el clima
+ // ---- GOD-RAYS: resplandor del sol en amanecer/atardecer ----
+ sunGlow.position.copy(sunDir).multiplyScalar(8000);
+ let glowO=Math.max((1-seg(tS,0.0,1.25))*0.5, seg(tS,4.15,4.6)*(1-seg(tS,5.7,6.0))*0.85);
+ if(tS>2.3&&tS<3.3)glowO=0;                    // no en el globo
+ sunGlow.material.opacity=glowO;sunGlow.visible=glowO>0.01;
+ // mecer barcos (más fuerte en tormenta)
+ const amp=1+stormK*2.2;
+ for(const o of ships){const ph=o.userData.ph;o.position.y=BASE_FLOAT+Math.sin(clock*0.5+ph)*0.15*amp;
+   o.rotation.set(Math.sin(clock*0.42+ph)*0.02*amp,o.userData.head,Math.sin(clock*0.5+ph*1.3)*0.028*amp);}
+ if(dockShip&&dockShip.visible){dockShip.position.y=BASE_FLOAT+Math.sin(clock*0.5+1.4)*0.12;dockShip.rotation.z=Math.sin(clock*0.4)*0.015;}
+ // ---- ESTELA de espuma tras cada nave ----
+ let shipVis=1;if(tS>2.1)shipVis=1-seg(tS,2.1,2.4);if(tS>3.35)shipVis=Math.max(shipVis,seg(tS,3.35,3.65));if(tS>4.6)shipVis=1-seg(tS,4.6,5.1);
+ foams.forEach((F,i)=>{const o=F.ship,h=o.userData.head;
+   F.s.position.set(o.position.x+Math.sin(h)*-6,0.3,o.position.z+Math.cos(h)*-6);
+   F.s.material.opacity=shipVis*(0.3+stormK*0.35)*(0.6+0.4*Math.sin(clock*2.2+i));});
+ // gaviotas (se desplazan al puerto en el acto 5)
+ const pG=seg(tS,4.4,4.9),gx=lerp(0,-40,pG),gy=lerp(0,3,pG),gz=lerp(0,-30,pG),spread=1-pG*0.55;
+ gulls.forEach(s=>s.position.set(gx+s.userData.x*spread+Math.sin(clock*s.userData.sp+s.userData.ph)*9,gy+s.userData.y+Math.sin(clock*s.userData.sp*1.3+s.userData.ph)*1.6,gz+s.userData.z*spread));
+ ACTS.forEach((A,i)=>nodes[i].classList.toggle('on',tS>=A.a&&tS<=A.b));
+ renderer.render(scene,camera);tEl.textContent=tS.toFixed(2);bar.style.width=(p*100)+'%';requestAnimationFrame(frame);}
+requestAnimationFrame(frame);
+addEventListener('resize',()=>{renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();});
+</script>
+</body>
+</html>

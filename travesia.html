@@ -1,0 +1,758 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>G&G Elcano — La Travesía</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,560;0,9..144,640;1,9..144,420;1,9..144,560&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --abismo:#070d20; --azul:#223f83; --azul-soft:#3a5aa8;
+  --cream:#faf7ee; --paper:#f4efe2; --ink:#1b2238; --mute:#4c536b;
+  --noche:#101c3c; --gold:#b08d57; --gold-light:#c9b07e; --gold-deep:#73592f;
+  --serif:'Fraunces',Georgia,serif; --sans:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+  --maxw:1180px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:auto}
+body{font-family:var(--sans);color:var(--cream);background:var(--abismo);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img,video{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+h1,h2,h3{font-family:var(--serif);font-weight:560;line-height:1.1;letter-spacing:-.01em}
+h1{line-height:1.04}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-light);opacity:.85}
+.lead{font-size:clamp(1.05rem,1.6vw,1.35rem);line-height:1.5;color:#e9e2d0;max-width:46ch}
+/* RITMO VERTICAL GLOBAL — ningún bloque de texto puede pisar al siguiente */
+.act__inner h1,.act__inner h2{margin-bottom:.4em}
+.act__inner .eyebrow{margin-bottom:1.2em;display:block}
+.act__inner .lead{margin-top:.2em}
+.act__inner p+p{margin-top:.9em}
+
+/* ---------- escenario de fondo (un solo fondo fijo; cada acto hace crossfade) ---------- */
+#stage{position:fixed;inset:0;z-index:0;background:var(--abismo)}
+#stage .bg{position:absolute;inset:0;opacity:0;transition:opacity 1.1s ease;will-change:opacity}
+#stage .bg.on{opacity:1}
+#stage .bg video,#stage .bg img{width:100%;height:100%;object-fit:cover}
+#stage .bg::after{content:"";position:absolute;inset:0;background:var(--veil,linear-gradient(180deg,rgba(7,13,32,.35),rgba(7,13,32,.65)))}
+#grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ---------- contenido ---------- */
+#scroll{position:relative;z-index:2}
+.act{position:relative;min-height:100vh;display:flex;align-items:center;padding:14vh 6vw}
+.act__inner{width:100%;max-width:var(--maxw);margin:0 auto}
+.act--center{justify-content:center;text-align:center}
+.act--center .lead{margin-inline:auto}
+
+/* header */
+header.nav{position:fixed;top:0;left:0;right:0;z-index:6;display:flex;justify-content:space-between;align-items:center;
+  padding:18px 6vw;mix-blend-mode:difference}
+.nav .brand{font-family:var(--serif);font-weight:640;letter-spacing:.02em;font-size:1.05rem}
+.nav .links{display:flex;gap:26px;font-size:.82rem;font-weight:500}
+@media(max-width:760px){.nav .links{display:none}}
+
+/* brújula de progreso */
+#brujula{position:fixed;left:24px;bottom:22px;z-index:6;font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;color:var(--cream);mix-blend-mode:difference}
+#brujula b{color:var(--gold-light)}
+#brujula .bar{width:120px;height:2px;background:rgba(255,255,255,.25);margin-top:7px;position:relative}
+#brujula .bar i{position:absolute;left:0;top:0;height:100%;width:0;background:var(--gold-light)}
+
+/* botones */
+.btn{display:inline-flex;align-items:center;gap:.5em;font-weight:600;font-size:.92rem;padding:.85em 1.5em;border-radius:40px;transition:transform .25s,background .25s}
+.btn--gold{background:var(--gold);color:#1a1206}
+.btn--ghost{border:1px solid rgba(250,247,238,.35)}
+.btn:hover{transform:translateY(-2px)}
+.chips{display:flex;flex-wrap:wrap;gap:10px 22px;font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;color:#cdd6e6;opacity:.8}
+.chips span{display:inline-flex;align-items:center;gap:.5em}
+
+/* reveal system (lo gobierna el JS base; las secciones solo ponen data-reveal) */
+[data-reveal]{opacity:0;transform:translateY(26px)}
+.is-in [data-reveal]{opacity:1;transform:none;transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
+.is-in [data-reveal][data-d="1"]{transition-delay:.08s}
+.is-in [data-reveal][data-d="2"]{transition-delay:.16s}
+.is-in [data-reveal][data-d="3"]{transition-delay:.24s}
+.is-in [data-reveal][data-d="4"]{transition-delay:.32s}
+
+/* tarjetas reutilizables */
+.cardgrid{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:42px}
+.card{background:rgba(12,18,38,.55);border:1px solid rgba(201,176,126,.18);border-radius:16px;padding:26px;backdrop-filter:blur(6px)}
+.card h3{font-size:1.3rem;margin-bottom:.4em}
+.card .num{font-family:var(--mono);color:var(--gold-light);font-size:.78rem;letter-spacing:.1em}
+.card p{color:#d7dce8;font-size:.95rem;line-height:1.55;margin-top:.5em}
+hr.rule{border:0;height:1px;background:linear-gradient(90deg,transparent,rgba(201,176,126,.4),transparent);margin:0}
+
+/* preloader */
+#pre{position:fixed;inset:0;z-index:20;background:var(--abismo);display:grid;place-items:center;transition:opacity .8s ease}
+#pre.gone{opacity:0;pointer-events:none}
+#pre .carta{font-family:var(--serif);text-align:center;color:var(--gold-light)}
+#pre .coord{font-family:var(--mono);font-size:.74rem;letter-spacing:.2em;margin-top:10px;color:#9fb0cf}
+#pre .count{font-family:var(--mono);position:absolute;right:26px;bottom:22px;color:var(--gold);font-size:.8rem}
+@media(prefers-reduced-motion:reduce){[data-reveal]{opacity:1!important;transform:none!important}#stage .bg{transition:none}}
+</style>
+</head>
+<body>
+<div id="pre"><div class="carta"><div style="font-size:clamp(2rem,5vw,3.4rem)">G&amp;G ELCANO</div><div class="coord">43°15′N · 2°55′O · BIZKAIA</div></div><div class="count" id="cnt">0</div></div>
+
+<div id="stage"></div>
+<div id="grain"></div>
+
+<header class="nav">
+  <div class="brand">G&amp;G Elcano</div>
+  <nav class="links">
+    <a href="#flota">La flota</a><a href="#mundo">Quiénes somos</a>
+    <a href="#metodo">Cómo trabajamos</a><a href="#puerto">Tarifas</a><a href="#arribada">Hablamos</a>
+  </nav>
+</header>
+
+<div id="brujula"><span id="bact">01 · La Carta</span><div class="bar"><i id="bbar"></i></div></div>
+
+<main id="scroll">
+<!-- ACTO: niebla -->
+<section class="act act--center" id="niebla" data-act="2" data-actname="La Niebla" data-bg="3d/planchas/v_niebla.mp4" data-veil="linear-gradient(180deg,rgba(7,13,32,.22),rgba(7,13,32,.58))">
+  <div class="act__inner">
+    <p class="eyebrow" data-reveal>Estudio Digital · Bizkaia</p>
+
+    <h1 data-reveal data-d="1">Tecnología con <em>rumbo</em><br>para tu negocio.</h1>
+
+    <p class="lead" data-reveal data-d="2">Diseñamos, alojamos y mantenemos tu web; te construimos las apps a medida y el sistema de reservas con IA que atiende cuando tú no puedes. Tú te dedicas a lo tuyo; del resto nos ocupamos nosotros.</p>
+
+    <div class="niebla__cta" data-reveal data-d="3">
+      <a class="btn btn--gold" href="#puerto">Pide tu propuesta</a>
+      <a class="btn btn--ghost" href="#flota">La Expedición</a>
+    </div>
+
+    <div class="chips niebla__chips" data-reveal data-d="4">
+      <span>Sin permanencia</span>
+      <span>Castellano y euskera</span>
+      <span>Cumplimiento RGPD</span>
+    </div>
+
+    <p class="niebla__coords" data-reveal data-d="4" data-parallax="-6">Atlántico Norte · 43°15′N 2°55′O</p>
+  </div>
+
+  <style>
+    #niebla{ color:var(--cream); }
+    #niebla .act__inner{ max-width:62rem; }
+
+    #niebla .eyebrow{
+      color:var(--gold-light);
+      letter-spacing:.34em;
+      margin-bottom:clamp(1.4rem,3vw,2.2rem);
+    }
+
+    #niebla h1{
+      font-family:var(--serif);
+      font-weight:380;
+      font-size:clamp(2.7rem,7.4vw,6.4rem);
+      line-height:.98;
+      letter-spacing:-.018em;
+      margin:0 auto clamp(1.6rem,3.4vw,2.6rem);
+      max-width:18ch;
+      color:var(--cream);
+      text-shadow:0 1px 40px rgba(7,13,32,.45);
+    }
+    #niebla h1 em{
+      font-style:italic;
+      font-weight:440;
+      color:var(--gold-light);
+      background:linear-gradient(180deg,var(--gold-light),var(--gold));
+      -webkit-background-clip:text;
+      background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+
+    #niebla .lead{
+      color:var(--cream);
+      opacity:.92;
+      max-width:46rem;
+      margin:0 auto clamp(2.2rem,4.4vw,3.2rem);
+      text-shadow:0 1px 24px rgba(7,13,32,.4);
+    }
+
+    #niebla .niebla__cta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:1rem;
+      justify-content:center;
+      margin-bottom:clamp(2.4rem,4.4vw,3.4rem);
+    }
+
+    #niebla .niebla__chips{
+      justify-content:center;
+      margin:0 auto;
+    }
+    #niebla .niebla__chips span{
+      color:var(--cream);
+      border-color:rgba(250,247,238,.26);
+    }
+
+    #niebla .niebla__coords{
+      font-family:var(--mono);
+      font-size:.72rem;
+      letter-spacing:.28em;
+      text-transform:uppercase;
+      color:var(--gold-light);
+      opacity:.78;
+      margin:clamp(3rem,7vw,5.4rem) auto 0;
+    }
+
+    @media (max-width:560px){
+      #niebla .niebla__cta{ flex-direction:column; align-items:center; }
+      #niebla .niebla__cta .btn{ width:100%; max-width:20rem; text-align:center; }
+    }
+  </style>
+</section>
+
+<!-- ACTO: flota -->
+<section class="act" id="flota" data-act="3" data-actname="La Flota" data-bg="3d/planchas/v_flota.mp4" data-veil="linear-gradient(180deg,rgba(7,13,32,.30),rgba(7,13,32,.62))">
+  <div class="act__inner">
+
+    <header class="flota__head">
+      <span class="eyebrow" data-reveal>02 · La flota</span>
+      <h2 class="flota__title" data-reveal data-d="1" data-parallax="-6">Tres naves, un mismo rumbo:<br><em>que tu negocio venda más.</em></h2>
+      <p class="lead" data-reveal data-d="2">Cada proyecto embarca en la nave que necesita. Muchos acaban navegando con las tres.</p>
+    </header>
+
+    <hr class="rule flota__rule" data-reveal data-d="2">
+
+    <div class="cardgrid">
+
+      <article class="card" data-reveal data-d="1">
+        <span class="num">I</span>
+        <h3>Webs profesionales</h3>
+        <p>Tu negocio, fácil de encontrar. Diseñamos, alojamos y mantenemos la web que tus clientes ven cuando te buscan en Google — y también cuando preguntan a una IA. SSL y mantenimiento incluidos.</p>
+      </article>
+
+      <article class="card" data-reveal data-d="2">
+        <span class="num">II</span>
+        <h3>Apps a medida</h3>
+        <p>Cuando una web no basta. Herramientas hechas para tu forma de trabajar: paneles de gestión, automatizaciones y aplicaciones que te ahorran horas cada semana.</p>
+      </article>
+
+      <article class="card flota__card--star" data-reveal data-d="3">
+        <span class="num">III</span>
+        <h3>Reservas autónomas con IA</h3>
+        <p>Tus clientes reservan solos, por web o por teléfono, y todo cae en un único panel. La IA atiende, reserva y filtra; solo te pasa lo que de verdad necesita una persona.</p>
+        <span class="flota__tag">Web hoy · Voz en lanzamiento</span>
+      </article>
+
+    </div>
+
+    <p class="flota__note" data-reveal data-d="3">Lo que no hacemos (todavía): campañas de anuncios, SEO «mágico» ni gestión de redes sociales. Preferimos hacer pocas cosas y hacerlas de verdad.</p>
+
+  </div>
+
+  <style>
+    #flota .flota__head{max-width:62ch}
+    #flota .flota__title{font-size:clamp(2.2rem,5.4vw,4rem);margin-top:.5em;text-wrap:balance}
+    #flota .flota__title em{font-style:italic;color:var(--gold-light)}
+    #flota .flota__rule{margin:48px 0 6px;max-width:240px}
+    #flota .cardgrid{margin-top:34px}
+    #flota .card{display:flex;flex-direction:column;position:relative;transition:border-color .4s ease,transform .4s ease,background .4s ease}
+    #flota .card .num{display:inline-block;font-size:1rem;letter-spacing:.18em;padding-bottom:.9em;margin-bottom:.2em;border-bottom:1px solid rgba(201,176,126,.28)}
+    #flota .card h3{margin-top:.6em}
+    #flota .card:hover{transform:translateY(-4px);border-color:rgba(201,176,126,.45);background:rgba(16,28,60,.62)}
+    #flota .flota__card--star{border-color:rgba(201,176,126,.4);background:rgba(16,28,60,.6)}
+    #flota .flota__tag{display:inline-flex;align-self:flex-start;margin-top:18px;font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-light);padding:.5em .9em;border:1px solid rgba(201,176,126,.35);border-radius:40px}
+    #flota .flota__note{margin-top:46px;max-width:58ch;font-size:.92rem;line-height:1.6;color:#aeb6c8;opacity:.82}
+    @media(max-width:760px){
+      #flota .flota__rule{max-width:160px;margin:36px 0 4px}
+      #flota .flota__note{margin-top:36px}
+    }
+  </style>
+</section>
+
+<!-- ACTO: mundo -->
+<section class="act" id="mundo" data-act="4" data-actname="El Mundo" data-bg="3d/planchas/v_noche.mp4" data-veil="radial-gradient(120% 120% at 50% 0,rgba(7,13,32,.45),rgba(7,13,32,.72))">
+  <div class="act__inner">
+    <div class="mundo__grid">
+      <header class="mundo__head">
+        <p class="eyebrow" data-reveal>03 · Bitácora</p>
+        <h2 class="mundo__title" data-reveal data-d="1" data-parallax="-8">Un estudio pequeño<br>con una ambición enorme.</h2>
+      </header>
+
+      <div class="mundo__body">
+        <p class="lead" data-reveal data-d="1">G&G Elcano es un estudio digital de Bizkaia.</p>
+
+        <p class="mundo__p" data-reveal data-d="2">En 1519 cinco naves zarparon de Sanlúcar. Tres años después solo una, la Victoria, regresó: la primera en dar la vuelta al mundo, capitaneada por Juan Sebastián Elcano. En su escudo quedó grabado <span class="mundo__motto">«Primus circumdedisti me»</span> — el primero que me circunnavegó.</p>
+
+        <p class="mundo__p" data-reveal data-d="3">Nos quedamos con esa idea: terminar lo que se empieza y llegar a puerto. Tu negocio es la travesía; nosotros, la tripulación.</p>
+
+        <div class="chips" data-reveal data-d="4">
+          <span>Bizkaia · 43°N</span>
+          <span>Sin permanencia</span>
+          <span>Trabajo primero</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    #mundo .mundo__grid{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(28px,6vw,90px);align-items:start}
+    #mundo .mundo__head{position:relative}
+    #mundo .eyebrow{margin-bottom:1.6em}
+    #mundo .mundo__title{font-size:clamp(2.4rem,6vw,5rem);font-weight:560;color:var(--cream);max-width:14ch}
+    #mundo .mundo__body{padding-top:.35rem}
+    #mundo .lead{max-width:42ch}
+    #mundo .mundo__p{margin-top:1.5em;font-size:clamp(1rem,1.25vw,1.12rem);line-height:1.72;color:#d7dce8;max-width:54ch}
+    #mundo .mundo__motto{font-family:var(--serif);font-style:italic;font-weight:420;color:var(--gold-light);letter-spacing:.005em}
+    #mundo .chips{margin-top:2.6em}
+    #mundo .chips span{position:relative;padding-left:1.15em}
+    #mundo .chips span::before{content:"";position:absolute;left:0;top:50%;width:5px;height:5px;margin-top:-2.5px;border-radius:50%;background:var(--gold);opacity:.9}
+    @media(max-width:860px){
+      #mundo .mundo__grid{grid-template-columns:1fr;gap:clamp(26px,8vw,46px)}
+      #mundo .mundo__title{max-width:18ch}
+      #mundo .eyebrow{margin-bottom:1.1em}
+    }
+  </style>
+</section>
+
+<!-- ACTO: metodo -->
+<section class="act" id="metodo" data-act="5" data-actname="La Tormenta" data-bg="3d/planchas/tormenta_anim.mp4" data-veil="linear-gradient(180deg,rgba(7,13,32,.34),rgba(7,13,32,.66))">
+  <div class="act__inner">
+    <div class="metodo__head">
+      <p class="eyebrow" data-reveal>04 · El método</p>
+      <h2 class="metodo__title" data-reveal data-d="1" data-parallax="-6">Trabajamos al revés<br>que casi todo el mundo.</h2>
+      <p class="lead" data-reveal data-d="2">Primero te enseñamos el trabajo hecho y después decides si quieres pagarlo. Sin reuniones eternas, sin permanencias ni ataduras.</p>
+    </div>
+
+    <hr class="rule metodo__rule" data-reveal data-d="2">
+
+    <div class="cardgrid">
+      <article class="card" data-reveal data-d="1">
+        <span class="num">01</span>
+        <h3>Trabajo primero</h3>
+        <p>Te enseñamos una propuesta real de tu web antes de cobrarte un euro.</p>
+      </article>
+      <article class="card" data-reveal data-d="2">
+        <span class="num">02</span>
+        <h3>Mes a mes</h3>
+        <p>Sin contratos de permanencia. Te quedas porque quieres, no porque firmaste.</p>
+      </article>
+      <article class="card" data-reveal data-d="3">
+        <span class="num">03</span>
+        <h3>Trato local</h3>
+        <p>Estamos en Bizkaia y atendemos en castellano y euskera.</p>
+      </article>
+      <article class="card" data-reveal data-d="4">
+        <span class="num">04</span>
+        <h3>Legalidad de serie</h3>
+        <p>RGPD, LSSI y accesibilidad europea incluidos en cada proyecto.</p>
+      </article>
+    </div>
+  </div>
+
+  <style>
+    #metodo .act__inner{position:relative}
+    #metodo .metodo__head{max-width:62ch}
+    #metodo .eyebrow{display:block}
+    #metodo .metodo__title{
+      font-family:var(--serif);
+      font-weight:560;
+      font-size:clamp(2.3rem,6.2vw,4.6rem);
+      line-height:1.02;
+      letter-spacing:-.015em;
+      margin:.5em 0 .55em;
+      color:var(--cream);
+      text-shadow:0 2px 30px rgba(7,13,32,.45);
+    }
+    #metodo .metodo__title br{display:block}
+    #metodo .lead{color:#eee7d5}
+    #metodo .metodo__rule{margin:48px 0 4px;max-width:560px}
+    #metodo .cardgrid{margin-top:38px}
+    #metodo .card{
+      background:rgba(9,15,34,.46);
+      border:1px solid rgba(201,176,126,.22);
+      transition:transform .4s cubic-bezier(.2,.7,.2,1),border-color .4s,background .4s;
+    }
+    #metodo .card:hover{
+      transform:translateY(-4px);
+      border-color:rgba(201,176,126,.5);
+      background:rgba(12,20,44,.62);
+    }
+    #metodo .card .num{
+      display:inline-block;
+      font-size:.9rem;
+      letter-spacing:.18em;
+      color:var(--gold-light);
+      margin-bottom:.6em;
+      padding-bottom:.4em;
+      border-bottom:1px solid rgba(201,176,126,.28);
+    }
+    #metodo .card h3{
+      color:var(--cream);
+      font-size:1.34rem;
+      margin-bottom:.35em;
+    }
+    #metodo .card p{color:#dbe0ec}
+    @media(max-width:760px){
+      #metodo .metodo__title br{display:none}
+    }
+  </style>
+</section>
+
+<!-- ACTO: puerto -->
+<section class="act act--center" id="puerto" data-act="6" data-actname="El Puerto" data-bg="3d/planchas/v_puerto.mp4" data-veil="linear-gradient(180deg,rgba(20,12,6,.30),rgba(7,13,32,.64))">
+  <div class="act__inner">
+    <p class="eyebrow" data-reveal>05 · Tarifas</p>
+    <h2 data-reveal data-d="1">Atracamos en puerto.<br>Estas son las tarifas.</h2>
+    <p class="lead" data-reveal data-d="2">Cuotas mensuales, sin permanencia. La puesta en marcha se ajusta segun el proyecto.</p>
+
+    <div class="cardgrid" data-parallax="-6">
+      <div class="card plan" data-reveal data-d="1">
+        <p class="num">I</p>
+        <h3>Basico</h3>
+        <p class="price"><span class="amount">19 €</span><span class="per">/mes</span></p>
+        <hr class="rule">
+        <p>Tu web profesional, alojada y mantenida.</p>
+      </div>
+
+      <div class="card plan plan--featured" data-reveal data-d="2">
+        <span class="flag">Recomendado</span>
+        <p class="num">II</p>
+        <h3>Profesional</h3>
+        <p class="price"><span class="amount">35 €</span><span class="per">/mes</span></p>
+        <hr class="rule">
+        <p>Web mas completa con mas paginas y soporte.</p>
+      </div>
+
+      <div class="card plan" data-reveal data-d="3">
+        <p class="num">III</p>
+        <h3>Avanzado</h3>
+        <p class="price"><span class="amount">55 €</span><span class="per">/mes</span></p>
+        <hr class="rule">
+        <p>Web a medida con automatizaciones.</p>
+      </div>
+
+      <div class="card plan" data-reveal data-d="4">
+        <p class="num">IV</p>
+        <h3>Premium</h3>
+        <p class="price"><span class="amount">89 €</span><span class="per">/mes</span></p>
+        <hr class="rule">
+        <p>Apps y reservas con IA a medida.</p>
+      </div>
+    </div>
+
+    <p class="puerto__foot" data-reveal data-d="2">Puesta en marcha segun proyecto · Sin permanencia · RGPD incluido.</p>
+  </div>
+
+  <style>
+    #puerto .act__inner{max-width:1180px}
+    #puerto h2{font-size:clamp(2.1rem,5vw,4rem);margin-top:.35em}
+    #puerto .lead{margin-top:1.1em}
+    #puerto .cardgrid{margin-top:clamp(48px,7vh,72px);align-items:stretch;text-align:left}
+    #puerto .plan{display:flex;flex-direction:column;position:relative;overflow:visible;
+      transition:transform .45s cubic-bezier(.2,.7,.2,1),border-color .45s,box-shadow .45s}
+    #puerto .plan:hover{transform:translateY(-8px);border-color:rgba(201,176,126,.4);box-shadow:0 26px 60px -34px rgba(0,0,0,.85)}
+    #puerto .plan .num{margin-bottom:1.4em}
+    #puerto .plan h3{font-size:1.45rem;letter-spacing:0}
+    #puerto .price{display:flex;align-items:baseline;gap:.38em;margin:.55em 0 1em}
+    #puerto .price .amount{font-family:var(--serif);font-weight:640;font-size:clamp(2.6rem,4.4vw,3.4rem);line-height:1;color:var(--cream)}
+    #puerto .price .per{font-family:var(--mono);font-size:.78rem;letter-spacing:.12em;text-transform:lowercase;color:var(--gold-light);opacity:.9}
+    #puerto .plan hr.rule{margin:.2em 0 1.2em}
+    #puerto .plan>p:last-child{margin-top:auto;color:#d7dce8;font-size:.96rem;line-height:1.55}
+
+    /* plan recomendado: borde dorado */
+    #puerto .plan--featured{border-color:var(--gold);background:rgba(16,28,60,.62);
+      box-shadow:0 0 0 1px rgba(176,141,87,.55),0 30px 70px -38px rgba(0,0,0,.9)}
+    #puerto .plan--featured .amount{color:var(--gold-light)}
+    #puerto .plan--featured:hover{border-color:var(--gold-light)}
+    #puerto .flag{position:absolute;top:-13px;left:26px;background:var(--gold);color:#1a1206;
+      font-family:var(--mono);font-size:.62rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+      padding:.45em 1em;border-radius:40px;box-shadow:0 8px 22px -10px rgba(0,0,0,.7)}
+
+    #puerto .puerto__foot{margin-top:clamp(34px,5vh,52px);font-family:var(--mono);
+      font-size:.74rem;letter-spacing:.1em;color:var(--gold-light);opacity:.78}
+
+    @media(max-width:760px){
+      #puerto{text-align:left}
+      #puerto .lead{margin-inline:0}
+      #puerto .puerto__foot{letter-spacing:.06em}
+    }
+  </style>
+</section>
+
+<!-- ACTO: cuaderno -->
+<section class="act" id="cuaderno" data-act="6" data-actname="Cuaderno de a bordo" data-bg="" data-veil="">
+  <div class="act__inner">
+    <p class="eyebrow" data-reveal>Cuaderno de a bordo</p>
+    <h2 data-reveal data-d="1">Preguntas frecuentes.</h2>
+
+    <hr class="rule" data-reveal data-d="1">
+
+    <ul class="cuaderno__list">
+      <li class="cuaderno__entry" data-reveal data-d="1">
+        <span class="cuaderno__mark" aria-hidden="true">01</span>
+        <h3>¿Tengo que firmar permanencia?</h3>
+        <p>No. Es mes a mes: te quedas porque quieres.</p>
+      </li>
+      <li class="cuaderno__entry" data-reveal data-d="2">
+        <span class="cuaderno__mark" aria-hidden="true">02</span>
+        <h3>¿En qué idiomas atendéis?</h3>
+        <p>En castellano y en euskera, como prefieras.</p>
+      </li>
+      <li class="cuaderno__entry" data-reveal data-d="3">
+        <span class="cuaderno__mark" aria-hidden="true">03</span>
+        <h3>¿Cuándo pago?</h3>
+        <p>Solo si la propuesta te convence. Te enseñamos el trabajo hecho antes de cobrarte.</p>
+      </li>
+      <li class="cuaderno__entry" data-reveal data-d="4">
+        <span class="cuaderno__mark" aria-hidden="true">04</span>
+        <h3>¿Qué no hacéis?</h3>
+        <p>Campañas de anuncios, SEO «mágico» ni redes sociales. Pocas cosas, bien hechas.</p>
+      </li>
+      <li class="cuaderno__entry" data-reveal data-d="4">
+        <span class="cuaderno__mark" aria-hidden="true">05</span>
+        <h3>¿Cumplís la ley?</h3>
+        <p>RGPD, LSSI y accesibilidad europea, de serie en cada proyecto.</p>
+      </li>
+    </ul>
+  </div>
+
+  <style>
+    #cuaderno{
+      background:var(--paper);
+      color:var(--ink);
+      position:relative;
+    }
+    /* textura sutil de papel cuadriculado de bitácora */
+    #cuaderno::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background-image:
+        linear-gradient(rgba(176,141,87,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(176,141,87,.05) 1px, transparent 1px);
+      background-size:34px 34px;
+      mask-image:radial-gradient(120% 80% at 50% 0%, #000 55%, transparent 100%);
+      -webkit-mask-image:radial-gradient(120% 80% at 50% 0%, #000 55%, transparent 100%);
+    }
+    #cuaderno .act__inner{position:relative;z-index:1;max-width:920px}
+
+    #cuaderno .eyebrow{color:var(--gold-deep)}
+
+    #cuaderno h2{
+      font-family:var(--serif);
+      color:var(--ink);
+      font-weight:500;
+      line-height:1.02;
+      letter-spacing:-.015em;
+      font-size:clamp(2.6rem,7vw,5rem);
+      margin:.35rem 0 0;
+    }
+
+    #cuaderno hr.rule{
+      border:0;
+      height:1px;
+      background:linear-gradient(90deg, var(--gold) 0%, rgba(176,141,87,.25) 60%, transparent 100%);
+      margin:2.4rem 0 .6rem;
+    }
+
+    #cuaderno .cuaderno__list{
+      list-style:none;
+      margin:0;
+      padding:0;
+    }
+
+    #cuaderno .cuaderno__entry{
+      position:relative;
+      display:grid;
+      grid-template-columns:auto 1fr;
+      column-gap:clamp(1rem,3vw,2.4rem);
+      align-items:start;
+      padding:1.9rem 0;
+      border-bottom:1px solid rgba(27,34,56,.12);
+    }
+    #cuaderno .cuaderno__entry:last-child{border-bottom:0}
+
+    #cuaderno .cuaderno__mark{
+      font-family:var(--mono);
+      font-size:.82rem;
+      letter-spacing:.16em;
+      color:var(--gold-deep);
+      padding-top:.5rem;
+      opacity:.7;
+    }
+
+    #cuaderno .cuaderno__entry h3{
+      font-family:var(--serif);
+      color:var(--ink);
+      font-weight:500;
+      letter-spacing:-.01em;
+      font-size:clamp(1.3rem,2.6vw,1.7rem);
+      line-height:1.15;
+      margin:0 0 .55rem;
+    }
+
+    #cuaderno .cuaderno__entry p{
+      font-family:var(--sans);
+      color:var(--mute);
+      font-size:clamp(1rem,1.4vw,1.12rem);
+      line-height:1.6;
+      max-width:54ch;
+      margin:0;
+    }
+
+    @media (max-width:560px){
+      #cuaderno .cuaderno__entry{
+        grid-template-columns:1fr;
+        row-gap:.3rem;
+      }
+      #cuaderno .cuaderno__mark{padding-top:0}
+    }
+  </style>
+</section>
+
+<!-- ACTO: arribada -->
+<section class="act act--center" id="arribada" data-act="6" data-actname="La Arribada" data-bg="3d/planchas/v_noche.mp4" data-veil="linear-gradient(180deg,rgba(7,13,32,.40),rgba(7,13,32,.78))">
+  <div class="act__inner">
+
+    <p class="eyebrow" data-reveal>06 · La arribada</p>
+
+    <h2 class="arribada__title" data-reveal data-d="1">Toda travesía empieza<br>con un nombre.</h2>
+
+    <p class="lead arribada__lead" data-reveal data-d="2">Cuéntanos tu negocio. Te preparamos una propuesta real de tu web, sin compromiso y antes de cobrarte nada.</p>
+
+    <div class="arribada__cta" data-reveal data-d="3">
+      <a class="btn btn--gold" href="mailto:accounting@ggelcano.com?subject=Pide%20tu%20propuesta">Pide tu propuesta</a>
+      <a class="arribada__mail" href="mailto:accounting@ggelcano.com">accounting@ggelcano.com</a>
+    </div>
+
+    <div class="arribada__footer" data-reveal data-d="4">
+      <hr class="rule">
+      <div class="arribada__footrow">
+        <span class="arribada__org">G&G Elcano · Estudio digital · Bizkaia · 43°15′N 2°55′O</span>
+        <nav class="arribada__links">
+          <a href="#">Aviso legal</a><span aria-hidden="true">·</span><a href="#">Privacidad</a><span aria-hidden="true">·</span><a href="#">RGPD</a>
+        </nav>
+      </div>
+    </div>
+
+  </div>
+
+  <style>
+    /* —— La Arribada · scoped a #arribada —— */
+    #arribada{flex-direction:column;justify-content:center;min-height:100vh}
+    #arribada .act__inner{display:flex;flex-direction:column;align-items:center}
+
+    #arribada .eyebrow{margin-bottom:1.6rem}
+
+    #arribada .arribada__title{
+      font-family:var(--serif);font-weight:560;
+      font-size:clamp(2.4rem,6.4vw,5.2rem);line-height:1.02;letter-spacing:-.02em;
+      color:var(--cream);text-wrap:balance;
+      text-shadow:0 2px 30px rgba(7,13,32,.55);
+    }
+    #arribada .arribada__title i{font-style:italic;color:var(--gold-light)}
+
+    #arribada .arribada__lead{
+      margin-top:1.5rem;color:#ece5d4;max-width:42ch;
+    }
+
+    #arribada .arribada__cta{
+      margin-top:2.8rem;display:flex;flex-direction:column;align-items:center;gap:1.5rem;
+    }
+    #arribada .btn--gold{
+      padding:1em 2em;font-size:.96rem;letter-spacing:.01em;
+      box-shadow:0 14px 40px -16px rgba(176,141,87,.85);
+    }
+    #arribada .arribada__mail{
+      font-family:var(--mono);font-weight:500;
+      font-size:clamp(1.05rem,2.4vw,1.7rem);letter-spacing:.04em;
+      color:var(--cream);position:relative;padding-bottom:.18em;
+      transition:color .3s ease;
+    }
+    #arribada .arribada__mail::after{
+      content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;
+      background:linear-gradient(90deg,transparent,var(--gold-light),transparent);
+      transform:scaleX(.55);transform-origin:center;opacity:.6;
+      transition:transform .4s cubic-bezier(.2,.7,.2,1),opacity .4s ease;
+    }
+    #arribada .arribada__mail:hover{color:var(--gold-light)}
+    #arribada .arribada__mail:hover::after{transform:scaleX(1);opacity:1}
+
+    #arribada .arribada__footer{
+      width:100%;max-width:var(--maxw);margin-top:clamp(5rem,12vh,9rem);
+    }
+    #arribada .arribada__footer .rule{margin-bottom:1.6rem}
+    #arribada .arribada__footrow{
+      display:flex;justify-content:space-between;align-items:center;gap:1rem 2.4rem;flex-wrap:wrap;
+      font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;
+      color:#9fb0cf;text-transform:uppercase;
+    }
+    #arribada .arribada__org{opacity:.9}
+    #arribada .arribada__links{display:inline-flex;align-items:center;gap:.9em}
+    #arribada .arribada__links a{
+      color:#b9c3d6;opacity:.85;transition:color .25s ease,opacity .25s ease;
+    }
+    #arribada .arribada__links a:hover{color:var(--gold-light);opacity:1}
+    #arribada .arribada__links span{opacity:.4}
+
+    @media(max-width:640px){
+      #arribada .arribada__footrow{justify-content:center;text-align:center;flex-direction:column;gap:.9rem}
+    }
+  </style>
+</section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
+<script>
+// ---- preloader ----
+let c=0;const cnt=document.getElementById('cnt');
+const pi=setInterval(()=>{c=Math.min(100,c+Math.ceil(Math.random()*9));cnt.textContent=c;if(c>=100){clearInterval(pi);setTimeout(()=>document.getElementById('pre').classList.add('gone'),250)}},90);
+
+// ---- Lenis (opcional) + GSAP ----
+gsap.registerPlugin(ScrollTrigger);
+let lenis=null;
+if(window.Lenis){
+  lenis=new Lenis({lerp:.09,smoothWheel:true});
+  lenis.on('scroll',()=>ScrollTrigger.update());
+  gsap.ticker.add(t=>lenis.raf(t*1000));gsap.ticker.lagSmoothing(0);
+}
+
+// ---- escenario de fondos: crea un .bg por acto con data-bg, crossfade al entrar ----
+const stage=document.getElementById('stage');
+const acts=[...document.querySelectorAll('.act')];
+const bgEls={};
+acts.forEach(a=>{
+  const src=a.dataset.bg; if(!src)return;
+  if(bgEls[src])return;
+  const d=document.createElement('div');d.className='bg';
+  if(a.dataset.veil)d.style.setProperty('--veil',a.dataset.veil);
+  if(/\.mp4$/.test(src)){d.innerHTML=`<video src="${src}" muted loop playsinline autoplay></video>`;}
+  else{d.innerHTML=`<img src="${src}" alt="">`;}
+  stage.appendChild(d);bgEls[src]=d;
+});
+function setBg(src){Object.entries(bgEls).forEach(([s,el])=>el.classList.toggle('on',s===src));}
+if(acts[0]&&acts[0].dataset.bg)setBg(acts[0].dataset.bg);
+
+// ---- por acto: reveal + cambio de fondo + brújula ----
+const bact=document.getElementById('bact'),bbar=document.getElementById('bbar');
+acts.forEach((a,i)=>{
+  ScrollTrigger.create({
+    trigger:a,start:'top 62%',end:'bottom 38%',
+    onToggle:self=>{ if(self.isActive){a.classList.add('is-in');
+      if(a.dataset.bg)setBg(a.dataset.bg);
+      if(a.dataset.actname)bact.textContent=String(i+1).padStart(2,'0')+' · '+a.dataset.actname;
+      if(a.dataset.veil2)document.documentElement.style.setProperty('--veilnow',a.dataset.veil2);
+    }},
+  });
+  // reveal una vez
+  ScrollTrigger.create({trigger:a,start:'top 78%',once:true,onEnter:()=>a.classList.add('is-in')});
+});
+// barra de progreso global
+ScrollTrigger.create({start:0,end:'max',onUpdate:self=>bbar.style.width=(self.progress*100)+'%'});
+
+// parallax suave de elementos marcados
+gsap.utils.toArray('[data-parallax]').forEach(el=>{
+  gsap.to(el,{yPercent:parseFloat(el.dataset.parallax)||-12,ease:'none',
+    scrollTrigger:{trigger:el,start:'top bottom',end:'bottom top',scrub:true}});
+});
+</script>
+</body>
+</html>
