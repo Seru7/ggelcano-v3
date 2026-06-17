@@ -1,0 +1,92 @@
+{
+ "fov": [
+  {
+   "t": 0,
+   "fov": 32
+  },
+  {
+   "t": 0.42,
+   "fov": 32
+  },
+  {
+   "t": 0.82,
+   "fov": 32
+  },
+  {
+   "t": 0.91,
+   "fov": 32
+  },
+  {
+   "t": 1,
+   "fov": 32
+  },
+  {
+   "t": 1.5,
+   "fov": 32
+  },
+  {
+   "t": 2,
+   "fov": 32
+  }
+ ],
+ "ships": [
+  {
+   "id": "Victoria",
+   "pos": [
+    0,
+    0,
+    0
+   ],
+   "headingDeg": 0
+  },
+  {
+   "id": "Trinidad",
+   "pos": [
+    -9,
+    4,
+    0
+   ],
+   "headingDeg": -13
+  },
+  {
+   "id": "Concepcion",
+   "pos": [
+    -13.5,
+    6,
+    0
+   ],
+   "headingDeg": 11
+  }
+ ],
+ "waterlineOffsetY": -0.6,
+ "fog": [
+  {
+   "t": 0,
+   "fogDensity": 0.92
+  },
+  {
+   "t": 0.42,
+   "fogDensity": 0.6
+  },
+  {
+   "t": 0.82,
+   "fogDensity": 0.34
+  },
+  {
+   "t": 0.91,
+   "fogDensity": 0.3
+  },
+  {
+   "t": 1,
+   "fogDensity": 0.28
+  },
+  {
+   "t": 1.5,
+   "fogDensity": 0.018
+  },
+  {
+   "t": 2,
+   "fogDensity": 0.022
+  }
+ ]
+}

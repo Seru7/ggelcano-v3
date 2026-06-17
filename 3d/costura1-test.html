@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Costura 1 — prueba de cámara (Niebla → Flota)</title>
+<style>
+  :root { --paper:#d8c6a0; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { background:#0a0a0c; }
+  /* el lienzo 3D vive fijo a pantalla completa; el scroll mueve el tiempo */
+  #c { position:fixed; inset:0; width:100vw; height:100vh; display:block; z-index:0; }
+  /* spacer alto = el "scroll" que rebobina la animación (2 actos ≈ 280vh) */
+  #scroll { position:relative; height:280vh; z-index:1; pointer-events:none; }
+  .hud { position:fixed; left:18px; bottom:16px; z-index:2; color:#e8e0cc;
+         font:600 12px/1.4 ui-monospace,monospace; opacity:.8; letter-spacing:.04em; }
+  .hud b { color:#e8b53a; }
+  .act { position:fixed; right:18px; top:16px; z-index:2; color:#e8e0cc;
+         font:600 12px/1.4 ui-monospace,monospace; opacity:.7; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="scroll"></div>
+<div class="hud">t = <b id="t">0.00</b> · scroll <span id="p">0%</span> · <span id="fps">–</span> fps</div>
+<div class="act" id="actname">ACTO I · La Niebla</div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://unpkg.com/three@0.169.0/build/three.module.js",
+  "three/addons/": "https://unpkg.com/three@0.169.0/examples/jsm/"
+}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, powerPreference:'high-performance' });
+renderer.setPixelRatio(Math.min(2, devicePixelRatio));
+renderer.setSize(innerWidth, innerHeight);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+
+const scene = new THREE.Scene();
+const FOGCOL = 0xcdbf9e;                         // niebla de papel / alba
+scene.background = new THREE.Color(FOGCOL);
+scene.fog = new THREE.FogExp2(FOGCOL, 0.03);     // densidad la maneja el mando fogDensity
+// map fogDensity(0..1 de la spec) -> densidad FogExp2
+const fogDens = f => 0.006 + f * 0.055;
+
+// luces sencillas (sin efectos: esto es la prueba de FLUIDEZ de cámara)
+const sun = new THREE.DirectionalLight(0xfff0d8, 3.2); sun.position.set(-12,8,10); scene.add(sun);
+const rim = new THREE.DirectionalLight(0x88aaff, 1.0); rim.position.set(12,6,-10); scene.add(rim);
+scene.add(new THREE.HemisphereLight(0xbfd4ff, 0x35506a, 0.6));
+
+// mar provisional: plano de AGUA en Y=0 (teal/petróleo, más oscuro que el cielo de niebla
+// para que el casco contraste y NO lea como niebla — recomendación del pulido).
+const sea = new THREE.Mesh(new THREE.PlaneGeometry(8000,8000),
+  new THREE.MeshStandardMaterial({ color:0x2b4650, roughness:0.34, metalness:0.15 }));
+sea.rotation.x = -Math.PI/2; sea.position.y = 0; scene.add(sea);
+
+const camera = new THREE.PerspectiveCamera(32, innerWidth/innerHeight, 0.1, 5000);
+
+const loader = new GLTFLoader();
+loader.setMeshoptDecoder(MeshoptDecoder);
+
+let mixer=null, camAction=null, camDur=1, camFromGLB=null;
+let fogTrack=[];
+
+// rutas relativas a esta página (sirve desde /3d/)
+const NAO = 'nao-victoria-v5.glb';
+const CAM = 'cam-costura1.glb';
+const META = 'cam-costura1-meta.json';
+
+// — cargar nao (plantilla) + meta (posiciones de la flota) y colocar las 3 naos —
+// Blender: proa +X, up +Z, manga Y  →  Three (Y-up): proa +X, up +Y, manga Z.
+// Las posiciones de la spec están en coords Blender (x,y,z) → Three (x, z, -y).
+Promise.all([ loader.loadAsync(NAO), fetch(META).then(r=>r.json()) ]).then(([g, meta])=>{
+  const tpl = g.scene;
+  fogTrack = meta.fog || [];
+  const hashSink = (location.hash.match(/sink=(-?[\d.]+)/)||[])[1];   // override de prueba: #sink=-1.0
+  const wlY = hashSink!==undefined ? parseFloat(hashSink) : (meta.waterlineOffsetY || 0);
+  (meta.ships||[]).forEach((sh,i)=>{
+    const s = (i===0)? tpl : tpl.clone(true);
+    const [bx,by,bz] = sh.pos;
+    s.position.set(bx, bz + wlY, -by);                 // Blender → Three (+ offset de flotación)
+    s.rotation.y = THREE.MathUtils.degToRad(-(sh.headingDeg||0)); // heading Z-Blender → Y-Three
+    scene.add(s);
+  });
+  console.log('flota colocada:', (meta.ships||[]).map(s=>s.id).join(', '));
+});
+
+// la cámara: intenta cargar el GLB de Blender; si aún no existe, usa una cámara
+// de respaldo que orbita, para poder probar el harness antes de tener el cam.glb.
+loader.loadAsync(CAM).then(g => {
+  camFromGLB = g.cameras[0] || null;
+  if (camFromGLB) {
+    camera.fov = camFromGLB.fov; camera.updateProjectionMatrix();
+  }
+  mixer = new THREE.AnimationMixer(g.scene);
+  const clip = g.animations[0];
+  camDur = clip.duration;
+  camAction = mixer.clipAction(clip);
+  camAction.play(); camAction.paused = true;
+  console.log('cam.glb cargado, duración', camDur, 's');
+}).catch(()=> console.warn('cam-costura1.glb aún no existe — usando cámara de respaldo'));
+
+// — scroll → tiempo —
+const tEl=document.getElementById('t'), pEl=document.getElementById('p'),
+      actEl=document.getElementById('actname'), fpsEl=document.getElementById('fps');
+function scrollProgress(){
+  const max = document.getElementById('scroll').offsetHeight - innerHeight;
+  return Math.max(0, Math.min(1, scrollY / Math.max(1,max)));
+}
+// suavizado tipo ScrollSmoother (la cámara persigue el target con retardo)
+let tSmooth=0;
+let last=performance.now(), frames=0, fps=0, facc=0;
+
+function frame(now){
+  const dt = Math.min(1/30, (now-last)/1000); last=now;
+  const p = scrollProgress();
+  const tTarget = p * 2.0;                 // 0..2 (Acto I y II)
+  tSmooth += (tTarget - tSmooth) * (1 - Math.pow(0.0015, dt));  // inercia
+
+  // niebla: interpolar fogDensity por t
+  if (fogTrack.length){
+    let a=fogTrack[0], b=fogTrack[fogTrack.length-1];
+    for (let i=0;i<fogTrack.length-1;i++){ if (tSmooth>=fogTrack[i].t && tSmooth<=fogTrack[i+1].t){ a=fogTrack[i]; b=fogTrack[i+1]; break; } }
+    const k = b.t>a.t ? (tSmooth-a.t)/(b.t-a.t) : 0;
+    scene.fog.density = fogDens(a.fogDensity + (b.fogDensity-a.fogDensity)*k);
+  }
+
+  if (camAction && camFromGLB){
+    // scrub: mapear t(0..2) a tiempo del clip
+    camAction.time = (tSmooth/2.0) * camDur;
+    mixer.update(0);
+    camera.position.copy(camFromGLB.getWorldPosition(new THREE.Vector3()));
+    camera.quaternion.copy(camFromGLB.getWorldQuaternion(new THREE.Quaternion()));
+    if (camFromGLB.fov){ camera.fov = camFromGLB.fov; camera.updateProjectionMatrix(); }
+  } else {
+    // cámara de respaldo: órbita simple para validar el harness
+    const a = tSmooth*0.9 - 0.4, r=34, h=2+tSmooth*1.5;
+    camera.position.set(Math.cos(a)*r, h, Math.sin(a)*r);
+    camera.lookAt(0,2,0);
+  }
+
+  renderer.render(scene, camera);
+
+  tEl.textContent = tSmooth.toFixed(2);
+  pEl.textContent = Math.round(p*100)+'%';
+  actEl.textContent = tSmooth<1.0 ? 'ACTO I · La Niebla'
+                    : tSmooth<1.15 ? '— viraje —' : 'ACTO II · La Flota';
+  frames++; facc+=dt; if(facc>=0.5){ fps=Math.round(frames/facc); frames=0; facc=0; fpsEl.textContent=fps; }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+addEventListener('resize', ()=>{
+  renderer.setSize(innerWidth, innerHeight);
+  camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
+});
+</script>
+</body>
+</html>
